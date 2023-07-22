@@ -4,9 +4,7 @@ import com.example.authservice.controller.AuthException;
 import com.example.authservice.dtos.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +12,13 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JWTHelper {
@@ -24,7 +27,10 @@ public class JWTHelper {
     private static final SecretKey key = new SecretKeySpec(Base64.getDecoder().decode(SECRET_KEY), "HmacSHA256");
 
     public String generateToken(UserDto user) throws JsonProcessingException {
-        Date expirationDate = new Date(System.currentTimeMillis() + (24 * 7 * 60 * 60 * 1000));
+
+        var expirationDate = Date.from(Instant.now()
+                .plus(1, ChronoUnit.DAYS));
+
         String issuer = "auth-service";
         String audience = "e-commerce-shop";
 
@@ -34,12 +40,14 @@ public class JWTHelper {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
+                .setIssuer(issuer)
+                .setAudience(audience)
                 .setExpiration(expirationDate)
                 .signWith(key)
                 .compact();
     }
 
-    public String decodeJWT(String token) throws JsonProcessingException {
+    public Optional<String> decodeJWT(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -47,9 +55,9 @@ public class JWTHelper {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return claims.get("username", String.class);
-        } catch (Exception e) {
-            throw new AuthException(AuthException.GENERIC_LOGIN_FAIL);
+            return Optional.ofNullable(claims.get("username", String.class));
+        } catch (JwtException e) {
+            return Optional.empty();
         }
     }
 }

@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = "users")
+@RequestMapping(path = "api/v1/users")
 public class UserController {
 
     private final IUserService userService;
     private final IUserMapper userMapper;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(
-            @PathVariable Long id
+    @GetMapping
+    public ResponseEntity<Object> getUser(
+            @RequestHeader("username") String username
     ) {
-        log.info("GET - getUserById {}", id);
-        var user = userService.getUserById(id);
+        log.info("GET - getUserById {}", username);
+        var user = userService.getUser(username);
 
         var dto = userMapper.toDto(user);
 
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Object> createUser(
             @Valid @RequestBody UserCreateDto userCreateDto
     ) {

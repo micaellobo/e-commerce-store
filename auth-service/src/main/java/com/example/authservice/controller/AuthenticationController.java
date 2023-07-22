@@ -1,16 +1,17 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.dtos.LoginDto;
-import com.example.authservice.dtos.UserDto;
 import com.example.authservice.service.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
-@RequestMapping(value = {"/auth"})
+@RequestMapping(value = {"api/v1/auth"})
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -27,9 +28,13 @@ public class AuthenticationController {
         return ResponseEntity.ok().headers(responseHeaders).build();
     }
 
-    @GetMapping("/validate/{jwt}")
+    @PostMapping("/validate")
     public ResponseEntity<Object> validateToken(
-            @PathVariable("jwt") String jwt) {
+            @RequestHeader("Authorization") String headerAuthorization) {
+
+        log.info("POST - validateToken {}", headerAuthorization);
+
+        var jwt = headerAuthorization.replace("Bearer ", "");
 
         var username = authService.validateToken(jwt);
 

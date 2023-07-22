@@ -7,7 +7,7 @@ import com.example.userservice.dto.UserEditDto;
 public interface IUserService {
     User insertUser(UserCreateDto userCreateDto);
 
-    User getUserById(Long id);
+    User getUser(String username);
 
     User editUser(UserEditDto userEditDto);
 }

@@ -40,10 +40,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public String validateToken(String jwt) {
-        try {
-            return jwtHelper.decodeJWT(jwt);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return jwtHelper.decodeJWT(jwt)
+                .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
     }
 }

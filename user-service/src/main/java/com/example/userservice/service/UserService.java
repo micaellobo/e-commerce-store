@@ -1,6 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userservice.config.HashUtils;
+import com.example.userservice.utils.HashUtils;
 import com.example.userservice.controler.UserException;
 import com.example.userservice.dto.UserCreateDto;
 import com.example.userservice.dto.IUserMapper;
@@ -36,8 +36,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserById(final Long id) {
-        return userRepository.findById(id)
+    public User getUser(final String username) {
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
     }
 

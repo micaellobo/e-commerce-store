@@ -1,4 +1,4 @@
-package com.example.userservice.config;
+package com.example.userservice.utils;
 
 import com.google.common.hash.Hashing;
 
