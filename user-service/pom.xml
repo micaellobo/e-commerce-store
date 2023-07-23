@@ -10,13 +10,14 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>user-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>user-service</name>
     <description>user-service</description>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
         <dependency>

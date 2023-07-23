@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 @ControllerAdvice
 public class UserControllerErrorHandling {
@@ -25,6 +27,23 @@ public class UserControllerErrorHandling {
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
+
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String message = ex.getMessage();
+        var headerName = ex.getHeaderName();
+
+        if (headerName.equals("username")) {
+            httpStatus = HttpStatus.UNAUTHORIZED;
+            message = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        }
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
+
+        return ResponseEntity.status(httpStatus).body(problemDetail);
     }
 
 }

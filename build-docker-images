@@ -1,0 +1,46 @@
+#!/bin/bash
+
+cd eureka-service; mvn clean package; cd ..
+cd api-gateway; mvn clean package; cd ..
+cd user-service; mvn clean package; cd ..
+cd auth-service; mvn clean package; cd ..
+
+docker rmi eureka-service;
+docker rmi api-gateway
+docker rmi user-service
+docker rmi auth-service
+
+docker build -t eureka-service ./eureka-service
+docker build -t api-gateway ./api-gateway
+docker build -t user-service ./user-service
+docker build -t auth-service ./auth-service
+
+## Necessario colocar a tag (versao) (trocar 8160202 por username da conta)
+## Pode ser preciso fazer o cmd 'docker login'
+#docker tag eureka-server:latest 8160202/eureka-server:latest
+#docker tag gateway-service:latest 8160202/gateway-service:latest
+#docker tag ums-service:latest 8160202/ums-service:latest
+#docker tag aus-service:latest 8160202/aus-service:latest
+#docker tag les-service:latest 8160202/les-service:latest
+#docker tag lms-service:latest 8160202/lms-service:latest
+#docker tag lss-service:latest 8160202/lss-service:latest
+#docker tag oms-service:latest 8160202/oms-service:latest
+#docker tag pos-service:latest 8160202/pos-service:latest
+#docker tag ros-service:latest 8160202/ros-service:latest
+#docker tag tos-service:latest 8160202/tos-service:latest
+#docker tag whs-service:latest 8160202/whs-service:latest
+#
+#
+## Publicar a imagem no Docker Hub (trocar 8160202 por username da conta)
+#docker push 8160202/eureka-server:latest
+#docker push 8160202/gateway-service:latest
+#docker push 8160202/ums-service:latest
+#docker push 8160202/aus-service:latest
+#docker push 8160202/les-service:latest
+#docker push 8160202/lms-service:latest
+#docker push 8160202/lss-service:latest
+#docker push 8160202/oms-service:latest
+#docker push 8160202/pos-service:latest
+#docker push 8160202/ros-service:latest
+#docker push 8160202/tos-service:latest
+#docker push 8160202/whs-service:latest

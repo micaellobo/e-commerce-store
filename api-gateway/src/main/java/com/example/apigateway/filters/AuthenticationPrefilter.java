@@ -1,6 +1,7 @@
 package com.example.apigateway.filters;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.*;
@@ -17,6 +18,9 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
 
     private final WebClient.Builder webClientBuilder;
 
+    @Value("${api.user-service}")
+    private String userServiceUrl;
+
     public AuthenticationPrefilter(WebClient.Builder webClientBuilder) {
         this.webClientBuilder = webClientBuilder;
     }
@@ -24,33 +28,46 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
-            log.info("URL is - " + request.getURI().getPath());
-            String bearerToken = request.getHeaders().getFirst("Authorization");
-            log.info("Bearer Token: " + bearerToken);
 
-            return webClientBuilder.build().post().uri("lb://auth-service/api/v1/auth/validate").header("Authorization", bearerToken).retrieve().toBodilessEntity().flatMap(responseEntity -> {
+            var headers = exchange.getRequest()
+                    .getHeaders();
 
-                String username = responseEntity.getHeaders().getFirst("username");
+            var bearerToken = headers.getFirst("Authorization");
+            var correlationID = headers.getFirst("CorrelationID");
 
-                if (username == null) {
-                    log.warn("username null");
-                    return onError(exchange, "", HttpStatus.UNAUTHORIZED);
-                }
+            return webClientBuilder.build()
+                    .post()
+                    .uri(userServiceUrl + "validate")
+                    .header("Authorization", bearerToken)
+                    .header("CorrelationID", correlationID)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .flatMap(response -> {
+                        String username = response
+                                .getHeaders()
+                                .getFirst("username");
 
-                ServerHttpRequest modifiedRequest = exchange.getRequest().mutate().header("username", username).build();
+                        if (username == null) {
+                            log.warn("username null");
+                            return onError(exchange);
+                        }
 
-                return chain.filter(exchange.mutate().request(modifiedRequest).build());
-            }).onErrorResume(throwable -> {
-                log.error(throwable.getMessage());
-                return onError(exchange, "", HttpStatus.UNAUTHORIZED);
-            });
+                        ServerHttpRequest modifiedRequest = exchange.getRequest()
+                                .mutate()
+                                .header("username", username)
+                                .build();
+
+                        return chain.filter(exchange.mutate().request(modifiedRequest).build());
+                    }).onErrorResume(error -> {
+                        log.error(error.getMessage());
+                        return onError(exchange);
+                    });
         };
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+    private Mono<Void> onError(final ServerWebExchange exchange) {
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return response.setComplete();
     }
 

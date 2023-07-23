@@ -9,16 +9,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.authservice.controller.AuthenticationController.CONTROLLER_PATH;
+
 @Slf4j
 @RestController
-@RequestMapping(value = {"api/v1/auth"})
+@RequestMapping(value = {CONTROLLER_PATH})
 @RequiredArgsConstructor
 public class AuthenticationController {
+
+    public static final String CONTROLLER_PATH = "api/v1/auth";
 
     private final IAuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<Object> login(
+            @RequestHeader("CorrelationID") String correlationId,
+            @Valid @RequestBody LoginDto loginDto) {
+
+        log.info("POST - {}/login - {} - {}", CONTROLLER_PATH, correlationId, loginDto);
 
         var jwt = authService.login(loginDto);
 
@@ -30,9 +38,9 @@ public class AuthenticationController {
 
     @PostMapping("/validate")
     public ResponseEntity<Object> validateToken(
+            @RequestHeader("CorrelationID") String correlationId,
             @RequestHeader("Authorization") String headerAuthorization) {
-
-        log.info("POST - validateToken {}", headerAuthorization);
+        log.info("POST - {}/validate - {} - {}", CONTROLLER_PATH, correlationId, headerAuthorization);
 
         var jwt = headerAuthorization.replace("Bearer ", "");
 

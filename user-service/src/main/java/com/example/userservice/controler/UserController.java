@@ -10,20 +10,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.userservice.controler.UserController.CONTROLLER_PATH;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = "api/v1/users")
+@RequestMapping(path = {CONTROLLER_PATH})
 public class UserController {
+
+    public static final String CONTROLLER_PATH = "api/v1/users";
 
     private final IUserService userService;
     private final IUserMapper userMapper;
 
     @GetMapping
     public ResponseEntity<Object> getUser(
-            @RequestHeader("username") String username
-    ) {
-        log.info("GET - getUserById {}", username);
+            @RequestHeader("CorrelationID") String correlationId,
+            @RequestHeader("username") String username) {
+
+        log.info("GET - {} - {} - {}", CONTROLLER_PATH, correlationId, username);
+
         var user = userService.getUser(username);
 
         var dto = userMapper.toDto(user);
@@ -31,11 +37,13 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Object> createUser(
-            @Valid @RequestBody UserCreateDto userCreateDto
-    ) {
-        log.info("POST - createUser {}", userCreateDto);
+            @RequestHeader("CorrelationID") String correlationId,
+            @Valid @RequestBody UserCreateDto userCreateDto) {
+
+        log.info("POST - {} - {} - {}", CONTROLLER_PATH, correlationId, userCreateDto);
+
         var user = userService.insertUser(userCreateDto);
 
 //        return ResponseEntity.created(URI.create("/" + user.getId())).build();

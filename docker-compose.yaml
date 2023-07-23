@@ -1,3 +1,4 @@
+name: e-commerce-shop
 services:
   db-users:
     container_name: db-users
@@ -10,6 +11,44 @@ services:
       - db-pgdata-users:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+  eureka-service:
+    container_name: eureka-service
+    build:
+      context: ./eureka-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    restart: always
+    depends_on:
+      - eureka-service
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    depends_on:
+      - eureka-service
+      - db-users
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    depends_on:
+      - eureka-service
 
 volumes:
   db-pgdata-users:
