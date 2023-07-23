@@ -10,10 +10,10 @@ docker rmi api-gateway
 docker rmi user-service
 docker rmi auth-service
 
-docker build -t eureka-service ./eureka-service
-docker build -t api-gateway ./api-gateway
-docker build -t user-service ./user-service
-docker build -t auth-service ./auth-service
+#docker build -t eureka-service ./eureka-service
+#docker build -t api-gateway ./api-gateway
+#docker build -t user-service ./user-service
+#docker build -t auth-service ./auth-service
 
 ## Necessario colocar a tag (versao) (trocar 8160202 por username da conta)
 ## Pode ser preciso fazer o cmd 'docker login'
