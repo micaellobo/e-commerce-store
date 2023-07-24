@@ -1,5 +1,6 @@
 package com.example.userservice.controler;
 
+import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
 import com.example.userservice.dto.IUserMapper;
 import com.example.userservice.service.IUserService;
@@ -31,6 +32,20 @@ public class UserController {
         log.info("GET - {} - {} - {}", CONTROLLER_PATH, correlationId, username);
 
         var user = userService.getUser(username);
+
+        var dto = userMapper.toDto(user);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> getUserLogin(
+            @RequestHeader String correlationId,
+            @RequestBody LoginDto loginDto) {
+
+        log.info("GET - {}/login - {} - {}", CONTROLLER_PATH, correlationId, loginDto);
+
+        var user = userService.getUserLogin(loginDto);
 
         var dto = userMapper.toDto(user);
 

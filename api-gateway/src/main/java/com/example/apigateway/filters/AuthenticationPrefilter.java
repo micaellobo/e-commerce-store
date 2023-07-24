@@ -1,5 +1,6 @@
 package com.example.apigateway.filters;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -14,16 +15,13 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<AuthenticationPrefilter.Config> {
 
     private final WebClient.Builder webClientBuilder;
 
-    @Value("${api.user-service}")
-    private String userServiceUrl;
-
-    public AuthenticationPrefilter(WebClient.Builder webClientBuilder) {
-        this.webClientBuilder = webClientBuilder;
-    }
+    @Value("${api.auth-service}")
+    private String authServiceUrl;
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -37,13 +35,13 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
 
             return webClientBuilder.build()
                     .post()
-                    .uri(userServiceUrl + "validate")
+                    .uri(authServiceUrl + "/validate")
                     .header("Authorization", bearerToken)
                     .header("CorrelationID", correlationID)
                     .retrieve()
                     .toBodilessEntity()
                     .flatMap(response -> {
-                        String username = response
+                        var username = response
                                 .getHeaders()
                                 .getFirst("username");
 
@@ -52,7 +50,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
                             return onError(exchange);
                         }
 
-                        ServerHttpRequest modifiedRequest = exchange.getRequest()
+                        var modifiedRequest = exchange.getRequest()
                                 .mutate()
                                 .header("username", username)
                                 .build();
@@ -66,7 +64,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
     }
 
     private Mono<Void> onError(final ServerWebExchange exchange) {
-        ServerHttpResponse response = exchange.getResponse();
+        var response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return response.setComplete();
     }

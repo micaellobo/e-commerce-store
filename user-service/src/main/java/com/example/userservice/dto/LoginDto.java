@@ -1,4 +1,4 @@
-package com.example.authservice.dtos;
+package com.example.userservice.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

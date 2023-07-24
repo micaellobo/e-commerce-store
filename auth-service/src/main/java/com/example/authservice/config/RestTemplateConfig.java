@@ -12,7 +12,10 @@ public class RestTemplateConfig {
     @Bean
     @LoadBalanced
     public RestTemplate getRestTemplate() {
-        return new RestTemplate();
+        var restTemplate = new RestTemplate();
+        restTemplate.getInterceptors()
+                .add(new CorrelationIdInterceptor());
+        return restTemplate;
     }
 
 }

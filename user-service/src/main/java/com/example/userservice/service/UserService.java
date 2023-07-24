@@ -1,11 +1,9 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.*;
 import com.example.userservice.utils.HashUtils;
 import com.example.userservice.controler.UserException;
-import com.example.userservice.dto.UserCreateDto;
-import com.example.userservice.dto.IUserMapper;
 import com.example.userservice.models.User;
-import com.example.userservice.dto.UserEditDto;
 import com.example.userservice.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +22,7 @@ public class UserService implements IUserService {
 
         var user = userMapper.toUser(userCreateDto);
 
-//        boolean exists = userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
-        boolean exists = userRepository.existsUser(user);
+        var exists = userRepository.existsUser(user);
 
         if (exists)
             throw new UserException(UserException.USER_ALREADY_EXISTS);
@@ -42,6 +39,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUserLogin(LoginDto loginDto) {
+        var password = HashUtils.Sha256Hash(loginDto.password());
+        return userRepository.findByUsernameAndPassword(loginDto.username(), password)
+                .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
+    }
+
+    @Override
     public User editUser(final UserEditDto userEditDto) {
 
         var user = userRepository.findById(userEditDto.id())
@@ -51,4 +55,6 @@ public class UserService implements IUserService {
 
         return userRepository.save(user);
     }
+
+
 }

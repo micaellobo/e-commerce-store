@@ -32,8 +32,8 @@ public class UserControllerErrorHandling {
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
 
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        String message = ex.getMessage();
+        var httpStatus = HttpStatus.BAD_REQUEST;
+        var message = ex.getMessage();
         var headerName = ex.getHeaderName();
 
         if (headerName.equals("username")) {

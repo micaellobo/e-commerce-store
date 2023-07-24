@@ -19,14 +19,14 @@ public class AuthenticationControllerErrorHandling {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        var httpStatus = HttpStatus.BAD_REQUEST;
 
         var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
 

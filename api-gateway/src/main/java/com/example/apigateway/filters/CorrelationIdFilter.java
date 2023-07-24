@@ -19,15 +19,15 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String correlationId = generateOrRetrieveCorrelationId();
-        ServerHttpRequest request = exchange.getRequest()
+        var correlationId = generateOrRetrieveCorrelationId();
+        var request = exchange.getRequest()
                 .mutate()
                 .header(CORRELATION_ID_HEADER, correlationId)
                 .build();
 
         log.info(request.getMethod() + " - " + correlationId + " - " + request.getURI().getPath());
 
-        ServerWebExchange mutatedExchange = exchange
+        var mutatedExchange = exchange
                 .mutate()
                 .request(request)
                 .build();

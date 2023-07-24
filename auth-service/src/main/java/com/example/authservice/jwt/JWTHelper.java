@@ -1,9 +1,7 @@
 package com.example.authservice.jwt;
 
-import com.example.authservice.controller.AuthException;
 import com.example.authservice.dtos.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
