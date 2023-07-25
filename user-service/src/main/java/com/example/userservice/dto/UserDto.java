@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public record UserDto(
         Long id,
-        String firstName,
+        String name,
         String lastName,
         String email,
         String username

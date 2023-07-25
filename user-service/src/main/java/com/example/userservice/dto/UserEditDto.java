@@ -13,7 +13,7 @@ import java.io.Serializable;
 public record UserEditDto(
         Long id,
         @NotNull @NotEmpty @NotBlank
-        String firstName,
+        String name,
         @NotNull @NotEmpty @NotBlank
         String lastName,
         @NotNull @Size(min = 10) @NotEmpty @NotBlank String password

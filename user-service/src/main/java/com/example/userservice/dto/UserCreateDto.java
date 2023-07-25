@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public record UserCreateDto(
         @NotNull @NotEmpty @NotBlank
-        String firstName,
+        String name,
         @NotNull @NotEmpty @NotBlank
         String lastName,
         @NotNull @Email

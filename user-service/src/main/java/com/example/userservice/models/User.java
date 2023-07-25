@@ -24,10 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private String firstName;
-
-    @NotNull
-    private String lastName;
+    private String name;
 
     @NotNull
     @Column(unique = true)
