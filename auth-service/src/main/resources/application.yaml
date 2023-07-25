@@ -1,0 +1,9 @@
+api:
+  user-service: lb://user-service/api/v1/users
+server:
+  port: 8082
+spring:
+  application:
+    name: auth-service
+  profiles:
+    active: dev

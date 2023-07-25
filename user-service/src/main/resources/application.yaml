@@ -1,0 +1,7 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: user-service
+  profiles:
+    active: dev

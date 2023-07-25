@@ -10,8 +10,6 @@ import java.io.Serializable;
 public record UserCreateDto(
         @NotNull @NotEmpty @NotBlank
         String name,
-        @NotNull @NotEmpty @NotBlank
-        String lastName,
         @NotNull @Email
         String email,
         @NotNull @Size(min = 4) @NotEmpty @NotBlank

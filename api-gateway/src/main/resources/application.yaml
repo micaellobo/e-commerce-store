@@ -1,0 +1,9 @@
+api:
+  auth-service: lb://auth-service/api/v1/auth
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: dev

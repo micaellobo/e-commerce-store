@@ -12,7 +12,6 @@ import java.util.Date;
 public record UserDto(
         Long id,
         String name,
-        String lastName,
         String email,
         String username
 ) implements Serializable {

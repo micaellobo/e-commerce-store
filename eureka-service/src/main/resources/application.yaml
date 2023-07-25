@@ -1,0 +1,9 @@
+info:
+  app:
+    name: '@project.artifactId@'
+    version: '@project.version@'
+server:
+  port: 8761
+spring:
+  profiles:
+    active: dev
