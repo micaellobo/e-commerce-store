@@ -36,6 +36,9 @@ public class ApiGatewayApplication {
                 .route("auth-service",
                         r -> r.path("/api/v1/auth/login")
                                 .uri("lb://auth-service"))
+                .route("inventory-service",
+                        r -> r.path("/api/v1/products/**")
+                                .uri("lb://inventory-service"))
                 .build();
     }
 }

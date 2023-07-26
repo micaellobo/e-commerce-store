@@ -18,6 +18,6 @@ public record ProductCreateDto(
         @Positive(message = "Only positive number allowed")
         BigDecimal price,
         @Positive(message = "Only positive number allowed")
-        int quantity
-) implements Serializable {
+        int quantity,
+        String description) implements Serializable {
 }

@@ -4,16 +4,19 @@ cd eureka-service; mvn clean package; cd ..
 cd api-gateway; mvn clean package; cd ..
 cd user-service; mvn clean package; cd ..
 cd auth-service; mvn clean package; cd ..
+cd inventory-service; mvn clean package; cd ..
 
-docker rmi eureka-service;
-docker rmi api-gateway
-docker rmi user-service
-docker rmi auth-service
+#docker rmi eureka-service;
+#docker rmi api-gateway
+#docker rmi user-service
+#docker rmi auth-service
+#docker rmi inventory-service
 
 #docker build -t eureka-service ./eureka-service
 #docker build -t api-gateway ./api-gateway
 #docker build -t user-service ./user-service
 #docker build -t auth-service ./auth-service
+#docker build -t inventory-service ./inventory-service
 
 ## Necessario colocar a tag (versao) (trocar 8160202 por username da conta)
 ## Pode ser preciso fazer o cmd 'docker login'

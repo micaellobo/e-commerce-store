@@ -37,7 +37,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<Object> getAll(
             @RequestHeader("CorrelationID") String correlationId) {
         log.info("GET - / - {}", correlationId);

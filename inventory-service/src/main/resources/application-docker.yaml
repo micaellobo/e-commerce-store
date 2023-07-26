@@ -13,7 +13,7 @@ spring:
       enabled: false
   datasource:
     password: postgres
-    url: jdbc:postgresql://db-users:5432/users
+    url: jdbc:postgresql://db-inventory:5433/inventory
     username: postgres
   jpa:
     hibernate:

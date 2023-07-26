@@ -12,6 +12,6 @@ public record ProductDto(
         Long id,
         String name,
         BigDecimal price,
-        int quantity
-) implements Serializable {
+        int quantity,
+        String description) implements Serializable {
 }

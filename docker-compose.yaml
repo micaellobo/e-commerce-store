@@ -12,6 +12,18 @@ services:
     ports:
       - "5432:5432"
 
+  db-inventory:
+    container_name: db-inventory
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory
+    volumes:
+      - db-pgdata-inventory:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
   eureka-service:
     container_name: eureka-service
     build:
@@ -50,6 +62,16 @@ services:
     depends_on:
       - eureka-service
 
+  inventory-service:
+    container_name: inventory-service
+    build:
+      context: ./inventory-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    depends_on:
+      - eureka-service
+
 volumes:
   db-pgdata-users:
+  db-pgdata-inventory:
 

@@ -22,7 +22,7 @@ public class Product {
     @NotNull
     private String name;
 
-    @Column(precision = 20, scale = 2) // Define precision and scale as per your requirements
+    @Column(precision = 20, scale = 2)
     private BigDecimal price;
 
     @NotNull

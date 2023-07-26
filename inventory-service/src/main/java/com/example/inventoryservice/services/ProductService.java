@@ -24,7 +24,7 @@ public class ProductService implements IProductService {
         var exists = productRepository.existsByName(productCreateDto.name());
 
         if (exists)
-            throw new InventoryException(InventoryException.ALREADY_EXISTS_USER);
+            throw new InventoryException(InventoryException.ALREADY_EXISTS_PRODUCT);
 
         var product = productMapper.toProduct(productCreateDto);
 
