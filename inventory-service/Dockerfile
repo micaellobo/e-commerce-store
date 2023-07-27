@@ -1,6 +1,11 @@
+FROM openjdk:17 as build
+COPY . /usr/app
+WORKDIR /usr/app
+RUN chmod +x mvnw && ./mvnw clean package
+
 FROM openjdk:17
 VOLUME /tmp
-COPY target/*.jar inventory-service.jar
+COPY --from=build /usr/app/target/*.jar inventory-service.jar
 ENTRYPOINT ["java","-jar","/inventory-service.jar"]
 EXPOSE 8083
 

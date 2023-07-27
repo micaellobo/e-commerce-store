@@ -6,8 +6,11 @@ eureka:
       defaultZone: http://eureka-service:8761/eureka/
 server:
   error:
-    include-exception: true
+    include-exception: false
 spring:
+  mvc:
+    problemdetails:
+      enabled: false
   datasource:
     password: postgres
     url: jdbc:postgresql://db-users:5432/users
@@ -18,6 +21,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  mvc:
-    problemdetails:
-      enabled: false

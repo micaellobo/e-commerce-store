@@ -11,6 +11,9 @@ services:
       - db-pgdata-users:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    restart: always
+    networks:
+      - e-commerce-shop
 
   db-inventory:
     container_name: db-inventory
@@ -23,18 +26,26 @@ services:
       - db-pgdata-inventory:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    restart: always
+    networks:
+      - e-commerce-shop
 
   eureka-service:
     container_name: eureka-service
     build:
       context: ./eureka-service
+    image: eureka-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
+    restart: always
+    networks:
+      - e-commerce-shop
 
   api-gateway:
     container_name: api-gateway
     build:
       context: ./api-gateway
+    image: api-gateway
     ports:
       - "8080:8080"
     environment:
@@ -42,36 +53,54 @@ services:
     restart: always
     depends_on:
       - eureka-service
+    networks:
+      - e-commerce-shop
 
   user-service:
     container_name: user-service
     build:
       context: ./user-service
+    image: user-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
+    restart: always
     depends_on:
       - eureka-service
       - db-users
+    networks:
+      - e-commerce-shop
 
   auth-service:
     container_name: auth-service
     build:
       context: ./auth-service
+    image: auth-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
+    restart: always
     depends_on:
       - eureka-service
+    networks:
+      - e-commerce-shop
 
   inventory-service:
     container_name: inventory-service
     build:
       context: ./inventory-service
+    image: inventory-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
+    restart: always
     depends_on:
       - eureka-service
+    networks:
+      - e-commerce-shop
 
 volumes:
   db-pgdata-users:
   db-pgdata-inventory:
+
+networks:
+  e-commerce-shop:
+    driver: bridge
 
