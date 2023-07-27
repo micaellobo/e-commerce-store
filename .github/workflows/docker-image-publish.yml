@@ -26,6 +26,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./e-commerce-shop/eureka-service
           push: true
-          tags: user/app:latest
+          tags: 8160202/eureka-service:latest
