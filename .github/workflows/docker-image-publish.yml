@@ -36,3 +36,17 @@ jobs:
           context: "{{defaultContext}}:api-gateway"
           push: true
           tags: 8160202/api-gateway:latest
+      -
+        name: Build and push user-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:user-service"
+          push: true
+          tags: 8160202/user-service:latest
+      -
+        name: Build and push auth-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:auth-service"
+          push: true
+          tags: 8160202/auth-service:latest
