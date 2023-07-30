@@ -1,4 +1,4 @@
-package com.example.inventoryservice.controllers;
+package com.example.authservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -9,38 +9,26 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class InventoryControllerErrorHandling {
+public class AuthControllerErrorHandling {
 
-    @ExceptionHandler(InventoryException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(InventoryException exception) {
-
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    @ExceptionHandler(AuthException.class)
+    public ProblemDetail OnUserException(AuthException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(MethodArgumentNotValidException ex) {
+    protected ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
+
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
-
         var httpStatus = HttpStatus.BAD_REQUEST;
-        var message = ex.getMessage();
-        var headerName = ex.getHeaderName();
 
-        if (headerName.equals("username")) {
-            httpStatus = HttpStatus.UNAUTHORIZED;
-            message = HttpStatus.UNAUTHORIZED.getReasonPhrase();
-        }
-
-        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
+        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
     }

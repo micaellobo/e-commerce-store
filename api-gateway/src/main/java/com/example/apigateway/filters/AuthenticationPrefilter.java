@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.*;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -12,6 +13,8 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -40,26 +43,35 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
                     .header("CorrelationID", correlationID)
                     .retrieve()
                     .toBodilessEntity()
-                    .flatMap(response -> {
-                        var username = response
-                                .getHeaders()
-                                .getFirst("username");
-
-                        if (username == null) {
-                            log.warn("username null");
-                            return onError(exchange);
-                        }
-
-                        var modifiedRequest = exchange.getRequest()
-                                .mutate()
-                                .header("username", username)
-                                .build();
-
-                        return chain.filter(exchange.mutate().request(modifiedRequest).build());
-                    }).onErrorResume(error -> {
+                    .flatMap(getResponseEntityMonoFunction(exchange, chain))
+                    .onErrorResume(error -> {
                         log.error(error.getMessage());
                         return onError(exchange);
                     });
+        };
+    }
+
+    private Function<ResponseEntity<Void>, Mono<? extends Void>> getResponseEntityMonoFunction(
+            final ServerWebExchange exchange,
+            final GatewayFilterChain chain) {
+        return response -> {
+            var headers = response
+                    .getHeaders();
+
+            var userId = headers.getFirst("userId");
+            var username = headers.getFirst("username");
+
+            if (username == null || userId == null) {
+                return onError(exchange);
+            }
+
+            var modifiedRequest = exchange.getRequest()
+                    .mutate()
+                    .header("userId", userId)
+                    .header("username", username)
+                    .build();
+
+            return chain.filter(exchange.mutate().request(modifiedRequest).build());
         };
     }
 

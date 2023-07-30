@@ -25,7 +25,7 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
                 .header(CORRELATION_ID_HEADER, correlationId)
                 .build();
 
-        log.info(request.getMethod() + " - " + correlationId + " - " + request.getURI().getPath());
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getPath(), correlationId, null, null);
 
         var mutatedExchange = exchange
                 .mutate()

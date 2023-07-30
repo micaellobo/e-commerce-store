@@ -1,6 +1,7 @@
 package com.example.authservice.jwt;
 
 import com.example.authservice.dtos.UserDto;
+import com.example.authservice.dtos.UserHeader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -29,11 +30,12 @@ public class JWTHelper {
         var expirationDate = Date.from(Instant.now()
                 .plus(1, ChronoUnit.DAYS));
 
-        String issuer = "auth-service";
-        String audience = "e-commerce-shop";
+        var issuer = "auth-service";
+        var audience = "e-commerce-shop";
 
-        Claims claims = Jwts.claims();
+        var claims = Jwts.claims();
         claims.put("username", user.username());
+        claims.put("userId", user.id());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -45,15 +47,19 @@ public class JWTHelper {
                 .compact();
     }
 
-    public Optional<String> decodeJWT(String token) {
+    public Optional<UserHeader> decodeJWT(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
+            var claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
 
-            return Optional.ofNullable(claims.get("username", String.class));
+            var userId = claims.get("userId", Long.class);
+            var username = claims.get("username", String.class);
+
+            var value = new UserHeader(userId, username);
+            return Optional.of(value);
         } catch (JwtException e) {
             return Optional.empty();
         }

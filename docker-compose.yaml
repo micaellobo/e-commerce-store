@@ -11,7 +11,7 @@ services:
       - db-pgdata-users:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    restart: always
+    restart: unless-stopped
     networks:
       - e-commerce-shop
 
@@ -26,7 +26,22 @@ services:
       - db-pgdata-inventory:/var/lib/postgresql/data
     ports:
       - "5433:5432"
-    restart: always
+    restart: unless-stopped
+    networks:
+      - e-commerce-shop
+
+  db-reviews:
+    container_name: db-reviews
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviews
+    volumes:
+      - db-pgdata-reviews:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
     networks:
       - e-commerce-shop
 
@@ -37,7 +52,7 @@ services:
     image: eureka-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
-    restart: always
+    restart: unless-stopped
     networks:
       - e-commerce-shop
 
@@ -50,7 +65,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
-    restart: always
+    restart: unless-stopped
     depends_on:
       - eureka-service
     networks:
@@ -63,7 +78,7 @@ services:
     image: user-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
-    restart: always
+    restart: unless-stopped
     depends_on:
       - eureka-service
       - db-users
@@ -77,7 +92,7 @@ services:
     image: auth-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
-    restart: always
+    restart: unless-stopped
     depends_on:
       - eureka-service
     networks:
@@ -90,7 +105,7 @@ services:
     image: inventory-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
-    restart: always
+    restart: unless-stopped
     depends_on:
       - eureka-service
     networks:
@@ -99,6 +114,7 @@ services:
 volumes:
   db-pgdata-users:
   db-pgdata-inventory:
+  db-pgdata-reviews:
 
 networks:
   e-commerce-shop:

@@ -1,6 +1,6 @@
 package com.example.inventoryservice.services;
 
-import com.example.inventoryservice.controllers.InventoryException;
+import com.example.inventoryservice.controllers.ProductException;
 import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
@@ -24,7 +24,7 @@ public class ProductService implements IProductService {
         var exists = productRepository.existsByName(productCreateDto.name());
 
         if (exists)
-            throw new InventoryException(InventoryException.ALREADY_EXISTS_PRODUCT);
+            throw new ProductException(ProductException.ALREADY_EXISTS_PRODUCT);
 
         var product = productMapper.toProduct(productCreateDto);
 
@@ -40,7 +40,7 @@ public class ProductService implements IProductService {
     public void increaseStock(final Long productId,
                               final ProductStockQuantityDto productStockQuantityDto) {
         var product = productRepository.findById(productId)
-                .orElseThrow(() -> new InventoryException(InventoryException.PRODUCT_DOES_NOT_EXIST));
+                .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
 
         product.setQuantity(product.getQuantity() + productStockQuantityDto.quantity());
 
@@ -51,13 +51,19 @@ public class ProductService implements IProductService {
     public void decreaseStock(final Long productId,
                               final ProductStockQuantityDto productStockQuantityDto) {
         var product = productRepository.findById(productId)
-                .orElseThrow(() -> new InventoryException(InventoryException.PRODUCT_DOES_NOT_EXIST));
+                .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
 
         if (product.getQuantity() - productStockQuantityDto.quantity() < 0)
-            throw new InventoryException(InventoryException.QUANTITY_LOWER_ZERO);
+            throw new ProductException(ProductException.QUANTITY_LOWER_ZERO);
 
         product.setQuantity(product.getQuantity() - productStockQuantityDto.quantity());
 
         productRepository.save(product);
+    }
+
+    @Override
+    public Product getOneBy(final Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
     }
 }

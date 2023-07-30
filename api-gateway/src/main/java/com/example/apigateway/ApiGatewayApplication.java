@@ -23,15 +23,12 @@ public class ApiGatewayApplication {
                 .route("user-service-without-auth",
                         r ->
                                 r.method(HttpMethod.POST)
-                                .and()
-                                .path("/api/v1/users")
-                                .uri("lb://user-service"))
+                                        .and()
+                                        .path("/api/v1/users")
+                                        .uri("lb://user-service"))
                 .route("user-service-with-auth",
                         r -> r.path("/api/v1/users/**")
-                                .filters(f -> f
-                                        .filter(authFilter
-                                                .apply(new AuthenticationPrefilter.Config()))
-                                )
+                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
                                 .uri("lb://user-service"))
                 .route("auth-service",
                         r -> r.path("/api/v1/auth/login")
@@ -39,6 +36,10 @@ public class ApiGatewayApplication {
                 .route("inventory-service",
                         r -> r.path("/api/v1/products/**")
                                 .uri("lb://inventory-service"))
+                .route("reviews-service",
+                        r -> r.path("/api/v1/reviews/**")
+                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
+                                .uri("lb://reviews-service"))
                 .build();
     }
 }

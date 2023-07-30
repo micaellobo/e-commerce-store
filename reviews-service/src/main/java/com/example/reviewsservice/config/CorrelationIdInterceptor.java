@@ -1,11 +1,10 @@
-package com.example.authservice.config;
+package com.example.reviewsservice.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;

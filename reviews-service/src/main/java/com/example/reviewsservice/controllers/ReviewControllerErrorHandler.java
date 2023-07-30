@@ -1,5 +1,6 @@
-package com.example.authservice.controller;
+package com.example.reviewsservice.controllers;
 
+import com.example.reviewsservice.models.Review;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -9,26 +10,38 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class AuthenticationControllerErrorHandling {
+public class ReviewControllerErrorHandler {
 
-    @ExceptionHandler(AuthException.class)
-    public ProblemDetail OnUserException(AuthException exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
-    }
+    @ExceptionHandler(ReviewException.class)
+    public ResponseEntity<ProblemDetail> OnUserException(ReviewException exception) {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> OnUserException(MethodArgumentNotValidException ex) {
+        var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
-        var httpStatus = HttpStatus.BAD_REQUEST;
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
+        var httpStatus = HttpStatus.BAD_REQUEST;
+        var message = ex.getMessage();
+        var headerName = ex.getHeaderName();
+
+        if (headerName.equals("username")) {
+            httpStatus = HttpStatus.UNAUTHORIZED;
+            message = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        }
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
     }

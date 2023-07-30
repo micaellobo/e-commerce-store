@@ -17,4 +17,6 @@ public interface IProductService {
 
     void decreaseStock(Long productId,
                        ProductStockQuantityDto productStockQuantityDto);
+
+    Product getOneBy(Long id);
 }

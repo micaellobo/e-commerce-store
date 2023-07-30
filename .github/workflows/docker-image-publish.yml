@@ -50,3 +50,17 @@ jobs:
           context: "{{defaultContext}}:auth-service"
           push: true
           tags: 8160202/auth-service:latest
+
+      - name: Build and push inventory-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:inventory-service"
+          push: true
+          tags: 8160202/inventory-service:latest
+
+      - name: Build and push reviews-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:reviews-service"
+          push: true
+          tags: 8160202/reviews-service:latest

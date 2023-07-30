@@ -1,0 +1,56 @@
+name: e-commerce-shop-dbs
+services:
+  db-users:
+    container_name: db-users
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+    volumes:
+      - db-pgdata-users:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-shop-dbs
+
+  db-inventory:
+    container_name: db-inventory
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory
+    volumes:
+      - db-pgdata-inventory:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-shop-dbs
+
+  db-reviews:
+    container_name: db-reviews
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviews
+    volumes:
+      - db-pgdata-reviews:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-shop-dbs
+
+volumes:
+  db-pgdata-users:
+  db-pgdata-inventory:
+  db-pgdata-reviews:
+
+networks:
+  e-commerce-shop-dbs:
+    driver: bridge
+

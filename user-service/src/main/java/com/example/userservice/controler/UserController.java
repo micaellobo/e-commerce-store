@@ -4,6 +4,7 @@ import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
 import com.example.userservice.dto.IUserMapper;
 import com.example.userservice.service.IUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,25 +12,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.userservice.controler.UserController.CONTROLLER_PATH;
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = {CONTROLLER_PATH})
+@RequestMapping(path = {"api/v1/users"})
 public class UserController {
-
-    public static final String CONTROLLER_PATH = "api/v1/users";
 
     private final IUserService userService;
     private final IUserMapper userMapper;
 
     @GetMapping
     public ResponseEntity<Object> getUser(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
             @RequestHeader("username") String username) {
 
-        log.info("GET - {} - {} - {}", CONTROLLER_PATH, correlationId, username);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, username, null);
 
         var user = userService.getUser(username);
 
@@ -40,10 +38,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> getUserLogin(
+            HttpServletRequest request,
             @RequestHeader String correlationId,
             @RequestBody LoginDto loginDto) {
 
-        log.info("GET - {}/login - {} - {}", CONTROLLER_PATH, correlationId, loginDto);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, loginDto);
 
         var user = userService.getUserLogin(loginDto);
 
@@ -54,10 +53,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> createUser(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody UserCreateDto userCreateDto) {
 
-        log.info("POST - {} - {} - {}", CONTROLLER_PATH, correlationId, userCreateDto);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, userCreateDto);
 
         var user = userService.insertUser(userCreateDto);
 

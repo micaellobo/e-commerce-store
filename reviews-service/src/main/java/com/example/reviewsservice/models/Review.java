@@ -1,41 +1,37 @@
-package com.example.userservice.models;
+package com.example.reviewsservice.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Builder
-@Entity(name = "users")
+@Entity(name = "reviews")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
 
+public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull
-    private String name;
 
     @NotNull
-    @Column(unique = true)
-    private String email;
+    private Long userId;
 
     @NotNull
-    @Column(unique = true)
-    private String username;
+    private Long productId;
 
     @NotNull
-    private String password;
+    private int rating;
+
+    @NotNull
+    private String reviewText;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -49,13 +45,13 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        var user = (User) o;
-        return id.equals(user.getId()) || username.equals(user.username) || email.equals(user.email);
+        var user = (Review) o;
+        return id.equals(user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email);
-    }
+        return Objects.hash(id);
 
+    }
 }

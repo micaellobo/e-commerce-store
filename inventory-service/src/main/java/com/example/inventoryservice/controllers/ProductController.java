@@ -4,6 +4,7 @@ import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.services.IProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,23 +12,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.inventoryservice.controllers.ProductController.CONTROLLER_PATH;
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = {CONTROLLER_PATH})
+@RequestMapping(path = {"api/v1/products"})
 public class ProductController {
 
-    public static final String CONTROLLER_PATH = "api/v1/products";
     private final IProductService productService;
     private final IProductMapper productMapper;
 
     @PostMapping("/add")
     public ResponseEntity<Object> add(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody ProductCreateDto productCreateDto) {
-        log.info("GET - /add - {} - {}", productCreateDto, correlationId);
+
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productCreateDto);
 
         var product = productService.add(productCreateDto);
 
@@ -37,10 +37,27 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOneById(
+            HttpServletRequest request,
+            @RequestHeader("CorrelationID") String correlationId,
+            @PathVariable Long id) {
+
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, null);
+
+        var product = productService.getOneBy(id);
+
+        var productDto = productMapper.toDto(product);
+
+        return ResponseEntity.ok(productDto);
+    }
+
     @GetMapping
     public ResponseEntity<Object> getAll(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId) {
-        log.info("GET - / - {}", correlationId);
+
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, null);
 
         var products = productService.getAll();
 
@@ -52,11 +69,12 @@ public class ProductController {
 
     @PatchMapping("/{productId}/increase-stock")
     public ResponseEntity<Object> increaseStock(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
             @PathVariable final Long productId,
             @Valid @RequestBody ProductStockQuantityDto productStockQuantityDto) {
 
-        log.info("PATCH - {}/increase-stock - {} - {}", productId, productStockQuantityDto, correlationId);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productStockQuantityDto);
 
         productService.increaseStock(productId, productStockQuantityDto);
 
@@ -65,11 +83,12 @@ public class ProductController {
 
     @PatchMapping("/{productId}/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
+            HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
             @PathVariable final Long productId,
             @Valid @RequestBody ProductStockQuantityDto productStockQuantityDto) {
 
-        log.info("PATCH - {}/decrease-stock - {} - {}", productId, productStockQuantityDto, correlationId);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productStockQuantityDto);
 
         productService.decreaseStock(productId, productStockQuantityDto);
 
