@@ -16,15 +16,13 @@ import org.springframework.web.client.RestTemplate;
 public class AuthService implements IAuthService {
 
     private final JWTHelper jwtHelper;
-    private final RestTemplate restTemplate;
-
-    @Value("${api.user-service}")
-    private String userServiceUrl;
+    private final IUserServiceClient userServiceClient;
 
     @Override
-    public String login(LoginDto loginDto) {
+    public String login(final LoginDto loginDto) {
 
-        var user = RequestUser(loginDto);
+        var user = userServiceClient.getUserForLogin(loginDto)
+                .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
 
         try {
             return jwtHelper.generateToken(user);
@@ -33,17 +31,9 @@ public class AuthService implements IAuthService {
         }
     }
 
-    private UserDto RequestUser(LoginDto loginDto) {
-        var response = restTemplate.postForEntity(userServiceUrl + "/login", loginDto, UserDto.class);
-
-        if (response.getStatusCode().isError())
-            throw new AuthException(AuthException.GENERIC_LOGIN_FAIL);
-
-        return response.getBody();
-    }
 
     @Override
-    public UserHeader validateToken(String jwt) {
+    public UserHeader validateToken(final String jwt) {
         return jwtHelper.decodeJWT(jwt)
                 .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
     }
