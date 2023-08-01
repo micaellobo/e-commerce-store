@@ -66,4 +66,9 @@ public class ProductService implements IProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
     }
+
+    @Override
+    public List<Product> getByIds(final List<Long> ids) {
+        return productRepository.findAllById(ids);
+    }
 }

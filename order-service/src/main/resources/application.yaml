@@ -1,0 +1,10 @@
+api:
+  user-service: lb://username-service/api/v1/users
+  inventory-service: lb://inventory-service/api/v1/products
+server:
+  port: 8085
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: dev

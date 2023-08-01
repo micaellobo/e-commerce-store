@@ -19,4 +19,6 @@ public interface IProductService {
                        ProductStockQuantityDto productStockQuantityDto);
 
     Product getOneBy(Long id);
+
+    List<Product> getByIds(List<Long> ids);
 }

@@ -2,15 +2,20 @@ package com.example.inventoryservice.controllers;
 
 import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
+import com.example.inventoryservice.dtos.ProductDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
+import com.example.inventoryservice.models.Product;
 import com.example.inventoryservice.services.IProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -93,5 +98,20 @@ public class ProductController {
         productService.decreaseStock(productId, productStockQuantityDto);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getByIds(
+            HttpServletRequest request,
+            @RequestHeader("CorrelationID") String correlationId,
+            @RequestParam List<Long> ids) {
+
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, ids);
+
+        var products = productService.getByIds(ids);
+
+        var productsDto = productMapper.toDtos(products);
+
+        return ResponseEntity.ok(productsDto);
     }
 }

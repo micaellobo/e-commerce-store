@@ -4,7 +4,6 @@ import com.example.userservice.models.User;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * DTO for {@link User}}

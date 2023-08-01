@@ -1,41 +1,37 @@
-package com.example.reviewsservice.models;
+package com.example.orderservice.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
+@Builder
 @Getter
 @Setter
-@Builder
-@Entity(name = "reviews")
+@Entity(name = "orders")
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
+@ToString
+public class Order {
 
-public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private Long userId;
 
-    @NotNull
-    private Long productId;
-
-    @NotNull
-    private int rating;
-
-    @NotNull
-    private String reviewText;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private Set<OrderProduct> products;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime date;
 
     @UpdateTimestamp
     @Column(nullable = false)
@@ -45,13 +41,12 @@ public class Review {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        var user = (Review) o;
-        return id.equals(user.id);
+        var user = (Order) o;
+        return id.equals(user.getId());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
-
     }
 }

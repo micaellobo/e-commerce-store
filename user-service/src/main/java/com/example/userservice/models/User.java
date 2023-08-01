@@ -9,7 +9,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
 import java.lang.reflect.Field;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -39,11 +39,11 @@ public class User {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {

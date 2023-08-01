@@ -3,7 +3,7 @@ package com.example.reviewsservice.dtos;
 import com.example.reviewsservice.models.Review;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * DTO for {@link Review}
@@ -14,7 +14,7 @@ public record ReviewDto(
         Long productId,
         String reviewText,
         int helpFulCount,
-        Date createdAt,
+        LocalDateTime createdAt,
         int rating
 ) implements Serializable {
 }
