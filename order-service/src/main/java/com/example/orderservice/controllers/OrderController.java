@@ -1,7 +1,6 @@
 package com.example.orderservice.controllers;
 
 import com.example.orderservice.dtos.OrderCreateDto;
-import com.example.orderservice.dtos.OrderDto;
 import com.example.orderservice.services.IOrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

@@ -15,8 +15,7 @@ public interface IProductService {
     void increaseStock(Long productId,
                        ProductStockQuantityDto productStockQuantityDto);
 
-    void decreaseStock(Long productId,
-                       ProductStockQuantityDto productStockQuantityDto);
+    void decreaseStock(List<ProductStockQuantityDto> productsQuantities);
 
     Product getOneBy(Long id);
 

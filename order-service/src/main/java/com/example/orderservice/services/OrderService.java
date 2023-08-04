@@ -35,6 +35,9 @@ public class OrderService implements IOrderService {
 
         var orderSaved = orderRepository.save(order);
 
+//        atualizar stock
+        productServiceClient.updateStock();
+
         return orderMapper.toDto(orderSaved);
     }
 

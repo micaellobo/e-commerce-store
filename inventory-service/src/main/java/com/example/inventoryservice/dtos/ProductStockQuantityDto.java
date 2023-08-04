@@ -1,6 +1,7 @@
 package com.example.inventoryservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.io.Serializable;
@@ -10,6 +11,9 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ProductStockQuantityDto(
+        @NotNull
+        Long productId,
+        @NotNull
         @Positive
         int quantity
 ) implements Serializable {

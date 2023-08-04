@@ -2,13 +2,10 @@ package com.example.inventoryservice.controllers;
 
 import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
-import com.example.inventoryservice.dtos.ProductDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
-import com.example.inventoryservice.models.Product;
 import com.example.inventoryservice.services.IProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -66,13 +63,12 @@ public class ProductController {
 
         var products = productService.getAll();
 
-        var productDtos = productMapper.toDtos(products);
+        var productsDto = productMapper.toDtos(products);
 
-        return ResponseEntity.ok(productDtos);
+        return ResponseEntity.ok(productsDto);
     }
 
-
-    @PatchMapping("/{productId}/increase-stock")
+    @PatchMapping("/increase-stock")
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
@@ -86,21 +82,20 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{productId}/decrease-stock")
+    @PatchMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
-            @PathVariable final Long productId,
-            @Valid @RequestBody ProductStockQuantityDto productStockQuantityDto) {
+            @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productStockQuantityDto);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productsQuantities);
 
-        productService.decreaseStock(productId, productStockQuantityDto);
+        productService.decreaseStock(productsQuantities);
 
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/by-ids")
     public ResponseEntity<Object> getByIds(
             HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
