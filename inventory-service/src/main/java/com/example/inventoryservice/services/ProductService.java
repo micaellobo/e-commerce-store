@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,35 +40,44 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void increaseStock(final Long productId,
-                              final ProductStockQuantityDto productStockQuantityDto) {
-        var product = productRepository.findById(productId)
+    public Product getOneBy(final Long id) {
+        return productRepository.findById(id)
                 .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
+    }
 
-        product.setQuantity(product.getQuantity() + productStockQuantityDto.quantity());
+    @Override
+    public List<Product> getByIds(final List<Long> ids) {
+        return productRepository.findAllById(ids);
+    }
 
-        productRepository.save(product);
+    @Override
+    public void increaseStock(final List<ProductStockQuantityDto> productsQuantities) {
+
+        var productsMap = createProductsMapFromQuantities(productsQuantities);
+
+        productsQuantities
+                .forEach(productQuantity -> {
+                    var product = productsMap.get(productQuantity.productId());
+                    var newQuantity = product.getQuantity() + productQuantity.quantity();
+
+                    product.setQuantity(newQuantity);
+                });
+
+        var updatedProducts = productsMap.values()
+                .stream()
+                .toList();
+
+        productRepository.saveAll(updatedProducts);
     }
 
     @Override
     public void decreaseStock(final List<ProductStockQuantityDto> productsQuantities) {
 
-        var productIds = productsQuantities.stream()
-                .map(ProductStockQuantityDto::productId)
-                .toList();
-
-        var productsMap = getByIds(productIds)
-                .stream()
-                .collect(Collectors.toMap(Product::getId, Function.identity()));
-
-        if (productsMap.size() != productIds.size()) {
-            throw new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST);
-        }
+        var productsMap = createProductsMapFromQuantities(productsQuantities);
 
         productsQuantities
                 .forEach(productQuantity -> {
                     var product = productsMap.get(productQuantity.productId());
-
                     var newQuantity = product.getQuantity() - productQuantity.quantity();
 
                     if (newQuantity < 0)
@@ -84,14 +93,24 @@ public class ProductService implements IProductService {
         productRepository.saveAll(updatedProducts);
     }
 
-    @Override
-    public Product getOneBy(final Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
+    private Map<Long, Product> createProductsMapFromQuantities(final List<ProductStockQuantityDto> productsQuantities) {
+        var productIds = productsQuantities.stream()
+                .map(ProductStockQuantityDto::productId)
+                .toList();
+
+        var productsMap = createProductsMap(productIds);
+
+        if (productsMap.size() != productIds.size()) {
+            throw new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST);
+        }
+        return productsMap;
     }
 
-    @Override
-    public List<Product> getByIds(final List<Long> ids) {
-        return productRepository.findAllById(ids);
+    private Map<Long, Product> createProductsMap(final List<Long> productIds) {
+        return getByIds(productIds)
+                .stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
     }
+
+
 }

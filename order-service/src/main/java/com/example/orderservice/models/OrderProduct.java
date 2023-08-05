@@ -1,9 +1,8 @@
 package com.example.orderservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -14,7 +13,6 @@ import java.util.Objects;
 @Setter
 @Entity(name = "order_products")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
 public class OrderProduct {
@@ -23,11 +21,20 @@ public class OrderProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Long productId;
 
+    @NotNull
+    @Positive
     private int quantity;
 
+    @Positive
+    @NotNull
     private BigDecimal price;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Order order;
 
     @Override
     public boolean equals(Object o) {

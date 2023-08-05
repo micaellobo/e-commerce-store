@@ -14,7 +14,7 @@ public record OrderDto(
         Long id,
         Long userId,
         Set<OrderProductDto> products,
-        LocalDateTime date,
+        LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) implements Serializable {
 }

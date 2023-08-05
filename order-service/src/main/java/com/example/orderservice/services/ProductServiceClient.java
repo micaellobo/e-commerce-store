@@ -1,12 +1,17 @@
 package com.example.orderservice.services;
 
+import com.example.orderservice.dtos.OrderProductCreateDto;
 import com.example.orderservice.dtos.ProductDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +34,7 @@ public class ProductServiceClient implements IProductServiceClient {
 
             return Optional.ofNullable(response.getBody());
         } catch (Exception ex) {
-            log.info(ex.getMessage());
+            log.error(ex.getMessage());
             return Optional.empty();
         }
     }
@@ -48,21 +53,26 @@ public class ProductServiceClient implements IProductServiceClient {
             return Arrays.stream(Objects.requireNonNull(response.getBody()))
                     .collect(Collectors.toMap(ProductDto::id, productDto -> productDto));
         } catch (Exception ex) {
-            log.info(ex.getMessage());
+            log.error(ex.getMessage());
             return new HashMap<>();
         }
     }
 
     @Override
-    public boolean updateStock(final Set<Long> ids) {
+    public boolean updateStock(final List<OrderProductCreateDto> ids) {
         try {
-            var url = serviceUrl + "/stock/decrease";
+            var url = serviceUrl + "/decrease-stock";
 
-            var response = restTemplate.getForEntity(url, ProductDto[].class);
+            var response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    new HttpEntity<>(ids),
+                    Void.class
+            );
 
-            return response.getStatusCode().is1xxInformational();
+            return response.getStatusCode().is2xxSuccessful();
         } catch (Exception ex) {
-            log.info(ex.getMessage());
+            log.error(ex.getMessage());
             return false;
         }
     }

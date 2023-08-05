@@ -6,15 +6,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Builder
 @Getter
 @Setter
 @Entity(name = "orders")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Order {
@@ -25,13 +24,13 @@ public class Order {
 
     private Long userId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
-    private Set<OrderProduct> products;
+    private List<OrderProduct> products;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime date;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)

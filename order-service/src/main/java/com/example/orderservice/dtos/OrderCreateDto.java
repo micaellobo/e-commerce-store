@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,6 +12,6 @@ import java.util.Set;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OrderCreateDto(
-        Set<OrderProductCreateDto> products
+        List<OrderProductCreateDto> products
 ) implements Serializable {
 }

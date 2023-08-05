@@ -72,17 +72,16 @@ public class ProductController {
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,
-            @PathVariable final Long productId,
-            @Valid @RequestBody ProductStockQuantityDto productStockQuantityDto) {
+            @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productStockQuantityDto);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productsQuantities);
 
-        productService.increaseStock(productId, productStockQuantityDto);
+        productService.increaseStock(productsQuantities);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/decrease-stock")
+    @PutMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
             @RequestHeader("CorrelationID") String correlationId,

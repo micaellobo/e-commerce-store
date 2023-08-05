@@ -40,6 +40,10 @@ public class ApiGatewayApplication {
                         r -> r.path("/api/v1/reviews/**")
                                 .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
                                 .uri("lb://reviews-service"))
+                .route("orders-service",
+                        r -> r.path("/api/v1/orders/**")
+                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
+                                .uri("lb://order-service"))
                 .build();
     }
 }

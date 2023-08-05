@@ -7,9 +7,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.*;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -36,6 +34,11 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             var bearerToken = headers.getFirst("Authorization");
             var correlationID = headers.getFirst("CorrelationID");
 
+            if (bearerToken == null) {
+                log.error("bearerToken NULL");
+                return onError(exchange, HttpStatus.UNAUTHORIZED);
+            }
+
             return webClientBuilder.build()
                     .post()
                     .uri(authServiceUrl + "/validate")
@@ -43,11 +46,11 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
                     .header("CorrelationID", correlationID)
                     .retrieve()
                     .toBodilessEntity()
-                    .flatMap(getResponseEntityMonoFunction(exchange, chain))
-                    .onErrorResume(error -> {
-                        log.error(error.getMessage());
-                        return onError(exchange);
-                    });
+                    .flatMap(getResponseEntityMonoFunction(exchange, chain));
+//                    .onErrorResume(error -> {
+//                        log.error(error.getMessage());
+//                        return onError(exchange);
+//                    });
         };
     }
 
@@ -55,6 +58,11 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             final ServerWebExchange exchange,
             final GatewayFilterChain chain) {
         return response -> {
+
+            if (!response.getStatusCode().is2xxSuccessful()){
+                return onError(exchange, response.getStatusCode());
+            }
+
             var headers = response
                     .getHeaders();
 
@@ -62,7 +70,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             var username = headers.getFirst("username");
 
             if (username == null || userId == null) {
-                return onError(exchange);
+                return onError(exchange, response.getStatusCode());
             }
 
             var modifiedRequest = exchange.getRequest()
@@ -75,9 +83,9 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
         };
     }
 
-    private Mono<Void> onError(final ServerWebExchange exchange) {
+    private Mono<Void> onError(final ServerWebExchange exchange, final HttpStatusCode statusCode) {
         var response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        response.setStatusCode(statusCode);
         return response.setComplete();
     }
 

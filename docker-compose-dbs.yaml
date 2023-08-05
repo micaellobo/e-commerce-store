@@ -44,11 +44,26 @@ services:
     restart: unless-stopped
     networks:
       - e-commerce-shop-dbs
+  db-orders:
+    container_name: db-orders
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    volumes:
+      - db-pgdata-orders:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-shop-dbs
 
 volumes:
   db-pgdata-users:
   db-pgdata-inventory:
   db-pgdata-reviews:
+  db-pgdata-orders:
 
 networks:
   e-commerce-shop-dbs:
