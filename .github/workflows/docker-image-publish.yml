@@ -29,39 +29,42 @@ jobs:
           context: "{{defaultContext}}:eureka-service"
           push: true
           tags: 8160202/eureka-service:latest
-          platforms: 'linux/arm64'
-#      -
-#        name: Build and push api-gateway
-#        uses: docker/build-push-action@v4
-#        with:
-#          context: "{{defaultContext}}:api-gateway"
-#          push: true
-#          tags: 8160202/api-gateway:latest
-#      -
-#        name: Build and push user-service
-#        uses: docker/build-push-action@v4
-#        with:
-#          context: "{{defaultContext}}:user-service"
-#          push: true
-#          tags: 8160202/user-service:latest
-#      -
-#        name: Build and push auth-service
-#        uses: docker/build-push-action@v4
-#        with:
-#          context: "{{defaultContext}}:auth-service"
-#          push: true
-#          tags: 8160202/auth-service:latest
-#
-#      - name: Build and push inventory-service
-#        uses: docker/build-push-action@v4
-#        with:
-#          context: "{{defaultContext}}:inventory-service"
-#          push: true
-#          tags: 8160202/inventory-service:latest
-#
-#      - name: Build and push reviews-service
-#        uses: docker/build-push-action@v4
-#        with:
-#          context: "{{defaultContext}}:reviews-service"
-#          push: true
-#          tags: 8160202/reviews-service:latest
+          platforms: 'linux/arm64,linux/amd64'
+      -
+        name: Build and push api-gateway
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:api-gateway"
+          push: true
+          tags: 8160202/api-gateway:latest
+          platforms: 'linux/arm64,linux/amd64'
+      -
+        name: Build and push user-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:user-service"
+          push: true
+          tags: 8160202/user-service:latest
+          platforms: 'linux/arm64,linux/amd64'
+      -
+        name: Build and push auth-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:auth-service"
+          push: true
+          tags: 8160202/auth-service:latest
+          platforms: 'linux/arm64,linux/amd64'
+      - name: Build and push inventory-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:inventory-service"
+          push: true
+          tags: 8160202/inventory-service:latest
+          platforms: 'linux/arm64,linux/amd64'
+      - name: Build and push reviews-service
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:reviews-service"
+          push: true
+          tags: 8160202/reviews-service:latest
+          platforms: 'linux/arm64,linux/amd64'
