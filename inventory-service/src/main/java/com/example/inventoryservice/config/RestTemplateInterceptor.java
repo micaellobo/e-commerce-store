@@ -17,15 +17,13 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-//        var correlationId = UUID.randomUUID().toString();
         var correlationId = context.getCorrelationId();
         var userId = context.getUserId();
         var username = context.getUsername();
 
+//        log.info("{} - {} - {} - {}", request.getMethod(), request.getURI().getPath(), correlationId, null);
+
         var headers = request.getHeaders();
-
-        log.info("{} - {} - {} - {}", request.getMethod(), request.getURI().getPath(), correlationId, null);
-
         headers.add("CorrelationId", correlationId);
 
         if (context.isAuthenticated()) {
