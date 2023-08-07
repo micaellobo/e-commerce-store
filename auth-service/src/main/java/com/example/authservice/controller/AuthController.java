@@ -1,6 +1,7 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.dtos.LoginDto;
+import com.example.authservice.config.*;
 import com.example.authservice.service.IAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final IAuthService authService;
+    private final CustomContextHolder contextHolder;
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody LoginDto loginDto) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, loginDto);
+        logRequest(request, loginDto);
 
         var jwt = authService.login(loginDto);
 
@@ -37,10 +38,9 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<Object> validateToken(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @RequestHeader("Authorization") String headerAuthorization) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, null);
+        logRequest(request, null);
 
         var jwt = headerAuthorization.replace("Bearer ", "");
 
@@ -51,5 +51,9 @@ public class AuthController {
         responseHeaders.set("username", userHeader.username());
 
         return ResponseEntity.ok().headers(responseHeaders).build();
+    }
+
+    private void logRequest(final HttpServletRequest request, final Object obj) {
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
     }
 }

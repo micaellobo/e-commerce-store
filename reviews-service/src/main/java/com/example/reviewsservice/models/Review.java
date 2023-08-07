@@ -28,6 +28,9 @@ public class Review {
     private Long productId;
 
     @NotNull
+    private Long orderId;
+
+    @NotNull
     private int rating;
 
     @NotNull

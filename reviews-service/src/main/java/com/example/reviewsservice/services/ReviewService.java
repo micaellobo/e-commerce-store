@@ -1,11 +1,13 @@
 package com.example.reviewsservice.services;
 
+import com.example.reviewsservice.config.CustomContextHolder;
 import com.example.reviewsservice.controllers.ReviewException;
 import com.example.reviewsservice.dtos.*;
 import com.example.reviewsservice.models.Review;
 import com.example.reviewsservice.repository.IReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,12 +22,29 @@ public class ReviewService implements IReviewService {
     private final IReviewMapper reviewMapper;
     private final IReviewRepository reviewRepository;
     private final IProductServiceClient productServiceClient;
+    private final IOrderServiceClient orderServiceClient;
+    private final CustomContextHolder context;
 
     @Override
     public ReviewDto add(final ReviewCreateDto reviewCreateDto) {
 
-        productServiceClient.getProductById(reviewCreateDto.productId())
-                .orElseThrow(() -> new ReviewException(ReviewException.PRODUCT_DOES_NOT_EXISTS));
+        var existsReview = reviewRepository.existsByUserIdAndOrderIdAndProductId(
+                context.getUserId(),
+                reviewCreateDto.orderId(),
+                reviewCreateDto.productId()
+        );
+
+        if (existsReview)
+            throw new ReviewException(ReviewException.REVIEW_ALREADY_EXISTS);
+
+        var order = orderServiceClient.getOrder(
+                        reviewCreateDto.orderId(),
+                        context.getUserId(),
+                        context.getUsername())
+                .orElseThrow(() -> new ReviewException(ReviewException.ORDER_DOES_NOT_EXIST));
+
+        if (!isProductPresentInOrder(reviewCreateDto, order))
+            throw new ReviewException(ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER);
 
         var review = reviewMapper.toReview(reviewCreateDto);
 
@@ -34,36 +53,28 @@ public class ReviewService implements IReviewService {
         return reviewMapper.toDto(reviewSaved);
     }
 
-    @Override
-    public List<ReviewDto> getByProduct(final Long productId) {
-        var reviewsByProduct = reviewRepository.findByProductId(productId);
-        return reviewMapper.toDto(reviewsByProduct);
+    private static boolean isProductPresentInOrder(final ReviewCreateDto reviewCreateDto, final OrderDto order) {
+        return order.products()
+                .stream()
+                .anyMatch(orderProductDto -> orderProductDto.productId().equals(reviewCreateDto.productId()));
     }
 
     @Override
-    public List<ReviewDto> getByUserAndProduct(final Long userId, final Long productId) {
-        var reviewsByUserAndProduct = reviewRepository.findByUserIdAndProductId(userId, productId);
-        return reviewMapper.toDto(reviewsByUserAndProduct);
-    }
-
-    @Override
-    public List<ReviewDto> getByUser(final Long userId) {
-        var repositoryByUser = reviewRepository.findByUserId(userId);
+    public List<ReviewDto> getByUser() {
+        var repositoryByUser = reviewRepository.findByUserId(context.getUserId());
         return reviewMapper.toDto(repositoryByUser);
     }
 
     @Override
-    public ReviewDto getOneByUserAndId(final Long userId,
-                                       final Long reviewId) {
+    public List<ReviewDto> getAllByProduct(final Long productId) {
+        var reviewsByProduct = reviewRepository.findByProductId(productId);
 
-        var review = reviewRepository.findByUserIdAndId(userId, reviewId)
-                .orElseThrow(() -> new ReviewException(ReviewException.REVIEW_DOES_NOT_EXISTS));
-        return reviewMapper.toDto(review);
+        return reviewMapper.toDto(reviewsByProduct);
     }
 
     @Override
     public boolean delete(final Long reviewId) {
-        reviewRepository.findById(reviewId)
+        reviewRepository.findByUserIdAndId(context.getUserId(), reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewException.REVIEW_DOES_NOT_EXISTS));
 
         reviewRepository.deleteById(reviewId);

@@ -1,5 +1,8 @@
 package com.example.userservice.controler;
 
+import com.example.userservice.config.CustomContext;
+import com.example.userservice.config.CustomContextHolder;
+import com.example.userservice.config.RequiresAuthentication;
 import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
 import com.example.userservice.dto.IUserMapper;
@@ -20,29 +23,26 @@ public class UserController {
 
     private final IUserService userService;
     private final IUserMapper userMapper;
+    private final CustomContextHolder contextHolder;
 
-    @GetMapping
-    public ResponseEntity<Object> getUser(
+    @PostMapping
+    public ResponseEntity<Object> createUser(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
-            @RequestHeader("username") String username) {
+            @Valid @RequestBody UserCreateDto userCreateDto) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, username, null);
+        logRequest(request, userCreateDto);
 
-        var user = userService.getUser(username);
+        var user = userService.insertUser(userCreateDto);
 
-        var dto = userMapper.toDto(user);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(user));
     }
 
     @PostMapping("/login")
     public ResponseEntity<Object> getUserLogin(
             HttpServletRequest request,
-            @RequestHeader String correlationId,
             @RequestBody LoginDto loginDto) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, loginDto);
+        logRequest(request, null);
 
         var user = userService.getUserLogin(loginDto);
 
@@ -51,17 +51,20 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> createUser(
-            HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
-            @Valid @RequestBody UserCreateDto userCreateDto) {
+    @GetMapping("me")
+    @RequiresAuthentication
+    public ResponseEntity<Object> getUser(HttpServletRequest request) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, userCreateDto);
+        logRequest(request, null);
 
-        var user = userService.insertUser(userCreateDto);
+        var user = userService.getUser();
 
-//        return ResponseEntity.created(URI.create("/" + user.getId())).build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(user));
+        var dto = userMapper.toDto(user);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    private void logRequest(final HttpServletRequest request, final Object obj) {
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
     }
 }

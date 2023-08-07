@@ -1,6 +1,7 @@
 package com.example.inventoryservice.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +14,13 @@ public class ProductControllerErrorHandling {
 
     @ExceptionHandler(ProductException.class)
     public ResponseEntity<ProblemDetail> OnUserException(ProductException exception) {
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        if (exception.statusCode != null) {
+            status = exception.statusCode;
+        }
+
+        var problemDetail = ProblemDetail.forStatusAndDetail(status, exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
@@ -43,5 +49,10 @@ public class ProductControllerErrorHandling {
         var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ProblemDetail> OnAuthException(AuthException ex) {
+        return ResponseEntity.status(ex.httpStatus).build();
     }
 }

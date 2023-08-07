@@ -11,7 +11,7 @@ public interface IProductMapper {
 
     ProductDto toDto(Product product);
 
-    List<ProductDto> toDtos(List<Product> products);
+    List<ProductDto> toDto(List<Product> products);
 
     void partialUpdate(ProductCreateDto productCreateDto, @MappingTarget Product product);
 

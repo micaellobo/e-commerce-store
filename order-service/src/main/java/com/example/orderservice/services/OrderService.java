@@ -1,5 +1,7 @@
 package com.example.orderservice.services;
 
+import com.example.orderservice.config.CustomContext;
+import com.example.orderservice.config.CustomContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
 import com.example.orderservice.models.Order;
@@ -25,15 +27,16 @@ public class OrderService implements IOrderService {
     private final IOrderRepository orderRepository;
     private final IOrderMapper orderMapper;
     private final IProductServiceClient productServiceClient;
+    private final CustomContextHolder contextHolder;
 
     @Transactional
     @Override
-    public OrderDto add(final OrderCreateDto orderCreateDto, final Long userId) {
+    public OrderDto add(final OrderCreateDto orderCreateDto) {
 
         var order = new Order();
-        var productsOrder = getOrderProducts(orderCreateDto, order);
 
-        order.setUserId(userId);
+        var productsOrder = getOrderProducts(orderCreateDto, order);
+        order.setUserId(contextHolder.getUserId());
         order.setProducts(productsOrder);
 
         var orderSaved = orderRepository.save(order);
@@ -46,6 +49,14 @@ public class OrderService implements IOrderService {
         }
 
         return orderMapper.toDto(orderSaved);
+    }
+
+    @Override
+    public OrderDto getOne(final Long orderId) {
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderException(OrderException.ORDER_DOES_NOT_EXIST));
+
+        return orderMapper.toDto(order);
     }
 
     private List<OrderProduct> getOrderProducts(final OrderCreateDto orderCreateDto, final Order order) {

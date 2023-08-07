@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.config.CustomContextHolder;
 import com.example.userservice.dto.*;
 import com.example.userservice.utils.HashUtils;
 import com.example.userservice.controler.UserException;
@@ -16,31 +17,33 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final IUserMapper userMapper;
+    private final CustomContextHolder contextHolder;
 
     @Override
     public User insertUser(final UserCreateDto userCreateDto) {
 
-        var user = userMapper.toUser(userCreateDto);
+        var password = HashUtils.Sha256Hash(userCreateDto.password());
+
+        var user = userMapper.toUser(userCreateDto, password);
 
         var exists = userRepository.existsUser(user);
 
         if (exists)
             throw new UserException(UserException.USER_ALREADY_EXISTS);
 
-        user.setPassword(HashUtils.Sha256Hash(user.getPassword()));
-
         return userRepository.save(user);
     }
 
     @Override
-    public User getUser(final String username) {
-        return userRepository.findByUsername(username)
+    public User getUser() {
+        return userRepository.findByUsername(contextHolder.getUsername())
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
     }
 
     @Override
     public User getUserLogin(LoginDto loginDto) {
         var password = HashUtils.Sha256Hash(loginDto.password());
+
         return userRepository.findByUsernameAndPassword(loginDto.username(), password)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
     }

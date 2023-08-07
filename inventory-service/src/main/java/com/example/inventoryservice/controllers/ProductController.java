@@ -1,5 +1,6 @@
 package com.example.inventoryservice.controllers;
 
+import com.example.inventoryservice.config.CustomContextHolder;
 import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
@@ -22,14 +23,14 @@ public class ProductController {
 
     private final IProductService productService;
     private final IProductMapper productMapper;
+    private final CustomContextHolder contextHolder;
 
     @PostMapping("/add")
     public ResponseEntity<Object> add(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody ProductCreateDto productCreateDto) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productCreateDto);
+        logRequest(request, productCreateDto);
 
         var product = productService.add(productCreateDto);
 
@@ -42,10 +43,9 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneById(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @PathVariable Long id) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, null);
+        logRequest(request, null);
 
         var product = productService.getOneBy(id);
 
@@ -55,26 +55,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAll(
-            HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId) {
+    public ResponseEntity<Object> getAll(HttpServletRequest request) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, null);
+        logRequest(request, null);
 
         var products = productService.getAll();
 
-        var productsDto = productMapper.toDtos(products);
+        var productsDto = productMapper.toDto(products);
 
         return ResponseEntity.ok(productsDto);
     }
 
-    @PatchMapping("/increase-stock")
+    @PutMapping("/increase-stock")
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productsQuantities);
+        logRequest(request, productsQuantities);
 
         productService.increaseStock(productsQuantities);
 
@@ -84,10 +81,9 @@ public class ProductController {
     @PutMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, productsQuantities);
+        logRequest(request, productsQuantities);
 
         productService.decreaseStock(productsQuantities);
 
@@ -97,15 +93,18 @@ public class ProductController {
     @GetMapping("/by-ids")
     public ResponseEntity<Object> getByIds(
             HttpServletRequest request,
-            @RequestHeader("CorrelationID") String correlationId,
             @RequestParam List<Long> ids) {
 
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), correlationId, null, ids);
+        logRequest(request, ids);
 
         var products = productService.getByIds(ids);
 
-        var productsDto = productMapper.toDtos(products);
+        var productsDto = productMapper.toDto(products);
 
         return ResponseEntity.ok(productsDto);
+    }
+
+    private void logRequest(final HttpServletRequest request, final Object obj) {
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
     }
 }

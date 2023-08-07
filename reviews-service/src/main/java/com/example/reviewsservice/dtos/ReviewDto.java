@@ -12,8 +12,8 @@ public record ReviewDto(
         Long id,
         Long userId,
         Long productId,
+        Long orderId,
         String reviewText,
-        int helpFulCount,
         LocalDateTime createdAt,
         int rating
 ) implements Serializable {

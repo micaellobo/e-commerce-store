@@ -20,29 +20,36 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder, AuthenticationPrefilter authFilter) {
         return builder.routes()
-                .route("user-service-without-auth",
-                        r ->
-                                r.method(HttpMethod.POST)
-                                        .and()
-                                        .path("/api/v1/users")
-                                        .uri("lb://user-service"))
-                .route("user-service-with-auth",
-                        r -> r.path("/api/v1/users/**")
-                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
-                                .uri("lb://user-service"))
                 .route("auth-service",
                         r -> r.path("/api/v1/auth/login")
                                 .uri("lb://auth-service"))
-                .route("inventory-service",
+                .route("user-service-with-auth",
+                        r -> r.path("/api/v1/users/me/**")
+                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
+                                .uri("lb://user-service"))
+                .route("user-service-no-auth",
+                        r -> r.path("/api/v1/users/**")
+                                .uri("lb://user-service"))
+                .route("inventory-service-with-auth",
+                        r -> r.path("/api/v1/products/users/me/**")
+                                .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
+                                .uri("lb://inventory-service"))
+                .route("inventory-service-no-auth",
                         r -> r.path("/api/v1/products/**")
                                 .uri("lb://inventory-service"))
-                .route("reviews-service",
-                        r -> r.path("/api/v1/reviews/**")
+                .route("reviews-service-with-auth",
+                        r -> r.path("/api/v1/reviews/users/me/**")
                                 .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
                                 .uri("lb://reviews-service"))
-                .route("orders-service",
-                        r -> r.path("/api/v1/orders/**")
+                .route("reviews-service-no-auth",
+                        r -> r.path("/api/v1/reviews/**")
+                                .uri("lb://reviews-service"))
+                .route("orders-service-with-auth",
+                        r -> r.path("/api/v1/orders/users/me/**")
                                 .filters(f -> f.filter(authFilter.apply(new AuthenticationPrefilter.Config())))
+                                .uri("lb://order-service"))
+                .route("orders-service-no-auth",
+                        r -> r.path("/api/v1/orders/**")
                                 .uri("lb://order-service"))
                 .build();
     }

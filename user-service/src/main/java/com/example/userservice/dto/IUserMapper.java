@@ -7,7 +7,8 @@ import org.mapstruct.*;
 public interface IUserMapper {
     User toUser(UserDto userDto);
 
-    User toUser(UserCreateDto userCreateDto);
+    @Mapping(target = "password", expression = "java(password)")
+    User toUser(UserCreateDto userCreateDto, @Context String password);
 
     User toUser(UserEditDto userEditDto);
 

@@ -11,13 +11,9 @@ import java.util.List;
 public interface IReviewService {
     ReviewDto add(final ReviewCreateDto reviewCreateDto);
 
-    List<ReviewDto> getByProduct(final Long productId);
+    List<ReviewDto> getAllByProduct(final Long productId);
 
-    List<ReviewDto> getByUserAndProduct(final Long userId, final Long productId);
-
-    List<ReviewDto> getByUser(final Long userId);
-
-    ReviewDto getOneByUserAndId(final Long userid, final Long reviewId);
+    List<ReviewDto> getByUser();
 
     boolean delete(final Long reviewId);
 

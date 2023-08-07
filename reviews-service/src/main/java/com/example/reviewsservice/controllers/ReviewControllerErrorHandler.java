@@ -2,6 +2,7 @@ package com.example.reviewsservice.controllers;
 
 import com.example.reviewsservice.models.Review;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,10 +15,15 @@ public class ReviewControllerErrorHandler {
 
     @ExceptionHandler(ReviewException.class)
     public ResponseEntity<ProblemDetail> OnUserException(ReviewException exception) {
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        if (exception.statusCode != null) {
+            status = exception.statusCode;
+        }
+        
+        var problemDetail = ProblemDetail.forStatusAndDetail(status, exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+        return ResponseEntity.status(status).body(problemDetail);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,5 +50,10 @@ public class ReviewControllerErrorHandler {
         var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ProblemDetail> OnAuthException(AuthException ex) {
+        return ResponseEntity.status(ex.httpStatus).build();
     }
 }

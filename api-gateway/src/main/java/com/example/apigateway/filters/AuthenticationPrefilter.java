@@ -9,6 +9,8 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -39,18 +41,22 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
 
-            return webClientBuilder.build()
-                    .post()
-                    .uri(authServiceUrl + "/validate")
-                    .header("Authorization", bearerToken)
-                    .header("CorrelationID", correlationID)
-                    .retrieve()
-                    .toBodilessEntity()
-                    .flatMap(getResponseEntityMonoFunction(exchange, chain));
-//                    .onErrorResume(error -> {
-//                        log.error(error.getMessage());
-//                        return onError(exchange);
-//                    });
+            try {
+                return webClientBuilder.build()
+                        .post()
+                        .uri(authServiceUrl + "/validate")
+                        .header("Authorization", bearerToken)
+                        .header("CorrelationID", correlationID)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .flatMap(getResponseEntityMonoFunction(exchange, chain));
+            } catch (WebClientResponseException e) {
+                log.error(e.getMessage());
+                return onError(exchange, e.getStatusCode());
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         };
     }
 
@@ -59,7 +65,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             final GatewayFilterChain chain) {
         return response -> {
 
-            if (!response.getStatusCode().is2xxSuccessful()){
+            if (!response.getStatusCode().is2xxSuccessful()) {
                 return onError(exchange, response.getStatusCode());
             }
 

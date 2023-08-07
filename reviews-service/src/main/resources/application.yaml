@@ -1,5 +1,6 @@
 api:
-  user-service: lb://username-service/api/v1/users
+  user-service: lb://user-service/api/v1/users
+  order-service: lb://order-service/api/v1/orders
   inventory-service: lb://inventory-service/api/v1/products
 server:
   port: 8084

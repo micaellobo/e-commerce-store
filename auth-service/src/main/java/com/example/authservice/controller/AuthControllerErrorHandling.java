@@ -1,6 +1,7 @@
 package com.example.authservice.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,7 +14,13 @@ public class AuthControllerErrorHandling {
 
     @ExceptionHandler(AuthException.class)
     public ProblemDetail OnUserException(AuthException exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
+
+        if (exception.statusCode != null) {
+            status = exception.statusCode;
+        }
+
+        return ProblemDetail.forStatusAndDetail(status, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,4 +39,6 @@ public class AuthControllerErrorHandling {
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
     }
+
+
 }

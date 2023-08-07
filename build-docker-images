@@ -5,6 +5,7 @@ cd api-gateway; mvn clean package; cd ..
 cd user-service; mvn clean package; cd ..
 cd auth-service; mvn clean package; cd ..
 cd inventory-service; mvn clean package; cd ..
+cd order-service; mvn clean package; cd ..
 
 docker rmi eureka-service;
 docker rmi api-gateway
