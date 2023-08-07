@@ -22,7 +22,7 @@ public class ProductService implements IProductService {
     private final IProductRepository productRepository;
 
     @Override
-    public Product add(final ProductCreateDto productCreateDto) {
+    public Product addOne(final ProductCreateDto productCreateDto) {
 
         var exists = productRepository.existsByName(productCreateDto.name());
 
@@ -46,7 +46,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getByIds(final List<Long> ids) {
+    public List<Product> getAllByIds(final List<Long> ids) {
         return productRepository.findAllById(ids);
     }
 
@@ -107,7 +107,7 @@ public class ProductService implements IProductService {
     }
 
     private Map<Long, Product> createProductsMap(final List<Long> productIds) {
-        return getByIds(productIds)
+        return getAllByIds(productIds)
                 .stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
     }

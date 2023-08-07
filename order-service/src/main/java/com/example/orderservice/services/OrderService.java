@@ -1,6 +1,5 @@
 package com.example.orderservice.services;
 
-import com.example.orderservice.config.CustomContext;
 import com.example.orderservice.config.CustomContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
@@ -31,7 +30,7 @@ public class OrderService implements IOrderService {
 
     @Transactional
     @Override
-    public OrderDto add(final OrderCreateDto orderCreateDto) {
+    public OrderDto addOne(final OrderCreateDto orderCreateDto) {
 
         var order = new Order();
 

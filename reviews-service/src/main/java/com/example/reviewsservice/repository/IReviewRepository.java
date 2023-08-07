@@ -1,11 +1,9 @@
 package com.example.reviewsservice.repository;
 
 import com.example.reviewsservice.models.Review;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +16,14 @@ public interface IReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByUserId(Long userId);
 
-    List<Review> findByUserIdAndProductId(Long userId, Long productId);
-
     List<Review> findByProductId(Long productId);
 
     boolean existsByUserIdAndOrderIdAndProductId(final Long userId, final Long orderId, final Long productId);
+
     Optional<Review> findByUserIdAndOrderIdAndProductId(final Long userId, final Long orderId, final Long productId);
+
+    @Transactional
+    @Modifying
+    @Query("delete from reviews r where r.id = ?1")
+    int deleteOneById(Long id);
 }

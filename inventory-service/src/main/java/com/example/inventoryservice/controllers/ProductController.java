@@ -32,7 +32,7 @@ public class ProductController {
 
         logRequest(request, productCreateDto);
 
-        var product = productService.add(productCreateDto);
+        var product = productService.addOne(productCreateDto);
 
         var productDto = productMapper.toDto(product);
 
@@ -97,7 +97,7 @@ public class ProductController {
 
         logRequest(request, ids);
 
-        var products = productService.getByIds(ids);
+        var products = productService.getAllByIds(ids);
 
         var productsDto = productMapper.toDto(products);
 

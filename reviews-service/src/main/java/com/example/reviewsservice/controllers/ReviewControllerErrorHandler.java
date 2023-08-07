@@ -1,6 +1,5 @@
 package com.example.reviewsservice.controllers;
 
-import com.example.reviewsservice.models.Review;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

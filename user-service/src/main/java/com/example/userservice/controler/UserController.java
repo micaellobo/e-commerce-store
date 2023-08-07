@@ -1,6 +1,5 @@
 package com.example.userservice.controler;
 
-import com.example.userservice.config.CustomContext;
 import com.example.userservice.config.CustomContextHolder;
 import com.example.userservice.config.RequiresAuthentication;
 import com.example.userservice.dto.LoginDto;
@@ -32,7 +31,7 @@ public class UserController {
 
         logRequest(request, userCreateDto);
 
-        var user = userService.insertUser(userCreateDto);
+        var user = userService.addOne(userCreateDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(user));
     }

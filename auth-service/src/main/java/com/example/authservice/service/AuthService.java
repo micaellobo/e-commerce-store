@@ -2,14 +2,11 @@ package com.example.authservice.service;
 
 import com.example.authservice.controller.AuthException;
 import com.example.authservice.dtos.LoginDto;
-import com.example.authservice.dtos.UserDto;
 import com.example.authservice.dtos.UserHeader;
 import com.example.authservice.jwt.JWTHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor

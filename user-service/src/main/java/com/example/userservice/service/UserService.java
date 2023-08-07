@@ -20,7 +20,7 @@ public class UserService implements IUserService {
     private final CustomContextHolder contextHolder;
 
     @Override
-    public User insertUser(final UserCreateDto userCreateDto) {
+    public User addOne(final UserCreateDto userCreateDto) {
 
         var password = HashUtils.Sha256Hash(userCreateDto.password());
 

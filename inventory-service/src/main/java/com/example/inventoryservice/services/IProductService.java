@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IProductService {
 
-    Product add(ProductCreateDto productCreateDto);
+    Product addOne(ProductCreateDto productCreateDto);
 
     List<Product> getAll();
 
@@ -18,5 +18,5 @@ public interface IProductService {
 
     Product getOneBy(Long id);
 
-    List<Product> getByIds(List<Long> ids);
+    List<Product> getAllByIds(List<Long> ids);
 }

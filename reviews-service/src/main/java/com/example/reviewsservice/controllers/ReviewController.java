@@ -31,7 +31,7 @@ public class ReviewController {
 
         logRequest(request, reviewCreateDto);
 
-        var review = reviewService.add(reviewCreateDto);
+        var review = reviewService.addOne(reviewCreateDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(review);
     }
@@ -42,7 +42,7 @@ public class ReviewController {
 
         logRequest(request, null);
 
-        var reviews = reviewService.getByUser();
+        var reviews = reviewService.getAllByUser();
 
         return ResponseEntity.ok(reviews);
     }
@@ -55,7 +55,7 @@ public class ReviewController {
 
         logRequest(request, null);
 
-        var hasDeleted = reviewService.delete(reviewId);
+        var hasDeleted = reviewService.deleteOne(reviewId);
 
         if (hasDeleted)
             return ResponseEntity.noContent().build();

@@ -5,10 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

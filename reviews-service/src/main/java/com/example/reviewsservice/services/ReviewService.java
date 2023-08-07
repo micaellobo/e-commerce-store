@@ -7,7 +7,6 @@ import com.example.reviewsservice.models.Review;
 import com.example.reviewsservice.repository.IReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,12 +20,11 @@ public class ReviewService implements IReviewService {
 
     private final IReviewMapper reviewMapper;
     private final IReviewRepository reviewRepository;
-    private final IProductServiceClient productServiceClient;
     private final IOrderServiceClient orderServiceClient;
     private final CustomContextHolder context;
 
     @Override
-    public ReviewDto add(final ReviewCreateDto reviewCreateDto) {
+    public ReviewDto addOne(final ReviewCreateDto reviewCreateDto) {
 
         var existsReview = reviewRepository.existsByUserIdAndOrderIdAndProductId(
                 context.getUserId(),
@@ -60,7 +58,7 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public List<ReviewDto> getByUser() {
+    public List<ReviewDto> getAllByUser() {
         var repositoryByUser = reviewRepository.findByUserId(context.getUserId());
         return reviewMapper.toDto(repositoryByUser);
     }
@@ -73,13 +71,11 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public boolean delete(final Long reviewId) {
+    public boolean deleteOne(final Long reviewId) {
         reviewRepository.findByUserIdAndId(context.getUserId(), reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewException.REVIEW_DOES_NOT_EXISTS));
 
-        reviewRepository.deleteById(reviewId);
-
-        return true;
+        return reviewRepository.deleteOneById(reviewId) == 1;
     }
 
     @Override

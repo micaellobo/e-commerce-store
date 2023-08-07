@@ -1,7 +1,6 @@
 package com.example.userservice.dto;
 
 import com.example.userservice.models.User;
-import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 
