@@ -50,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("me")
+    @GetMapping("/me")
     @RequiresAuthentication
     public ResponseEntity<Object> getUser(HttpServletRequest request) {
 

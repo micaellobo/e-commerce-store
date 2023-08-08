@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface IReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByUserIdAndId(Long userId, Long reviewId);
 
