@@ -10,7 +10,6 @@ import com.example.userservice.models.User;
 import com.example.userservice.repository.IUserRepository;
 import com.example.userservice.utils.HashUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,47 +36,49 @@ class UserServiceTest {
 
     @InjectMocks
     UserService userService;
+    private UserCreateDto userCreateDto;
+    private User user;
+    private LoginDto loginDto;
+    private UserEditDto userEditDto;
 
     @BeforeEach
     void beforeEach() {
         Mockito.lenient().when(contextHolder.getUserId()).thenReturn(1L);
         Mockito.lenient().when(contextHolder.getUsername()).thenReturn("testUser");
-    }
 
-    @Test
-    void addOne_exists() {
-        // Arrange
-        var userCreateDto = UserCreateDto.builder()
+        userCreateDto = UserCreateDto.builder()
                 .name("John")
                 .email("jhondoe@gmail.com")
                 .username("jhondoe")
                 .password("pwd")
                 .build();
 
-        when(userMapper.toUser(Mockito.eq(userCreateDto), Mockito.anyString())).thenReturn(new User());
-        when(userRepository.existsUser(Mockito.any(User.class))).thenReturn(true);
 
-        // Act and Assert
-        Assertions.assertThrows(UserException.class,
-                () -> userService.addOne(userCreateDto),
-                UserException.USER_ALREADY_EXISTS);
+        user = User.builder()
+                .email(userCreateDto.email())
+                .name(userCreateDto.name())
+                .password(HashUtils.Sha256Hash(userCreateDto.password()))
+                .username(userCreateDto.username())
+                .build();
 
-        verify(userRepository, never()).save(Mockito.any(User.class));
+        loginDto = LoginDto.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .build();
+
+        userEditDto = UserEditDto.builder()
+                .id(1L)
+                .name("newName")
+                .password("pwd")
+                .build();
     }
 
     @Test
-    void addOne_success() {
+    void addOne_UserDoesNotExist_ShouldSaveUser() {
         //Arrange
-        var userCreateDto = UserCreateDto.builder()
-                .name("John")
-                .email("jhondoe@gmail.com")
-                .username("jhondoe")
-                .password(HashUtils.Sha256Hash("pwd"))
-                .build();
-
-        when(userMapper.toUser(Mockito.eq(userCreateDto), Mockito.anyString())).thenReturn(new User());
-        when(userRepository.existsUser(Mockito.any(User.class))).thenReturn(false);
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
+        when(userMapper.toUser(userCreateDto, user.getPassword())).thenReturn(user);
+        when(userRepository.existsUser(user)).thenReturn(false);
+        when(userRepository.save(user)).thenReturn(user);
 
         //Act
         var addedUser = userService.addOne(userCreateDto);
@@ -87,9 +88,23 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser() {
+    void addOne_UserAlreadyExists_ShouldThrowUserException() {
         // Arrange
-        when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.empty());
+        when(userMapper.toUser(userCreateDto, user.getPassword())).thenReturn(user);
+        when(userRepository.existsUser(user)).thenReturn(true);
+
+        // Act and Assert
+        Assertions.assertThrows(UserException.class,
+                () -> userService.addOne(userCreateDto),
+                UserException.USER_ALREADY_EXISTS);
+
+        verify(userRepository, never()).save(user);
+    }
+
+    @Test
+    void getUser_UserDoesNotExist_ThrowsUserException() {
+        // Arrange
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
         // Act and Assert
         Assertions.assertThrows(
@@ -100,44 +115,54 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser_success() {
+    void getUser_UserExists_ReturnsUser() {
         // Arrange
-        when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(new User()));
+        when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
 
         //Act
-        var user = userService.getUser();
+        var userGet = userService.getUser();
 
         //Assert
-        Assertions.assertNotNull(user);
+        Assertions.assertNotNull(userGet);
     }
 
     @Test
-    void testGetUserLogin_Success() {
+    void getUserLogin_ValidLogin_ReturnsUser() {
         //Arrange
-        var loginDto = LoginDto
-                .builder()
-                .username("john")
-                .password("pwd")
-                .build();
-
-        when(userRepository.findByUsernameAndPassword(Mockito.anyString(), anyString())).thenReturn(Optional.of(new User()));
+        when(userRepository.findByUsernameAndPassword(Mockito.anyString(), anyString())).thenReturn(Optional.of(user));
 
         // Act
-        var user = userService.getUserLogin(loginDto);
+        var userGet = userService.getUserLogin(loginDto);
 
         // Assert
-        Assertions.assertNotNull(user);
+        Assertions.assertNotNull(userGet);
+    }
+
+    @Test
+    void getUserLogin_InvalidLogin_ThrowsUserException() {
+        //Arrange
+        when(userRepository.findByUsernameAndPassword(Mockito.anyString(), Mockito.anyString())).thenReturn(Optional.empty());
+
+        // Act
+
+        // Act and Assert
+        Assertions.assertThrows(
+                UserException.class,
+                () -> userService.getUserLogin(loginDto),
+                UserException.USER_NOT_FOUND
+        );
     }
 
 
     @Test
-    void testEditUser_Success() {
+    void editUser_ValidUserEdit_ReturnsEditedUser() {
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(userRepository.save(any(User.class))).thenReturn(new User());
 
+        doNothing().when(userMapper).partialUpdate(isA(UserEditDto.class), isA(User.class));
+
         // Call the service method
-        var userEditDto = new UserEditDto(1L, "jhon", "pwd");
         var editedUser = userService.editUser(userEditDto);
 
         // Assert the result
@@ -145,11 +170,8 @@ class UserServiceTest {
     }
 
     @Test
-    void testEditUser_Fail() {
+    void editUser_InvalidUserEdit_ThrowsUserException() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        // Call the service method
-        var userEditDto = new UserEditDto(1L, "jhon", "pwd");
 
         // Act and Assert
         Assertions.assertThrows(
