@@ -43,16 +43,12 @@ class UserServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        Mockito.lenient().when(contextHolder.getUserId()).thenReturn(1L);
-        Mockito.lenient().when(contextHolder.getUsername()).thenReturn("testUser");
-
         userCreateDto = UserCreateDto.builder()
                 .name("John")
                 .email("jhondoe@gmail.com")
                 .username("jhondoe")
                 .password("pwd")
                 .build();
-
 
         user = User.builder()
                 .email(userCreateDto.email())
@@ -71,6 +67,9 @@ class UserServiceTest {
                 .name("newName")
                 .password("pwd")
                 .build();
+
+        Mockito.lenient().when(contextHolder.getUserId()).thenReturn(1L);
+        Mockito.lenient().when(contextHolder.getUsername()).thenReturn(userCreateDto.username());
     }
 
     @Test
