@@ -2,10 +2,7 @@ package com.example.userservice.service;
 
 import com.example.userservice.config.CustomContextHolder;
 import com.example.userservice.controler.UserException;
-import com.example.userservice.dto.IUserMapper;
-import com.example.userservice.dto.LoginDto;
-import com.example.userservice.dto.UserCreateDto;
-import com.example.userservice.dto.UserEditDto;
+import com.example.userservice.dto.*;
 import com.example.userservice.models.User;
 import com.example.userservice.repository.IUserRepository;
 import com.example.userservice.utils.HashUtils;
@@ -38,6 +35,7 @@ class UserServiceTest {
     UserService userService;
     private UserCreateDto userCreateDto;
     private User user;
+    private UserDto userDto;
     private LoginDto loginDto;
     private UserEditDto userEditDto;
 
@@ -57,6 +55,12 @@ class UserServiceTest {
                 .username(userCreateDto.username())
                 .build();
 
+        userDto = UserDto.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .username(user.getUsername())
+                .build();
+
         loginDto = LoginDto.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -73,17 +77,18 @@ class UserServiceTest {
     }
 
     @Test
-    void addOne_UserDoesNotExist_ShouldSaveUser() {
+    void addOne_UserDoNotExist_ShouldSaveUser() {
         //Arrange
         when(userMapper.toUser(userCreateDto, user.getPassword())).thenReturn(user);
         when(userRepository.existsUser(user)).thenReturn(false);
         when(userRepository.save(user)).thenReturn(user);
+        when(userMapper.toDto(user)).thenReturn(userDto);
 
         //Act
         var addedUser = userService.addOne(userCreateDto);
 
         //Assert
-        Assertions.assertNotNull(addedUser);
+        Assertions.assertEquals(userDto, addedUser);
     }
 
     @Test
@@ -101,7 +106,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser_UserDoesNotExist_ThrowsUserException() {
+    void getUser_UserDoNotExist_ThrowsUserException() {
         // Arrange
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
@@ -117,24 +122,26 @@ class UserServiceTest {
     void getUser_UserExists_ReturnsUser() {
         // Arrange
         when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
+        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
 
         //Act
         var userGet = userService.getUser();
 
         //Assert
-        Assertions.assertNotNull(userGet);
+        Assertions.assertEquals(userDto, userGet);
     }
 
     @Test
     void getUserLogin_ValidLogin_ReturnsUser() {
         //Arrange
         when(userRepository.findByUsernameAndPassword(Mockito.anyString(), anyString())).thenReturn(Optional.of(user));
+        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
 
         // Act
         var userGet = userService.getUserLogin(loginDto);
 
         // Assert
-        Assertions.assertNotNull(userGet);
+        Assertions.assertEquals(userDto, userGet);
     }
 
     @Test
@@ -152,24 +159,24 @@ class UserServiceTest {
         );
     }
 
-
     @Test
     void editUser_ValidUserEdit_ReturnsEditedUser() {
-
+        //Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(userRepository.save(any(User.class))).thenReturn(new User());
-
         doNothing().when(userMapper).partialUpdate(isA(UserEditDto.class), isA(User.class));
+        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
 
-        // Call the service method
+        // Act
         var editedUser = userService.editUser(userEditDto);
 
-        // Assert the result
-        Assertions.assertNotNull(editedUser);
+        // Assert
+        Assertions.assertEquals(userDto, editedUser);
     }
 
     @Test
     void editUser_InvalidUserEdit_ThrowsUserException() {
+        //Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act and Assert

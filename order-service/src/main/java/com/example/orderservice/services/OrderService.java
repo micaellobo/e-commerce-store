@@ -43,7 +43,6 @@ public class OrderService implements IOrderService {
         var hasStockUpdated = productServiceClient.updateStock(orderCreateDto.products());
 
         if (!hasStockUpdated) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw new OrderException(OrderException.ERROR_UPDATE_STOCK);
         }
 
@@ -58,11 +57,13 @@ public class OrderService implements IOrderService {
         return orderMapper.toDto(order);
     }
 
-    private List<OrderProduct> getOrderProducts(final OrderCreateDto orderCreateDto, final Order order) {
+    private List<OrderProduct> getOrderProducts(
+            final OrderCreateDto orderCreateDto,
+            final Order order) {
         var productsId = orderCreateDto.products()
                 .stream()
                 .map(OrderProductCreateDto::productId)
-                .collect(Collectors.toSet());
+                .toList();
 
         var productById = productServiceClient.getProductById(productsId);
 
@@ -72,7 +73,9 @@ public class OrderService implements IOrderService {
                 .toList();
     }
 
-    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(final Map<Long, ProductDto> productById, final Order order) {
+    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
+            final Map<Long, ProductDto> productById,
+            final Order order) {
         return orderProductCreateDto -> {
             var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
                     .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));

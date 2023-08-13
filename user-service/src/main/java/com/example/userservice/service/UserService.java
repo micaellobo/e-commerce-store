@@ -4,7 +4,6 @@ import com.example.userservice.config.CustomContextHolder;
 import com.example.userservice.dto.*;
 import com.example.userservice.utils.HashUtils;
 import com.example.userservice.controler.UserException;
-import com.example.userservice.models.User;
 import com.example.userservice.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ public class UserService implements IUserService {
     private final CustomContextHolder contextHolder;
 
     @Override
-    public User addOne(final UserCreateDto userCreateDto) {
+    public UserDto addOne(final UserCreateDto userCreateDto) {
 
         var password = HashUtils.Sha256Hash(userCreateDto.password());
 
@@ -31,31 +30,39 @@ public class UserService implements IUserService {
         if (exists)
             throw new UserException(UserException.USER_ALREADY_EXISTS);
 
-        return userRepository.save(user);
+        var saveSaved = userRepository.save(user);
+
+        return userMapper.toDto(saveSaved);
     }
 
     @Override
-    public User getUser() {
-        return userRepository.findByUsername(contextHolder.getUsername())
+    public UserDto getUser() {
+        var userSaved = userRepository.findByUsername(contextHolder.getUsername())
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
+
+        return userMapper.toDto(userSaved);
     }
 
     @Override
-    public User getUserLogin(LoginDto loginDto) {
+    public UserDto getUserLogin(LoginDto loginDto) {
         var password = HashUtils.Sha256Hash(loginDto.password());
 
-        return userRepository.findByUsernameAndPassword(loginDto.username(), password)
+        var user = userRepository.findByUsernameAndPassword(loginDto.username(), password)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
+
+        return userMapper.toDto(user);
     }
 
     @Override
-    public User editUser(final UserEditDto userEditDto) {
+    public UserDto editUser(final UserEditDto userEditDto) {
 
         var user = userRepository.findById(userEditDto.id())
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
 
         userMapper.partialUpdate(userEditDto, user);
 
-        return userRepository.save(user);
+        var userEdited = userRepository.save(user);
+
+        return userMapper.toDto(userEdited);
     }
 }

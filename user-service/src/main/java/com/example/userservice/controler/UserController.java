@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final IUserService userService;
-    private final IUserMapper userMapper;
     private final CustomContextHolder contextHolder;
 
     @PostMapping
@@ -31,9 +30,9 @@ public class UserController {
 
         logRequest(request, userCreateDto);
 
-        var user = userService.addOne(userCreateDto);
+        var userDto = userService.addOne(userCreateDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @PostMapping("/login")
@@ -43,11 +42,9 @@ public class UserController {
 
         logRequest(request, null);
 
-        var user = userService.getUserLogin(loginDto);
+        var userDto = userService.getUserLogin(loginDto);
 
-        var dto = userMapper.toDto(user);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(userDto);
     }
 
     @GetMapping("/me")
@@ -56,11 +53,9 @@ public class UserController {
 
         logRequest(request, null);
 
-        var user = userService.getUser();
+        var userDto = userService.getUser();
 
-        var dto = userMapper.toDto(user);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(userDto);
     }
 
     private void logRequest(final HttpServletRequest request, final Object obj) {

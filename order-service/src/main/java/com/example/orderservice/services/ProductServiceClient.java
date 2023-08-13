@@ -38,7 +38,7 @@ public class ProductServiceClient implements IProductServiceClient {
     }
 
     @Override
-    public Map<Long, ProductDto> getProductById(final Set<Long> ids) {
+    public Map<Long, ProductDto> getProductById(final List<Long> ids) {
         try {
             var idsStringList = ids.stream()
                     .map(String::valueOf)

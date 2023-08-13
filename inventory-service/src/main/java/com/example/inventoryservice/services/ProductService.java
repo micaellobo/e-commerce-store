@@ -3,6 +3,7 @@ package com.example.inventoryservice.services;
 import com.example.inventoryservice.controllers.ProductException;
 import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
+import com.example.inventoryservice.dtos.ProductDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.models.Product;
 import com.example.inventoryservice.repository.IProductRepository;
@@ -22,7 +23,7 @@ public class ProductService implements IProductService {
     private final IProductRepository productRepository;
 
     @Override
-    public Product addOne(final ProductCreateDto productCreateDto) {
+    public ProductDto addOne(final ProductCreateDto productCreateDto) {
 
         var exists = productRepository.existsByName(productCreateDto.name());
 
@@ -31,23 +32,30 @@ public class ProductService implements IProductService {
 
         var product = productMapper.toProduct(productCreateDto);
 
-        return productRepository.save(product);
+        var productSaved = productRepository.save(product);
+
+        return productMapper.toDto(productSaved);
     }
 
     @Override
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public List<ProductDto> getAll() {
+        var productsList = productRepository.findAll();
+
+        return productMapper.toDto(productsList);
     }
 
     @Override
-    public Product getOneBy(final Long id) {
-        return productRepository.findById(id)
+    public ProductDto getOneById(final Long id) {
+        var product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
+
+        return productMapper.toDto(product);
     }
 
     @Override
-    public List<Product> getAllByIds(final List<Long> ids) {
-        return productRepository.findAllById(ids);
+    public List<ProductDto> getAllByIds(final List<Long> ids) {
+        var products = productRepository.findAllById(ids);
+        return productMapper.toDto(products);
     }
 
     @Override
@@ -107,10 +115,8 @@ public class ProductService implements IProductService {
     }
 
     private Map<Long, Product> createProductsMap(final List<Long> productIds) {
-        return getAllByIds(productIds)
+        return productRepository.findAllById(productIds)
                 .stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
     }
-
-
 }

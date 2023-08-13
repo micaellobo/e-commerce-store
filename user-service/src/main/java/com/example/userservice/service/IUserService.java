@@ -2,15 +2,15 @@ package com.example.userservice.service;
 
 import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
-import com.example.userservice.models.User;
+import com.example.userservice.dto.UserDto;
 import com.example.userservice.dto.UserEditDto;
 
 public interface IUserService {
-    User addOne(UserCreateDto userCreateDto);
+    UserDto addOne(UserCreateDto userCreateDto);
 
-    User getUser();
+    UserDto getUser();
 
-    User editUser(UserEditDto userEditDto);
+    UserDto editUser(UserEditDto userEditDto);
 
-    User getUserLogin(LoginDto loginDto);
+    UserDto getUserLogin(LoginDto loginDto);
 }

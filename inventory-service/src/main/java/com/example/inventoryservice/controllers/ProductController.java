@@ -1,7 +1,6 @@
 package com.example.inventoryservice.controllers;
 
 import com.example.inventoryservice.config.CustomContextHolder;
-import com.example.inventoryservice.dtos.IProductMapper;
 import com.example.inventoryservice.dtos.ProductCreateDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.services.IProductService;
@@ -22,7 +21,6 @@ import java.util.List;
 public class ProductController {
 
     private final IProductService productService;
-    private final IProductMapper productMapper;
     private final CustomContextHolder contextHolder;
 
     @PostMapping("/add")
@@ -32,9 +30,7 @@ public class ProductController {
 
         logRequest(request, productCreateDto);
 
-        var product = productService.addOne(productCreateDto);
-
-        var productDto = productMapper.toDto(product);
+        var productDto = productService.addOne(productCreateDto);
 
 //        return ResponseEntity.created(URI.create("/" + productDto.id())).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
@@ -47,9 +43,7 @@ public class ProductController {
 
         logRequest(request, null);
 
-        var product = productService.getOneBy(id);
-
-        var productDto = productMapper.toDto(product);
+        var productDto = productService.getOneById(id);
 
         return ResponseEntity.ok(productDto);
     }
@@ -59,9 +53,7 @@ public class ProductController {
 
         logRequest(request, null);
 
-        var products = productService.getAll();
-
-        var productsDto = productMapper.toDto(products);
+        var productsDto = productService.getAll();
 
         return ResponseEntity.ok(productsDto);
     }
@@ -97,14 +89,14 @@ public class ProductController {
 
         logRequest(request, ids);
 
-        var products = productService.getAllByIds(ids);
-
-        var productsDto = productMapper.toDto(products);
+        var productsDto = productService.getAllByIds(ids);
 
         return ResponseEntity.ok(productsDto);
     }
 
-    private void logRequest(final HttpServletRequest request, final Object obj) {
+    private void logRequest(
+            final HttpServletRequest request,
+            final Object obj) {
         log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
     }
 }
