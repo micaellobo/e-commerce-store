@@ -28,9 +28,9 @@ public class ProductController {
             HttpServletRequest request,
             @Valid @RequestBody ProductCreateDto productCreateDto) {
 
-        logRequest(request, productCreateDto);
+        this.logRequest(request, productCreateDto);
 
-        var productDto = productService.addOne(productCreateDto);
+        var productDto = this.productService.addOne(productCreateDto);
 
 //        return ResponseEntity.created(URI.create("/" + productDto.id())).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
@@ -41,9 +41,9 @@ public class ProductController {
             HttpServletRequest request,
             @PathVariable Long id) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var productDto = productService.getOneById(id);
+        var productDto = this.productService.getOneById(id);
 
         return ResponseEntity.ok(productDto);
     }
@@ -51,9 +51,9 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Object> getAll(HttpServletRequest request) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var productsDto = productService.getAll();
+        var productsDto = this.productService.getAll();
 
         return ResponseEntity.ok(productsDto);
     }
@@ -63,9 +63,9 @@ public class ProductController {
             HttpServletRequest request,
             @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        logRequest(request, productsQuantities);
+        this.logRequest(request, productsQuantities);
 
-        productService.increaseStock(productsQuantities);
+        this.productService.increaseStock(productsQuantities);
 
         return ResponseEntity.noContent().build();
     }
@@ -75,9 +75,9 @@ public class ProductController {
             HttpServletRequest request,
             @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
 
-        logRequest(request, productsQuantities);
+        this.logRequest(request, productsQuantities);
 
-        productService.decreaseStock(productsQuantities);
+        this.productService.decreaseStock(productsQuantities);
 
         return ResponseEntity.noContent().build();
     }
@@ -87,9 +87,9 @@ public class ProductController {
             HttpServletRequest request,
             @RequestParam List<Long> ids) {
 
-        logRequest(request, ids);
+        this.logRequest(request, ids);
 
-        var productsDto = productService.getAllByIds(ids);
+        var productsDto = this.productService.getAllByIds(ids);
 
         return ResponseEntity.ok(productsDto);
     }
@@ -97,6 +97,6 @@ public class ProductController {
     private void logRequest(
             final HttpServletRequest request,
             final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

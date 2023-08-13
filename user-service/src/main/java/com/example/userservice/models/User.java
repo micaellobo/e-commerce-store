@@ -45,14 +45,14 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         var user = (User) o;
-        return id.equals(user.getId()) || username.equals(user.username) || email.equals(user.email);
+        return this.id.equals(user.getId()) || this.username.equals(user.username) || this.email.equals(user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email);
+        return Objects.hash(this.id, this.username, this.email);
     }
 
 }

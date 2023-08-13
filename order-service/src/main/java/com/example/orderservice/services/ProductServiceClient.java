@@ -26,9 +26,9 @@ public class ProductServiceClient implements IProductServiceClient {
     @Override
     public Optional<ProductDto> getProductById(final Long id) {
         try {
-            var url = serviceUrl + "/" + id;
+            var url = this.serviceUrl + "/" + id;
 
-            var response = restTemplate.getForEntity(url, ProductDto.class);
+            var response = this.restTemplate.getForEntity(url, ProductDto.class);
 
             return Optional.ofNullable(response.getBody());
         } catch (Exception ex) {
@@ -44,9 +44,9 @@ public class ProductServiceClient implements IProductServiceClient {
                     .map(String::valueOf)
                     .collect(Collectors.joining(","));
 
-            var url = serviceUrl + "?ids=" + idsStringList;
+            var url = this.serviceUrl + "?ids=" + idsStringList;
 
-            var response = restTemplate.getForEntity(url, ProductDto[].class);
+            var response = this.restTemplate.getForEntity(url, ProductDto[].class);
 
             return Arrays.stream(Objects.requireNonNull(response.getBody()))
                     .collect(Collectors.toMap(ProductDto::id, productDto -> productDto));
@@ -59,9 +59,9 @@ public class ProductServiceClient implements IProductServiceClient {
     @Override
     public boolean updateStock(final List<OrderProductCreateDto> ids) {
         try {
-            var url = serviceUrl + "/decrease-stock";
+            var url = this.serviceUrl + "/decrease-stock";
 
-            var response = restTemplate.exchange(
+            var response = this.restTemplate.exchange(
                     url,
                     HttpMethod.PUT,
                     new HttpEntity<>(ids),

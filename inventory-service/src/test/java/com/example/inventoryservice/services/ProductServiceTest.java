@@ -7,7 +7,6 @@ import com.example.inventoryservice.dtos.ProductDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.models.Product;
 import com.example.inventoryservice.repository.IProductRepository;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -39,7 +35,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        productCreate = ProductCreateDto
+        this.productCreate = ProductCreateDto
                 .builder()
                 .name("Trackpad")
                 .description("Apple Magic Trackpad")
@@ -47,60 +43,60 @@ class ProductServiceTest {
                 .quantity(100)
                 .build();
 
-        product = Product.builder()
+        this.product = Product.builder()
                 .id(1L)
-                .name(productCreate.name())
-                .description(productCreate.description())
-                .price(productCreate.price())
-                .quantity(productCreate.quantity())
+                .name(this.productCreate.name())
+                .description(this.productCreate.description())
+                .price(this.productCreate.price())
+                .quantity(this.productCreate.quantity())
                 .build();
 
-        productDto = ProductDto.builder()
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
+        this.productDto = ProductDto.builder()
+                .name(this.product.getName())
+                .description(this.product.getDescription())
+                .price(this.product.getPrice())
+                .quantity(this.product.getQuantity())
                 .build();
     }
 
     @Test
-    void addOne_WhenProductDoNotExist_ShouldSave() {
+    void addOne_WhenProductDoesNotExist_ShouldSave() {
         //Arrange
-        when(productRepository.existsByName(anyString())).thenReturn(false);
-        when(productMapper.toProduct(any(ProductCreateDto.class))).thenReturn(product);
-        when(productRepository.save(any(Product.class))).thenReturn(product);
-        when(productMapper.toDto(any(Product.class))).thenReturn(productDto);
+        when(this.productRepository.existsByName(anyString())).thenReturn(false);
+        when(this.productMapper.toProduct(any(ProductCreateDto.class))).thenReturn(this.product);
+        when(this.productRepository.save(any(Product.class))).thenReturn(this.product);
+        when(this.productMapper.toDto(any(Product.class))).thenReturn(this.productDto);
 
         //Act
-        var productSaved = productService.addOne(productCreate);
+        var productSaved = this.productService.addOne(this.productCreate);
 
         //Assert
-        Assertions.assertEquals(productDto, productSaved);
-        verify(productRepository).save(product);
+        Assertions.assertEquals(this.productDto, productSaved);
+        verify(this.productRepository).save(this.product);
     }
 
     @Test
     void addOne_WhenProductAlreadyExist_ShouldThrowProductException() {
         //Arrange
-        when(productRepository.existsByName(anyString())).thenReturn(true);
+        when(this.productRepository.existsByName(anyString())).thenReturn(true);
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,
-                () -> productService.addOne(productCreate),
+                () -> this.productService.addOne(this.productCreate),
                 ProductException.ALREADY_EXISTS_PRODUCT);
 
-        verify(productRepository, never()).save(any(Product.class));
+        verify(this.productRepository, never()).save(any(Product.class));
     }
 
     @Test
     void getAll_WhenSingleProduct_ShouldReturnList() {
         //Arrange
-        var productsDtoList = Collections.singletonList(productDto);
-        when(productRepository.findAll()).thenReturn(List.of(product));
-        when(productMapper.toDto(anyList())).thenReturn(productsDtoList);
+        var productsDtoList = Collections.singletonList(this.productDto);
+        when(this.productRepository.findAll()).thenReturn(List.of(this.product));
+        when(this.productMapper.toDto(anyList())).thenReturn(productsDtoList);
 
         //Act
-        var productsGet = productService.getAll();
+        var productsGet = this.productService.getAll();
 
         //Assert
         Assertions.assertEquals(productsDtoList.size(), productsGet.size());
@@ -110,36 +106,38 @@ class ProductServiceTest {
     @Test
     void getOneById_WhenProductExist_ShouldReturnsProduct() {
         //Arrange
-        when(productRepository.findById(anyLong())).thenReturn(Optional.ofNullable(product));
-        when(productMapper.toDto(any(Product.class))).thenReturn(productDto);
+        when(this.productRepository.findById(anyLong())).thenReturn(Optional.ofNullable(this.product));
+        when(this.productMapper.toDto(any(Product.class))).thenReturn(this.productDto);
 
         //Act
-        var productGet = productService.getOneById(anyLong());
+        var productGet = this.productService.getOneById(anyLong());
 
         //Assert
-        Assertions.assertEquals(productDto, productGet);
+        Assertions.assertEquals(this.productDto, productGet);
     }
 
     @Test
-    void getOneById_WhenProductDoNotExist_ShouldThrowProductException() {
+    void getOneById_WhenProductDoesNotExist_ShouldThrowProductException() {
         //Arrange
-        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(this.productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,
-                () -> productService.getOneById(anyLong()),
+                () -> this.productService.getOneById(anyLong()),
                 ProductException.PRODUCT_DOES_NOT_EXIST);
     }
 
     @Test
     void getAllByIds_WhenSingleProduct_ShouldReturnList() {
         //Arrange
-        var productsListDto = List.of(productDto);
-        when(productRepository.findAllById(anyList())).thenReturn(List.of(product));
-        when(productMapper.toDto(anyList())).thenReturn(productsListDto);
+        var productsListDto = List.of(this.productDto);
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(List.of(this.product));
+        when(this.productMapper.toDto(anyList()))
+                .thenReturn(productsListDto);
 
         //Act
-        var productsGet = productService.getAllByIds(anyList());
+        var productsGet = this.productService.getAllByIds(anyList());
 
         //Assert
         Assertions.assertEquals(productsListDto.size(), productsGet.size());
@@ -149,40 +147,40 @@ class ProductServiceTest {
     @Test
     void increaseStock_WhenAllProductsExist_ShouldIncreaseTheQuantities() {
         //Arrange
-        var initialQuantity = product.getQuantity(); // 100
+        var initialQuantity = this.product.getQuantity(); // 100
         var quantityToIncrease = 1;
 
         var quantities = List.of(
-                new ProductStockQuantityDto(product.getId(), quantityToIncrease)
+                new ProductStockQuantityDto(this.product.getId(), quantityToIncrease)
         );
 
-        var productsToUpdate = List.of(product);
-        when(productRepository.findAllById(anyList())).thenReturn(productsToUpdate);
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(List.of(this.product));
 
         //Act
-        productService.increaseStock(quantities);
+        this.productService.increaseStock(quantities);
 
         //Assert
-        Assertions.assertEquals(initialQuantity + quantityToIncrease, product.getQuantity());
-
+        Assertions.assertEquals(initialQuantity + quantityToIncrease, this.product.getQuantity());
     }
 
 
     @Test
-    void increaseStock_WhenSomeGivenProductsDoNotExist_ShouldThrowProductException() {
+    void increaseStock_WhenSomeGivenProductsDoesNotExist_ShouldThrowProductException() {
         //Arrange
-        var initialQuantity = product.getQuantity(); // 100
+        var initialQuantity = this.product.getQuantity(); // 100
         var quantityToIncrease = 1;
 
         var quantities = List.of(
-                new ProductStockQuantityDto(product.getId(), quantityToIncrease)
+                new ProductStockQuantityDto(this.product.getId(), quantityToIncrease)
         );
 
-        when(productRepository.findAllById(anyList())).thenReturn(Collections.emptyList());
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(Collections.emptyList());
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,
-                () -> productService.increaseStock(quantities),
+                () -> this.productService.increaseStock(quantities),
                 ProductException.PRODUCT_DOES_NOT_EXIST);
     }
 
@@ -191,38 +189,39 @@ class ProductServiceTest {
     void decreaseStock_WhenAllGivenProductsExist_ShouldDecreaseTheQuantities() {
         //Arrange
 
-        var initialQuantity = product.getQuantity(); // 100
+        var initialQuantity = this.product.getQuantity(); // 100
         var quantityToDecrease = 99;
 
         var quantities = List.of(
-                new ProductStockQuantityDto(product.getId(), quantityToDecrease)
+                new ProductStockQuantityDto(this.product.getId(), quantityToDecrease)
         );
 
-        var productsToUpdate = List.of(product);
-        when(productRepository.findAllById(anyList())).thenReturn(productsToUpdate);
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(List.of(this.product));
 
         //Act
-        productService.decreaseStock(quantities);
+        this.productService.decreaseStock(quantities);
 
         //Assert
-        Assertions.assertEquals(initialQuantity - quantityToDecrease, product.getQuantity());
+        Assertions.assertEquals(initialQuantity - quantityToDecrease, this.product.getQuantity());
     }
 
     @Test
-    void decreaseStock_WhenSomeGivenProductsDoNotExist_ShouldThrowProductException() {
+    void decreaseStock_WhenSomeGivenProductsDoesNotExist_ShouldThrowProductException() {
         //Arrange
 
         var quantityToDecrease = 99;
 
         var quantities = List.of(
-                new ProductStockQuantityDto(product.getId(), quantityToDecrease)
+                new ProductStockQuantityDto(this.product.getId(), quantityToDecrease)
         );
 
-        when(productRepository.findAllById(anyList())).thenReturn(Collections.emptyList());
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(Collections.emptyList());
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,
-                () -> productService.decreaseStock(quantities),
+                () -> this.productService.decreaseStock(quantities),
                 ProductException.PRODUCT_DOES_NOT_EXIST);
     }
 
@@ -234,15 +233,15 @@ class ProductServiceTest {
         var quantityToDecrease = 101;
 
         var quantities = List.of(
-                new ProductStockQuantityDto(product.getId(), quantityToDecrease)
+                new ProductStockQuantityDto(this.product.getId(), quantityToDecrease)
         );
 
-        var productsToUpdate = List.of(product);
-        when(productRepository.findAllById(anyList())).thenReturn(productsToUpdate);
+        when(this.productRepository.findAllById(anyList()))
+                .thenReturn(List.of(this.product));
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,
-                () -> productService.decreaseStock(quantities),
+                () -> this.productService.decreaseStock(quantities),
                 ProductException.QUANTITY_LOWER_ZERO);
     }
 }

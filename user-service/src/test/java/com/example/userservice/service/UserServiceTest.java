@@ -41,148 +41,162 @@ class UserServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        userCreateDto = UserCreateDto.builder()
+        this.userCreateDto = UserCreateDto.builder()
                 .name("John")
                 .email("jhondoe@gmail.com")
                 .username("jhondoe")
                 .password("pwd")
                 .build();
 
-        user = User.builder()
-                .email(userCreateDto.email())
-                .name(userCreateDto.name())
-                .password(HashUtils.Sha256Hash(userCreateDto.password()))
-                .username(userCreateDto.username())
+        this.user = User.builder()
+                .email(this.userCreateDto.email())
+                .name(this.userCreateDto.name())
+                .password(HashUtils.Sha256Hash(this.userCreateDto.password()))
+                .username(this.userCreateDto.username())
                 .build();
 
-        userDto = UserDto.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .username(user.getUsername())
+        this.userDto = UserDto.builder()
+                .email(this.user.getEmail())
+                .name(this.user.getName())
+                .username(this.user.getUsername())
                 .build();
 
-        loginDto = LoginDto.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
+        this.loginDto = LoginDto.builder()
+                .username(this.user.getUsername())
+                .password(this.user.getPassword())
                 .build();
 
-        userEditDto = UserEditDto.builder()
+        this.userEditDto = UserEditDto.builder()
                 .id(1L)
                 .name("newName")
                 .password("pwd")
                 .build();
 
-        Mockito.lenient().when(contextHolder.getUserId()).thenReturn(1L);
-        Mockito.lenient().when(contextHolder.getUsername()).thenReturn(userCreateDto.username());
+        Mockito.lenient().when(this.contextHolder.getUserId()).thenReturn(1L);
+        Mockito.lenient().when(this.contextHolder.getUsername()).thenReturn(this.userCreateDto.username());
     }
 
     @Test
-    void addOne_UserDoNotExist_ShouldSaveUser() {
+    void addOne_WhenUserDoesNotExist_ShouldSaveUser() {
         //Arrange
-        when(userMapper.toUser(userCreateDto, user.getPassword())).thenReturn(user);
-        when(userRepository.existsUser(user)).thenReturn(false);
-        when(userRepository.save(user)).thenReturn(user);
-        when(userMapper.toDto(user)).thenReturn(userDto);
+        when(this.userMapper.toUser(this.userCreateDto, this.user.getPassword()))
+                .thenReturn(this.user);
+        when(this.userRepository.existsUser(this.user))
+                .thenReturn(false);
+        when(this.userRepository.save(this.user))
+                .thenReturn(this.user);
+        when(this.userMapper.toDto(this.user))
+                .thenReturn(this.userDto);
 
         //Act
-        var addedUser = userService.addOne(userCreateDto);
+        var addedUser = this.userService.addOne(this.userCreateDto);
 
         //Assert
-        Assertions.assertEquals(userDto, addedUser);
+        Assertions.assertEquals(this.userDto, addedUser);
     }
 
     @Test
-    void addOne_UserAlreadyExists_ShouldThrowUserException() {
+    void addOne_WhenUserAlreadyExists_ShouldThrowUserException() {
         // Arrange
-        when(userMapper.toUser(userCreateDto, user.getPassword())).thenReturn(user);
-        when(userRepository.existsUser(user)).thenReturn(true);
+        when(this.userMapper.toUser(this.userCreateDto, this.user.getPassword()))
+                .thenReturn(this.user);
+        when(this.userRepository.existsUser(this.user))
+                .thenReturn(true);
 
         // Act and Assert
         Assertions.assertThrows(UserException.class,
-                () -> userService.addOne(userCreateDto),
+                () -> this.userService.addOne(this.userCreateDto),
                 UserException.USER_ALREADY_EXISTS);
 
-        verify(userRepository, never()).save(user);
+        verify(this.userRepository, never()).save(this.user);
     }
 
     @Test
-    void getUser_UserDoNotExist_ThrowsUserException() {
+    void getUser_WhenUserDoesNotExist_ShouldThrowUserException() {
         // Arrange
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(this.userRepository.findByUsername(anyString()))
+                .thenReturn(Optional.empty());
 
         // Act and Assert
         Assertions.assertThrows(
                 UserException.class,
-                userService::getUser,
+                this.userService::getUser,
                 UserException.USER_ALREADY_EXISTS
         );
     }
 
     @Test
-    void getUser_UserExists_ReturnsUser() {
+    void getUser_WhenUserExists_ShouldReturnsUser() {
         // Arrange
-        when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(user));
-        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
+        when(this.userRepository.findByUsername(anyString()))
+                .thenReturn(Optional.of(this.user));
+        when(this.userMapper.toDto(any(User.class)))
+                .thenReturn(this.userDto);
 
         //Act
-        var userGet = userService.getUser();
+        var userGet = this.userService.getUser();
 
         //Assert
-        Assertions.assertEquals(userDto, userGet);
+        Assertions.assertEquals(this.userDto, userGet);
     }
 
     @Test
-    void getUserLogin_ValidLogin_ReturnsUser() {
+    void getUserLogin_WhenValidLogin_ShouldReturnsUser() {
         //Arrange
-        when(userRepository.findByUsernameAndPassword(Mockito.anyString(), anyString())).thenReturn(Optional.of(user));
-        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
+        when(this.userRepository.findByUsernameAndPassword(anyString(), anyString()))
+                .thenReturn(Optional.of(this.user));
+        when(this.userMapper.toDto(any(User.class)))
+                .thenReturn(this.userDto);
 
         // Act
-        var userGet = userService.getUserLogin(loginDto);
+        var userGet = this.userService.getUserLogin(this.loginDto);
 
         // Assert
-        Assertions.assertEquals(userDto, userGet);
+        Assertions.assertEquals(this.userDto, userGet);
     }
 
     @Test
-    void getUserLogin_InvalidLogin_ThrowsUserException() {
+    void getUserLogin_WhenInvalidLogin_ShouldThrowUserException() {
         //Arrange
-        when(userRepository.findByUsernameAndPassword(Mockito.anyString(), Mockito.anyString())).thenReturn(Optional.empty());
-
-        // Act
+        when(this.userRepository.findByUsernameAndPassword(anyString(), anyString()))
+                .thenReturn(Optional.empty());
 
         // Act and Assert
         Assertions.assertThrows(
                 UserException.class,
-                () -> userService.getUserLogin(loginDto),
+                () -> this.userService.getUserLogin(this.loginDto),
                 UserException.USER_NOT_FOUND
         );
     }
 
     @Test
-    void editUser_ValidUserEdit_ReturnsEditedUser() {
+    void editUser_WhenValidUserEdit_ShouldReturnsEditedUser() {
         //Arrange
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(new User());
-        doNothing().when(userMapper).partialUpdate(isA(UserEditDto.class), isA(User.class));
-        when(userMapper.toDto(any(User.class))).thenReturn(userDto);
+        when(this.userRepository.findById(anyLong()))
+                .thenReturn(Optional.of(new User()));
+        when(this.userRepository.save(any(User.class)))
+                .thenReturn(new User());
+        doNothing().when(this.userMapper).partialUpdate(isA(UserEditDto.class), isA(User.class));
+        when(this.userMapper.toDto(any(User.class)))
+                .thenReturn(this.userDto);
 
         // Act
-        var editedUser = userService.editUser(userEditDto);
+        var editedUser = this.userService.editUser(this.userEditDto);
 
         // Assert
-        Assertions.assertEquals(userDto, editedUser);
+        Assertions.assertEquals(this.userDto, editedUser);
     }
 
     @Test
-    void editUser_InvalidUserEdit_ThrowsUserException() {
+    void editUser_WhenInvalidUserEdit_ShouldThrowsUserException() {
         //Arrange
-        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(this.userRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
 
         // Act and Assert
         Assertions.assertThrows(
                 UserException.class,
-                () -> userService.editUser(userEditDto),
+                () -> this.userService.editUser(this.userEditDto),
                 UserException.USER_NOT_FOUND
         );
     }

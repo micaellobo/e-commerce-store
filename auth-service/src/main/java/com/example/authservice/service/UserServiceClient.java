@@ -25,9 +25,9 @@ public class UserServiceClient implements IUserServiceClient {
     public Optional<UserDto> getUserForLogin(final LoginDto loginDto) {
         try {
 
-            var url = userServiceUrl + "/login";
+            var url = this.userServiceUrl + "/login";
 
-            var response = restTemplate.postForEntity(url, loginDto, UserDto.class);
+            var response = this.restTemplate.postForEntity(url, loginDto, UserDto.class);
 
             if (response.getStatusCode().isError())
                 throw new AuthException(AuthException.GENERIC_LOGIN_FAIL);

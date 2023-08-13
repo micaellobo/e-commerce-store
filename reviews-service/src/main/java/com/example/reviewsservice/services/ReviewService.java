@@ -26,8 +26,8 @@ public class ReviewService implements IReviewService {
     @Override
     public ReviewDto addOne(final ReviewCreateDto reviewCreateDto) {
 
-        var existsReview = reviewRepository.existsByUserIdAndOrderIdAndProductId(
-                context.getUserId(),
+        var existsReview = this.reviewRepository.existsByUserIdAndOrderIdAndProductId(
+                this.context.getUserId(),
                 reviewCreateDto.orderId(),
                 reviewCreateDto.productId()
         );
@@ -35,52 +35,49 @@ public class ReviewService implements IReviewService {
         if (existsReview)
             throw new ReviewException(ReviewException.REVIEW_ALREADY_EXISTS);
 
-        var order = orderServiceClient.getOrder(
-                        reviewCreateDto.orderId(),
-                        context.getUserId(),
-                        context.getUsername())
+        var order = this.orderServiceClient.getOrder(reviewCreateDto.orderId())
                 .orElseThrow(() -> new ReviewException(ReviewException.ORDER_DOES_NOT_EXIST));
 
-        if (!isProductPresentInOrder(reviewCreateDto, order))
+        if (!isProductPresentInOrder(reviewCreateDto.productId(), order))
             throw new ReviewException(ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER);
 
-        var review = reviewMapper.toReview(reviewCreateDto);
+        var review = this.reviewMapper.toReview(reviewCreateDto);
 
-        var reviewSaved = reviewRepository.save(review);
+        var reviewSaved = this.reviewRepository.save(review);
 
-        return reviewMapper.toDto(reviewSaved);
+        return this.reviewMapper.toDto(reviewSaved);
     }
 
-    private static boolean isProductPresentInOrder(final ReviewCreateDto reviewCreateDto, final OrderDto order) {
+    private static boolean isProductPresentInOrder(final Long productId, final OrderDto order) {
         return order.products()
                 .stream()
-                .anyMatch(orderProductDto -> orderProductDto.productId().equals(reviewCreateDto.productId()));
+                .anyMatch(orderProductDto -> orderProductDto.productId().equals(productId));
     }
 
     @Override
     public List<ReviewDto> getAllByUser() {
-        var repositoryByUser = reviewRepository.findByUserId(context.getUserId());
-        return reviewMapper.toDto(repositoryByUser);
+        var repositoryByUser = this.reviewRepository.findByUserId(this.context.getUserId());
+        return this.reviewMapper.toDto(repositoryByUser);
     }
 
     @Override
     public List<ReviewDto> getAllByProduct(final Long productId) {
-        var reviewsByProduct = reviewRepository.findByProductId(productId);
+        var reviewsByProduct = this.reviewRepository.findByProductId(productId);
 
-        return reviewMapper.toDto(reviewsByProduct);
+        return this.reviewMapper.toDto(reviewsByProduct);
     }
 
     @Override
     public boolean deleteOne(final Long reviewId) {
-        reviewRepository.findByUserIdAndId(context.getUserId(), reviewId)
+        this.reviewRepository.findByUserIdAndId(this.context.getUserId(), reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewException.REVIEW_DOES_NOT_EXISTS));
 
-        return reviewRepository.deleteOneById(reviewId) == 1;
+        return this.reviewRepository.deleteOneById(reviewId) == 1;
     }
 
     @Override
     public List<ProductAvgRatDto> getTopAvgRatedProducts(final int max) {
-        return reviewRepository.findAll()
+        return this.reviewRepository.findAll()
                 .stream()
                 .collect(Collectors.groupingBy(Review::getProductId, Collectors.averagingDouble(Review::getRating)))
                 .entrySet()

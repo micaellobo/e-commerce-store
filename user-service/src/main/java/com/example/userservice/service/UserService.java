@@ -23,46 +23,46 @@ public class UserService implements IUserService {
 
         var password = HashUtils.Sha256Hash(userCreateDto.password());
 
-        var user = userMapper.toUser(userCreateDto, password);
+        var user = this.userMapper.toUser(userCreateDto, password);
 
-        var exists = userRepository.existsUser(user);
+        var exists = this.userRepository.existsUser(user);
 
         if (exists)
             throw new UserException(UserException.USER_ALREADY_EXISTS);
 
-        var saveSaved = userRepository.save(user);
+        var saveSaved = this.userRepository.save(user);
 
-        return userMapper.toDto(saveSaved);
+        return this.userMapper.toDto(saveSaved);
     }
 
     @Override
     public UserDto getUser() {
-        var userSaved = userRepository.findByUsername(contextHolder.getUsername())
+        var userSaved = this.userRepository.findByUsername(this.contextHolder.getUsername())
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
 
-        return userMapper.toDto(userSaved);
+        return this.userMapper.toDto(userSaved);
     }
 
     @Override
     public UserDto getUserLogin(LoginDto loginDto) {
         var password = HashUtils.Sha256Hash(loginDto.password());
 
-        var user = userRepository.findByUsernameAndPassword(loginDto.username(), password)
+        var user = this.userRepository.findByUsernameAndPassword(loginDto.username(), password)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
 
-        return userMapper.toDto(user);
+        return this.userMapper.toDto(user);
     }
 
     @Override
     public UserDto editUser(final UserEditDto userEditDto) {
 
-        var user = userRepository.findById(userEditDto.id())
+        var user = this.userRepository.findById(userEditDto.id())
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));
 
-        userMapper.partialUpdate(userEditDto, user);
+        this.userMapper.partialUpdate(userEditDto, user);
 
-        var userEdited = userRepository.save(user);
+        var userEdited = this.userRepository.save(user);
 
-        return userMapper.toDto(userEdited);
+        return this.userMapper.toDto(userEdited);
     }
 }

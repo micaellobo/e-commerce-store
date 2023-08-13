@@ -34,13 +34,13 @@ public class Product {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         var user = (Product) o;
-        return id.equals(user.id) || name.equals(user.name);
+        return this.id.equals(user.id) || this.name.equals(user.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(this.id, this.name);
     }
 }

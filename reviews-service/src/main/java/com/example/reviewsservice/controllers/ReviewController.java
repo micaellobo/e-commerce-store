@@ -29,9 +29,9 @@ public class ReviewController {
             final HttpServletRequest request,
             @Valid @RequestBody ReviewCreateDto reviewCreateDto) {
 
-        logRequest(request, reviewCreateDto);
+        this.logRequest(request, reviewCreateDto);
 
-        var review = reviewService.addOne(reviewCreateDto);
+        var review = this.reviewService.addOne(reviewCreateDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(review);
     }
@@ -40,9 +40,9 @@ public class ReviewController {
     @RequiresAuthentication
     public ResponseEntity<List<ReviewDto>> getAllByUser(final HttpServletRequest request) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var reviews = reviewService.getAllByUser();
+        var reviews = this.reviewService.getAllByUser();
 
         return ResponseEntity.ok(reviews);
     }
@@ -53,9 +53,9 @@ public class ReviewController {
             final HttpServletRequest request,
             @PathVariable final Long reviewId) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var hasDeleted = reviewService.deleteOne(reviewId);
+        var hasDeleted = this.reviewService.deleteOne(reviewId);
 
         if (hasDeleted)
             return ResponseEntity.noContent().build();
@@ -68,9 +68,9 @@ public class ReviewController {
             final HttpServletRequest request,
             @PathVariable Long productId) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var reviews = reviewService.getAllByProduct(productId);
+        var reviews = this.reviewService.getAllByProduct(productId);
 
         return ResponseEntity.ok(reviews);
     }
@@ -80,15 +80,15 @@ public class ReviewController {
             final HttpServletRequest request,
             @RequestParam(required = false, defaultValue = "5") int max) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var reviews = reviewService.getTopAvgRatedProducts(max);
+        var reviews = this.reviewService.getTopAvgRatedProducts(max);
 
         return ResponseEntity.ok(reviews);
     }
 
 
     private void logRequest(final HttpServletRequest request, final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

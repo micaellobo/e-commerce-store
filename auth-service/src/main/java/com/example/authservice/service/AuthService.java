@@ -18,11 +18,11 @@ public class AuthService implements IAuthService {
     @Override
     public String login(final LoginDto loginDto) {
 
-        var user = userServiceClient.getUserForLogin(loginDto)
+        var user = this.userServiceClient.getUserForLogin(loginDto)
                 .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
 
         try {
-            return jwtHelper.generateToken(user);
+            return this.jwtHelper.generateToken(user);
         } catch (JsonProcessingException e) {
             throw new AuthException(AuthException.GENERIC_LOGIN_FAIL);
         }
@@ -31,7 +31,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public UserHeader validateToken(final String jwt) {
-        return jwtHelper.decodeJWT(jwt)
+        return this.jwtHelper.decodeJWT(jwt)
                 .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
     }
 }

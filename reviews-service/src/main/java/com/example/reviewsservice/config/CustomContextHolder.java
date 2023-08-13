@@ -20,7 +20,7 @@ public class CustomContextHolder {
     }
 
     public boolean isAuthenticated() {
-        var customContext = get();
+        var customContext = this.get();
 
         var isUsernameEmptyOrNull = StringUtils.isEmpty(customContext.getUsername());
 
@@ -28,14 +28,14 @@ public class CustomContextHolder {
     }
 
     public String getCorrelationId() {
-        return get().getCorrelationId();
+        return this.get().getCorrelationId();
     }
 
     public Long getUserId() {
-        return get().getUserId();
+        return this.get().getUserId();
     }
 
     public String getUsername() {
-        return get().getUsername();
+        return this.get().getUsername();
     }
 }

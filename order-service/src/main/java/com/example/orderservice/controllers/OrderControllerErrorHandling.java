@@ -22,7 +22,7 @@ public class OrderControllerErrorHandling {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(status, exception.getMessage());
 
-        return buildResponseEntity(problemDetail);
+        return this.buildResponseEntity(problemDetail);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -31,7 +31,7 @@ public class OrderControllerErrorHandling {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
 
-        return buildResponseEntity(problemDetail);
+        return this.buildResponseEntity(problemDetail);
     }
 
     @ExceptionHandler(AuthException.class)

@@ -7,7 +7,6 @@ import com.example.orderservice.dtos.ProductDto;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public interface IProductServiceClient {
     Optional<ProductDto> getProductById(Long id);

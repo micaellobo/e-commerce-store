@@ -4,23 +4,18 @@ import com.example.orderservice.config.CustomContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
 import com.example.orderservice.models.Order;
-import com.example.orderservice.models.OrderProduct;
 import com.example.orderservice.repository.IOrderRepository;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.nio.Buffer;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +36,7 @@ class OrderServiceTest {
     @BeforeEach
     void beforeEach() {
 
-        productDto = ProductDto
+        this.productDto = ProductDto
                 .builder()
                 .id(1L)
                 .name("Trackpad")
@@ -50,8 +45,8 @@ class OrderServiceTest {
                 .quantity(100)
                 .build();
 
-        lenient().when(contextHolder.getUserId()).thenReturn(1L);
-        lenient().when(contextHolder.getUsername()).thenReturn("JhonDoe");
+        lenient().when(this.contextHolder.getUserId()).thenReturn(1L);
+        lenient().when(this.contextHolder.getUsername()).thenReturn("JhonDoe");
     }
 
     @Test
@@ -59,7 +54,7 @@ class OrderServiceTest {
         //Arrange
         var orderProductCreate = OrderProductCreateDto
                 .builder()
-                .productId(productDto.id())
+                .productId(this.productDto.id())
                 .quantity(20)
                 .build();
 
@@ -67,63 +62,63 @@ class OrderServiceTest {
                 .products(List.of(orderProductCreate))
                 .build();
 
-        when(productServiceClient.getProductById(anyList()))
-                .thenReturn(Map.of(productDto.id(), productDto));
-        when(productServiceClient.updateStock(orderCreateDto.products()))
+        when(this.productServiceClient.getProductById(anyList()))
+                .thenReturn(Map.of(this.productDto.id(), this.productDto));
+        when(this.productServiceClient.updateStock(orderCreateDto.products()))
                 .thenReturn(true);
-        when(orderRepository.save(any(Order.class)))
+        when(this.orderRepository.save(any(Order.class)))
                 .thenReturn(new Order());
-        when(orderMapper.toDto(any(Order.class)))
+        when(this.orderMapper.toDto(any(Order.class)))
                 .thenReturn(OrderDto.builder().build());
 
         //Act
-        var orderCreated = orderService.addOne(orderCreateDto);
+        var orderCreated = this.orderService.addOne(orderCreateDto);
 
         //Assert
         Assertions.assertNotNull(orderCreated);
     }
 
     @Test
-    void addOne_WhenProductDoNotExist_ShouldThrowOrderException() {
+    void addOne_WhenProductDoesNotExist_ShouldThrowOrderException() {
         //Arrange
         var orderProductCreate = OrderProductCreateDto
                 .builder()
-                .productId(productDto.id())
-                .quantity(productDto.quantity() + 1)
+                .productId(this.productDto.id())
+                .quantity(this.productDto.quantity() + 1)
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
                 .products(List.of(orderProductCreate))
                 .build();
 
-        when(productServiceClient.getProductById(anyList()))
+        when(this.productServiceClient.getProductById(anyList()))
                 .thenReturn(Collections.emptyMap());
 
         //Act and Assert
         Assertions.assertThrows(OrderException.class,
-                () -> orderService.addOne(orderCreateDto),
+                () -> this.orderService.addOne(orderCreateDto),
                 OrderException.PRODUCT_DOES_NOT_EXIST);
     }
 
     @Test
-    void addOne_WhenProductDoNotHaveStock_ShouldThrowOrderException() {
+    void addOne_WhenProductDoesNotHaveStock_ShouldThrowOrderException() {
         //Arrange
         var orderProductCreate = OrderProductCreateDto
                 .builder()
-                .productId(productDto.id())
-                .quantity(productDto.quantity() + 1)
+                .productId(this.productDto.id())
+                .quantity(this.productDto.quantity() + 1)
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
                 .products(List.of(orderProductCreate))
                 .build();
 
-        when(productServiceClient.getProductById(anyList()))
-                .thenReturn(Map.of(productDto.id(), productDto));
+        when(this.productServiceClient.getProductById(anyList()))
+                .thenReturn(Map.of(this.productDto.id(), this.productDto));
 
         //Act and Assert
         Assertions.assertThrows(OrderException.class,
-                () -> orderService.addOne(orderCreateDto),
+                () -> this.orderService.addOne(orderCreateDto),
                 OrderException.STOCK_NOT_AVAILABLE);
     }
 
@@ -132,7 +127,7 @@ class OrderServiceTest {
         //Arrange
         var orderProductCreate = OrderProductCreateDto
                 .builder()
-                .productId(productDto.id())
+                .productId(this.productDto.id())
                 .quantity(20)
                 .build();
 
@@ -140,43 +135,43 @@ class OrderServiceTest {
                 .products(List.of(orderProductCreate))
                 .build();
 
-        when(productServiceClient.getProductById(anyList()))
-                .thenReturn(Map.of(productDto.id(), productDto));
-        when(orderRepository.save(any(Order.class)))
+        when(this.productServiceClient.getProductById(anyList()))
+                .thenReturn(Map.of(this.productDto.id(), this.productDto));
+        when(this.orderRepository.save(any(Order.class)))
                 .thenReturn(new Order());
-        when(productServiceClient.updateStock(orderCreateDto.products()))
+        when(this.productServiceClient.updateStock(orderCreateDto.products()))
                 .thenReturn(false);
 
         //Act and Assert
         Assertions.assertThrows(OrderException.class,
-                () -> orderService.addOne(orderCreateDto),
+                () -> this.orderService.addOne(orderCreateDto),
                 OrderException.ERROR_UPDATE_STOCK);
     }
 
     @Test
     void getOne_WhenOrderExists_ShouldReturnOrder() {
         //Arrange
-        when(orderRepository.findById(anyLong()))
+        when(this.orderRepository.findById(anyLong()))
                 .thenReturn(Optional.of(new Order()));
-        when(orderMapper.toDto(any(Order.class)))
+        when(this.orderMapper.toDto(any(Order.class)))
                 .thenReturn(OrderDto.builder().build());
 
         //Act
-        var orderGet = orderService.getOne(anyLong());
+        var orderGet = this.orderService.getOne(anyLong());
 
         //Assert
         Assertions.assertNotNull(orderGet);
     }
 
     @Test
-    void getOne_WhenOrderDoNotExists_ShouldReturnOrder() {
+    void getOne_WhenOrderDoesNotExists_ShouldReturnOrder() {
         //Arrange
-        when(orderRepository.findById(anyLong()))
+        when(this.orderRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
         //Act and Assert
         Assertions.assertThrows(OrderException.class,
-                () -> orderService.getOne(anyLong()),
+                () -> this.orderService.getOne(anyLong()),
                 OrderException.ORDER_DOES_NOT_EXIST);
     }
 }

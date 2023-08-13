@@ -23,11 +23,11 @@ public class OrderServiceClient implements IOrderServiceClient {
     private String serviceUrl;
 
     @Override
-    public Optional<OrderDto> getOrder(Long orderId, Long userId, String username) {
-        var url = serviceUrl + "/users/me/" + orderId;
+    public Optional<OrderDto> getOrder(Long orderId) {
+        var url = this.serviceUrl + "/users/me/" + orderId;
         ResponseEntity<OrderDto> response = null;
         try {
-            response = restTemplate.getForEntity(url, OrderDto.class);
+            response = this.restTemplate.getForEntity(url, OrderDto.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
                 log.error(response.getStatusCode().toString());

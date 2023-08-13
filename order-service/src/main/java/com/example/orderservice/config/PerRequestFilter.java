@@ -30,12 +30,12 @@ public class PerRequestFilter extends OncePerRequestFilter {
 
         var context = new CustomContext(correlationId, userId, username);
 
-        contextHolder.set(context);
+        this.contextHolder.set(context);
 
         try {
             filterChain.doFilter(request, response);
         } finally {
-            contextHolder.remove();
+            this.contextHolder.remove();
         }
     }
 

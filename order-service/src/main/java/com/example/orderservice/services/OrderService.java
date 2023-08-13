@@ -10,13 +10,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,27 +32,27 @@ public class OrderService implements IOrderService {
 
         var order = new Order();
 
-        var productsOrder = getOrderProducts(orderCreateDto, order);
-        order.setUserId(contextHolder.getUserId());
+        var productsOrder = this.getOrderProducts(orderCreateDto, order);
+        order.setUserId(this.contextHolder.getUserId());
         order.setProducts(productsOrder);
 
-        var orderSaved = orderRepository.save(order);
+        var orderSaved = this.orderRepository.save(order);
 
-        var hasStockUpdated = productServiceClient.updateStock(orderCreateDto.products());
+        var hasStockUpdated = this.productServiceClient.updateStock(orderCreateDto.products());
 
         if (!hasStockUpdated) {
             throw new OrderException(OrderException.ERROR_UPDATE_STOCK);
         }
 
-        return orderMapper.toDto(orderSaved);
+        return this.orderMapper.toDto(orderSaved);
     }
 
     @Override
     public OrderDto getOne(final Long orderId) {
-        var order = orderRepository.findById(orderId)
+        var order = this.orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderException(OrderException.ORDER_DOES_NOT_EXIST));
 
-        return orderMapper.toDto(order);
+        return this.orderMapper.toDto(order);
     }
 
     private List<OrderProduct> getOrderProducts(
@@ -65,7 +63,7 @@ public class OrderService implements IOrderService {
                 .map(OrderProductCreateDto::productId)
                 .toList();
 
-        var productById = productServiceClient.getProductById(productsId);
+        var productById = this.productServiceClient.getProductById(productsId);
 
         return orderCreateDto.products()
                 .stream()

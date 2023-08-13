@@ -18,7 +18,7 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        var correlationId = generateOrRetrieveCorrelationId();
+        var correlationId = this.generateOrRetrieveCorrelationId();
         var request = exchange.getRequest()
                 .mutate()
                 .header(CORRELATION_ID_HEADER, correlationId)

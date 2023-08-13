@@ -18,7 +18,7 @@ public class RestTemplateConfig {
     public RestTemplate getRestTemplate() {
         var restTemplate = new RestTemplate();
         restTemplate.getInterceptors()
-                .add(new RestTemplateInterceptor(contextHolder));
+                .add(new RestTemplateInterceptor(this.contextHolder));
         return restTemplate;
     }
 

@@ -25,43 +25,43 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto addOne(final ProductCreateDto productCreateDto) {
 
-        var exists = productRepository.existsByName(productCreateDto.name());
+        var exists = this.productRepository.existsByName(productCreateDto.name());
 
         if (exists)
             throw new ProductException(ProductException.ALREADY_EXISTS_PRODUCT);
 
-        var product = productMapper.toProduct(productCreateDto);
+        var product = this.productMapper.toProduct(productCreateDto);
 
-        var productSaved = productRepository.save(product);
+        var productSaved = this.productRepository.save(product);
 
-        return productMapper.toDto(productSaved);
+        return this.productMapper.toDto(productSaved);
     }
 
     @Override
     public List<ProductDto> getAll() {
-        var productsList = productRepository.findAll();
+        var productsList = this.productRepository.findAll();
 
-        return productMapper.toDto(productsList);
+        return this.productMapper.toDto(productsList);
     }
 
     @Override
     public ProductDto getOneById(final Long id) {
-        var product = productRepository.findById(id)
+        var product = this.productRepository.findById(id)
                 .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
 
-        return productMapper.toDto(product);
+        return this.productMapper.toDto(product);
     }
 
     @Override
     public List<ProductDto> getAllByIds(final List<Long> ids) {
-        var products = productRepository.findAllById(ids);
-        return productMapper.toDto(products);
+        var products = this.productRepository.findAllById(ids);
+        return this.productMapper.toDto(products);
     }
 
     @Override
     public void increaseStock(final List<ProductStockQuantityDto> productsQuantities) {
 
-        var productsMap = createProductsMapFromQuantities(productsQuantities);
+        var productsMap = this.createProductsMapFromQuantities(productsQuantities);
 
         productsQuantities
                 .forEach(productQuantity -> {
@@ -75,13 +75,13 @@ public class ProductService implements IProductService {
                 .stream()
                 .toList();
 
-        productRepository.saveAll(updatedProducts);
+        this.productRepository.saveAll(updatedProducts);
     }
 
     @Override
     public void decreaseStock(final List<ProductStockQuantityDto> productsQuantities) {
 
-        var productsMap = createProductsMapFromQuantities(productsQuantities);
+        var productsMap = this.createProductsMapFromQuantities(productsQuantities);
 
         productsQuantities
                 .forEach(productQuantity -> {
@@ -98,7 +98,7 @@ public class ProductService implements IProductService {
                 .stream()
                 .toList();
 
-        productRepository.saveAll(updatedProducts);
+        this.productRepository.saveAll(updatedProducts);
     }
 
     private Map<Long, Product> createProductsMapFromQuantities(final List<ProductStockQuantityDto> productsQuantities) {
@@ -106,7 +106,7 @@ public class ProductService implements IProductService {
                 .map(ProductStockQuantityDto::productId)
                 .toList();
 
-        var productsMap = createProductsMap(productIds);
+        var productsMap = this.createProductsMap(productIds);
 
         if (productsMap.size() != productIds.size()) {
             throw new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST);
@@ -115,7 +115,7 @@ public class ProductService implements IProductService {
     }
 
     private Map<Long, Product> createProductsMap(final List<Long> productIds) {
-        return productRepository.findAllById(productIds)
+        return this.productRepository.findAllById(productIds)
                 .stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
     }

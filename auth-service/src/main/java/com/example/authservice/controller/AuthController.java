@@ -25,9 +25,9 @@ public class AuthController {
             HttpServletRequest request,
             @Valid @RequestBody LoginDto loginDto) {
 
-        logRequest(request, loginDto);
+        this.logRequest(request, loginDto);
 
-        var jwt = authService.login(loginDto);
+        var jwt = this.authService.login(loginDto);
 
         var responseHeaders = new HttpHeaders();
         responseHeaders.set("Authorization", "Bearer " + jwt);
@@ -40,11 +40,11 @@ public class AuthController {
             HttpServletRequest request,
             @RequestHeader("Authorization") String headerAuthorization) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
         var jwt = headerAuthorization.replace("Bearer ", "");
 
-        var userHeader = authService.validateToken(jwt);
+        var userHeader = this.authService.validateToken(jwt);
 
         var responseHeaders = new HttpHeaders();
         responseHeaders.set("userId", userHeader.id().toString());
@@ -54,6 +54,6 @@ public class AuthController {
     }
 
     private void logRequest(final HttpServletRequest request, final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

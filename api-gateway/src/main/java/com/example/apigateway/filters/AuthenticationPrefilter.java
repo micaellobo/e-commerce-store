@@ -37,24 +37,24 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
 
             if (bearerToken == null) {
                 log.error("bearerToken NULL");
-                return onError(exchange, HttpStatus.UNAUTHORIZED);
+                return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             }
 
             try {
-                return webClientBuilder.build()
+                return this.webClientBuilder.build()
                         .post()
-                        .uri(authServiceUrl + "/validate")
+                        .uri(this.authServiceUrl + "/validate")
                         .header("Authorization", bearerToken)
                         .header("CorrelationID", correlationID)
                         .retrieve()
                         .toBodilessEntity()
-                        .flatMap(getResponseEntityMonoFunction(exchange, chain));
+                        .flatMap(this.getResponseEntityMonoFunction(exchange, chain));
             } catch (WebClientResponseException e) {
                 log.error(e.getMessage());
-                return onError(exchange, e.getStatusCode());
+                return this.onError(exchange, e.getStatusCode());
             } catch (Exception e) {
                 log.error(e.getMessage());
-                return onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
+                return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         };
     }
@@ -65,7 +65,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
         return response -> {
 
             if (!response.getStatusCode().is2xxSuccessful()) {
-                return onError(exchange, response.getStatusCode());
+                return this.onError(exchange, response.getStatusCode());
             }
 
             var headers = response
@@ -75,7 +75,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             var username = headers.getFirst("username");
 
             if (username == null || userId == null) {
-                return onError(exchange, response.getStatusCode());
+                return this.onError(exchange, response.getStatusCode());
             }
 
             var modifiedRequest = exchange.getRequest()

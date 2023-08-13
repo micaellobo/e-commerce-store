@@ -26,9 +26,9 @@ public class OrderController {
             HttpServletRequest request,
             @Valid @RequestBody OrderCreateDto orderCreateDto) {
 
-        logRequest(request, orderCreateDto);
+        this.logRequest(request, orderCreateDto);
 
-        var orderDto = orderService.addOne(orderCreateDto);
+        var orderDto = this.orderService.addOne(orderCreateDto);
 
         return ResponseEntity.ok(orderDto);
     }
@@ -39,14 +39,14 @@ public class OrderController {
             HttpServletRequest request,
             @PathVariable Long orderId) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var orderDto = orderService.getOne(orderId);
+        var orderDto = this.orderService.getOne(orderId);
 
         return ResponseEntity.ok(orderDto);
     }
 
     private void logRequest(final HttpServletRequest request, final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

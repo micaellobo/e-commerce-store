@@ -47,14 +47,14 @@ public class Review {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         var user = (Review) o;
-        return id.equals(user.id);
+        return this.id.equals(user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.id);
 
     }
 }

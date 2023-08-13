@@ -4,7 +4,6 @@ import com.example.userservice.config.CustomContextHolder;
 import com.example.userservice.config.RequiresAuthentication;
 import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
-import com.example.userservice.dto.IUserMapper;
 import com.example.userservice.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,9 +27,9 @@ public class UserController {
             HttpServletRequest request,
             @Valid @RequestBody UserCreateDto userCreateDto) {
 
-        logRequest(request, userCreateDto);
+        this.logRequest(request, userCreateDto);
 
-        var userDto = userService.addOne(userCreateDto);
+        var userDto = this.userService.addOne(userCreateDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
@@ -40,9 +39,9 @@ public class UserController {
             HttpServletRequest request,
             @RequestBody LoginDto loginDto) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var userDto = userService.getUserLogin(loginDto);
+        var userDto = this.userService.getUserLogin(loginDto);
 
         return ResponseEntity.ok(userDto);
     }
@@ -51,14 +50,14 @@ public class UserController {
     @RequiresAuthentication
     public ResponseEntity<Object> getUser(HttpServletRequest request) {
 
-        logRequest(request, null);
+        this.logRequest(request, null);
 
-        var userDto = userService.getUser();
+        var userDto = this.userService.getUser();
 
         return ResponseEntity.ok(userDto);
     }
 
     private void logRequest(final HttpServletRequest request, final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), contextHolder.getCorrelationId(), contextHolder.getUsername(), obj);
+        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

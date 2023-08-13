@@ -4,8 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +30,12 @@ public class PerRequestFilter extends OncePerRequestFilter {
 
         var context = new CustomContext(correlationId, userId, username);
 
-        contextHolder.set(context);
+        this.contextHolder.set(context);
 
         try {
             filterChain.doFilter(request, response);
         } finally {
-            contextHolder.remove();
+            this.contextHolder.remove();
         }
     }
 
