@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PerRequestFilter extends OncePerRequestFilter {
 
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @Override
     protected void doFilterInternal(
@@ -28,7 +28,7 @@ public class PerRequestFilter extends OncePerRequestFilter {
         var userId = parseUserId(request);
         var username = request.getHeader("username");
 
-        var context = new CustomContext(correlationId, userId, username);
+        var context = new ContextData(correlationId, userId, username);
 
         this.contextHolder.set(context);
 

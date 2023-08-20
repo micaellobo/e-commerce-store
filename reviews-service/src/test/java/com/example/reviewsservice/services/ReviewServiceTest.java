@@ -1,6 +1,6 @@
 package com.example.reviewsservice.services;
 
-import com.example.reviewsservice.config.CustomContextHolder;
+import com.example.reviewsservice.config.ContextHolder;
 import com.example.reviewsservice.controllers.ReviewException;
 import com.example.reviewsservice.dtos.*;
 import com.example.reviewsservice.models.Review;
@@ -32,7 +32,7 @@ class ReviewServiceTest {
     @Mock
     IOrderServiceClient orderServiceClient;
     @Mock
-    CustomContextHolder contextHolder;
+    ContextHolder contextHolder;
     @InjectMocks
     ReviewService reviewService;
     private OrderProductDto orderProduct;
@@ -129,7 +129,7 @@ class ReviewServiceTest {
         when(this.orderServiceClient.getOrder(anyLong()))
                 .thenReturn(Optional.empty());
 
-        // Act & Assert
+        // Act and Assert
         Assertions.assertThrows(ReviewException.class,
                 () -> this.reviewService.addOne(this.reviewCreateDto),
                 ReviewException.ORDER_DOES_NOT_EXIST);

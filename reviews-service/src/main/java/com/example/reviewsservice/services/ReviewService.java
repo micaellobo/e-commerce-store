@@ -1,6 +1,6 @@
 package com.example.reviewsservice.services;
 
-import com.example.reviewsservice.config.CustomContextHolder;
+import com.example.reviewsservice.config.ContextHolder;
 import com.example.reviewsservice.controllers.ReviewException;
 import com.example.reviewsservice.dtos.*;
 import com.example.reviewsservice.models.Review;
@@ -21,7 +21,7 @@ public class ReviewService implements IReviewService {
     private final IReviewMapper reviewMapper;
     private final IReviewRepository reviewRepository;
     private final IOrderServiceClient orderServiceClient;
-    private final CustomContextHolder context;
+    private final ContextHolder context;
 
     @Override
     public ReviewDto addOne(final ReviewCreateDto reviewCreateDto) {

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final IAuthService authService;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(

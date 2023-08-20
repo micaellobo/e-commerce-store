@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationAspect {
 
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
     private final HttpServletRequest request;
 
 

@@ -1,6 +1,6 @@
 package com.example.inventoryservice.controllers;
 
-import com.example.inventoryservice.config.CustomContextHolder;
+import com.example.inventoryservice.config.ContextHolder;
 import com.example.inventoryservice.dtos.ProductCreateDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.services.IProductService;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ProductController {
 
     private final IProductService productService;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @PostMapping("/add")
     public ResponseEntity<Object> add(

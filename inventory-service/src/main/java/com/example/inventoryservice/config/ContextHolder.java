@@ -1,17 +1,17 @@
-package com.example.reviewsservice.config;
+package com.example.inventoryservice.config;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomContextHolder {
-    private static final ThreadLocal<CustomContext> holder = new ThreadLocal<>();
+public class ContextHolder {
+    private static final ThreadLocal<ContextData> holder = new ThreadLocal<>();
 
-    public void set(CustomContext context) {
+    public void set(ContextData context) {
         holder.set(context);
     }
 
-    public CustomContext get() {
+    public ContextData get() {
         return holder.get();
     }
 

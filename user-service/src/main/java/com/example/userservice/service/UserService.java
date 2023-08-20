@@ -1,6 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userservice.config.CustomContextHolder;
+import com.example.userservice.config.ContextHolder;
 import com.example.userservice.dto.*;
 import com.example.userservice.utils.HashUtils;
 import com.example.userservice.controler.UserException;
@@ -16,7 +16,7 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final IUserMapper userMapper;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @Override
     public UserDto addOne(final UserCreateDto userCreateDto) {

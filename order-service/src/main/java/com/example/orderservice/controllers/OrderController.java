@@ -1,6 +1,6 @@
 package com.example.orderservice.controllers;
 
-import com.example.orderservice.config.CustomContextHolder;
+import com.example.orderservice.config.ContextHolder;
 import com.example.orderservice.config.RequiresAuthentication;
 import com.example.orderservice.dtos.OrderCreateDto;
 import com.example.orderservice.services.IOrderService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final IOrderService orderService;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @PostMapping("users/me")
     @RequiresAuthentication

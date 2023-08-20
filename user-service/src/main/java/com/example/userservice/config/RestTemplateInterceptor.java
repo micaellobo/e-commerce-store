@@ -13,7 +13,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
 
-    private final CustomContextHolder context;
+    private final ContextHolder context;
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

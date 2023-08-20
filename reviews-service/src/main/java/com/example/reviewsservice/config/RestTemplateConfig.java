@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class RestTemplateConfig {
 
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @Bean
     @LoadBalanced

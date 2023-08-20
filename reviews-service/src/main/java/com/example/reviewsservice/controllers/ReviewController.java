@@ -1,6 +1,6 @@
 package com.example.reviewsservice.controllers;
 
-import com.example.reviewsservice.config.CustomContextHolder;
+import com.example.reviewsservice.config.ContextHolder;
 import com.example.reviewsservice.config.RequiresAuthentication;
 import com.example.reviewsservice.dtos.*;
 import com.example.reviewsservice.services.IReviewService;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ReviewController {
 
     private final IReviewService reviewService;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @PostMapping("users/me")
     @RequiresAuthentication

@@ -1,6 +1,6 @@
 package com.example.orderservice.services;
 
-import com.example.orderservice.config.CustomContextHolder;
+import com.example.orderservice.config.ContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
 import com.example.orderservice.models.Order;
@@ -24,7 +24,7 @@ public class OrderService implements IOrderService {
     private final IOrderRepository orderRepository;
     private final IOrderMapper orderMapper;
     private final IProductServiceClient productServiceClient;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @Transactional
     @Override

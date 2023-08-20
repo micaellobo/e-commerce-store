@@ -24,8 +24,8 @@ public class Order {
 
     private Long userId;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderProduct> products;
 
     @CreationTimestamp

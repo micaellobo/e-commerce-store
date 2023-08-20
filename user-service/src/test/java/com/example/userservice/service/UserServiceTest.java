@@ -1,6 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userservice.config.CustomContextHolder;
+import com.example.userservice.config.ContextHolder;
 import com.example.userservice.controler.UserException;
 import com.example.userservice.dto.*;
 import com.example.userservice.models.User;
@@ -29,7 +29,7 @@ class UserServiceTest {
     private IUserMapper userMapper;
 
     @Mock
-    CustomContextHolder contextHolder;
+    ContextHolder contextHolder;
 
     @InjectMocks
     UserService userService;

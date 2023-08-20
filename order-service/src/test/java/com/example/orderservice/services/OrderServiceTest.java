@@ -1,6 +1,6 @@
 package com.example.orderservice.services;
 
-import com.example.orderservice.config.CustomContextHolder;
+import com.example.orderservice.config.ContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
 import com.example.orderservice.models.Order;
@@ -28,7 +28,7 @@ class OrderServiceTest {
     @Mock
     IProductServiceClient productServiceClient;
     @Mock
-    CustomContextHolder contextHolder;
+    ContextHolder contextHolder;
     @InjectMocks
     OrderService orderService;
     private ProductDto productDto;

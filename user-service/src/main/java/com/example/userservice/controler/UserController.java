@@ -1,6 +1,6 @@
 package com.example.userservice.controler;
 
-import com.example.userservice.config.CustomContextHolder;
+import com.example.userservice.config.ContextHolder;
 import com.example.userservice.config.RequiresAuthentication;
 import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final IUserService userService;
-    private final CustomContextHolder contextHolder;
+    private final ContextHolder contextHolder;
 
     @PostMapping
     public ResponseEntity<Object> createUser(
