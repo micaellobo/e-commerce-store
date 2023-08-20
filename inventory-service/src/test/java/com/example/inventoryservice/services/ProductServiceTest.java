@@ -62,10 +62,14 @@ class ProductServiceTest {
     @Test
     void addOne_WhenProductDoesNotExist_ShouldSave() {
         //Arrange
-        when(this.productRepository.existsByName(anyString())).thenReturn(false);
-        when(this.productMapper.toProduct(any(ProductCreateDto.class))).thenReturn(this.product);
-        when(this.productRepository.save(any(Product.class))).thenReturn(this.product);
-        when(this.productMapper.toDto(any(Product.class))).thenReturn(this.productDto);
+        when(this.productRepository.existsByName(anyString()))
+                .thenReturn(false);
+        when(this.productMapper.toProduct(any(ProductCreateDto.class)))
+                .thenReturn(this.product);
+        when(this.productRepository.save(any(Product.class)))
+                .thenReturn(this.product);
+        when(this.productMapper.toDto(any(Product.class)))
+                .thenReturn(this.productDto);
 
         //Act
         var productSaved = this.productService.addOne(this.productCreate);
@@ -92,8 +96,10 @@ class ProductServiceTest {
     void getAll_WhenSingleProduct_ShouldReturnList() {
         //Arrange
         var productsDtoList = Collections.singletonList(this.productDto);
-        when(this.productRepository.findAll()).thenReturn(List.of(this.product));
-        when(this.productMapper.toDto(anyList())).thenReturn(productsDtoList);
+        when(this.productRepository.findAll())
+                .thenReturn(List.of(this.product));
+        when(this.productMapper.toDto(anyList()))
+                .thenReturn(productsDtoList);
 
         //Act
         var productsGet = this.productService.getAll();
@@ -106,8 +112,10 @@ class ProductServiceTest {
     @Test
     void getOneById_WhenProductExist_ShouldReturnsProduct() {
         //Arrange
-        when(this.productRepository.findById(anyLong())).thenReturn(Optional.ofNullable(this.product));
-        when(this.productMapper.toDto(any(Product.class))).thenReturn(this.productDto);
+        when(this.productRepository.findById(anyLong()))
+                .thenReturn(Optional.ofNullable(this.product));
+        when(this.productMapper.toDto(any(Product.class)))
+                .thenReturn(this.productDto);
 
         //Act
         var productGet = this.productService.getOneById(anyLong());
@@ -119,7 +127,8 @@ class ProductServiceTest {
     @Test
     void getOneById_WhenProductDoesNotExist_ShouldThrowProductException() {
         //Arrange
-        when(this.productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(this.productRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
 
         //Act and Assert
         Assertions.assertThrows(ProductException.class,

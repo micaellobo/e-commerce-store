@@ -16,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderServiceClient implements IOrderServiceClient {
 
-
     private final RestTemplate restTemplate;
 
     @Value("${api.order-service}")

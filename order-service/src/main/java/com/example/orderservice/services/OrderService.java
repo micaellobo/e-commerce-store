@@ -58,6 +58,7 @@ public class OrderService implements IOrderService {
     private List<OrderProduct> getOrderProducts(
             final OrderCreateDto orderCreateDto,
             final Order order) {
+
         var productsId = orderCreateDto.products()
                 .stream()
                 .map(OrderProductCreateDto::productId)
@@ -74,6 +75,7 @@ public class OrderService implements IOrderService {
     private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
             final Map<Long, ProductDto> productById,
             final Order order) {
+
         return orderProductCreateDto -> {
             var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
                     .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));

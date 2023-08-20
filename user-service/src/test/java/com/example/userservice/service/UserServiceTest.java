@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -24,13 +23,10 @@ class UserServiceTest {
 
     @Mock
     IUserRepository userRepository;
-
     @Mock
     private IUserMapper userMapper;
-
     @Mock
     ContextHolder contextHolder;
-
     @InjectMocks
     UserService userService;
     private UserCreateDto userCreateDto;
@@ -72,8 +68,10 @@ class UserServiceTest {
                 .password("pwd")
                 .build();
 
-        Mockito.lenient().when(this.contextHolder.getUserId()).thenReturn(1L);
-        Mockito.lenient().when(this.contextHolder.getUsername()).thenReturn(this.userCreateDto.username());
+        lenient().when(this.contextHolder.getUserId())
+                .thenReturn(1L);
+        lenient().when(this.contextHolder.getUsername())
+                .thenReturn(this.userCreateDto.username());
     }
 
     @Test

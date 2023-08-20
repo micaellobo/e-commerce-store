@@ -79,8 +79,10 @@ class ReviewServiceTest {
                 .quantity(10)
                 .build();
 
-        lenient().when(this.contextHolder.getUserId()).thenReturn(1L);
-        lenient().when(this.contextHolder.getUsername()).thenReturn("JhonDoe");
+        lenient().when(this.contextHolder.getUserId())
+                .thenReturn(1L);
+        lenient().when(this.contextHolder.getUsername())
+                .thenReturn("JhonDoe");
     }
 
     @Test

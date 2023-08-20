@@ -16,12 +16,14 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
     private final ContextHolder context;
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(
+            final HttpRequest request,
+            final byte[] body,
+            final ClientHttpRequestExecution execution) throws IOException {
+
         var correlationId = this.context.getCorrelationId();
         var userId = this.context.getUserId();
         var username = this.context.getUsername();
-
-//        log.info("{} - {} - {} - {}", request.getMethod(), request.getURI().getPath(), correlationId, null);
 
         var headers = request.getHeaders();
         headers.add("CorrelationId", correlationId);

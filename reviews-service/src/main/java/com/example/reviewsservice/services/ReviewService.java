@@ -48,7 +48,9 @@ public class ReviewService implements IReviewService {
         return this.reviewMapper.toDto(reviewSaved);
     }
 
-    private static boolean isProductPresentInOrder(final Long productId, final OrderDto order) {
+    private static boolean isProductPresentInOrder(
+            final Long productId,
+            final OrderDto order) {
         return order.products()
                 .stream()
                 .anyMatch(orderProductDto -> orderProductDto.productId().equals(productId));
