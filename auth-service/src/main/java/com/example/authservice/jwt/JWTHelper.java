@@ -26,7 +26,7 @@ public class JWTHelper {
                 .plus(1, ChronoUnit.DAYS));
 
         var issuer = "auth-service";
-        var audience = "e-commerce-shop";
+        var audience = "e-commerce-store";
 
         var claims = Jwts.claims();
         claims.put("username", user.username());

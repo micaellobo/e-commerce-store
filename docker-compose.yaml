@@ -1,4 +1,4 @@
-name: e-commerce-shop
+name: e-commerce-store
 services:
   db-users:
     container_name: db-users
@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   db-inventory:
     container_name: db-inventory
@@ -28,7 +28,7 @@ services:
       - "5433:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   db-reviews:
     container_name: db-reviews
@@ -43,7 +43,7 @@ services:
       - "5433:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   eureka-service:
     container_name: eureka-service
@@ -54,7 +54,7 @@ services:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   api-gateway:
     container_name: api-gateway
@@ -69,7 +69,7 @@ services:
     depends_on:
       - eureka-service
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   user-service:
     container_name: user-service
@@ -83,7 +83,7 @@ services:
       - eureka-service
       - db-users
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   auth-service:
     container_name: auth-service
@@ -96,7 +96,7 @@ services:
     depends_on:
       - eureka-service
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
   inventory-service:
     container_name: inventory-service
@@ -109,7 +109,7 @@ services:
     depends_on:
       - eureka-service
     networks:
-      - e-commerce-shop
+      - e-commerce-store
 
 volumes:
   db-pgdata-users:
@@ -117,6 +117,6 @@ volumes:
   db-pgdata-reviews:
 
 networks:
-  e-commerce-shop:
+  e-commerce-store:
     driver: bridge
 
