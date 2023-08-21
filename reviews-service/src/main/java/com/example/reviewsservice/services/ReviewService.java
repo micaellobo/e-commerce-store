@@ -25,7 +25,6 @@ public class ReviewService implements IReviewService {
 
     @Override
     public ReviewDto addOne(final ReviewCreateDto reviewCreateDto) {
-
         var existsReview = this.reviewRepository.existsByUserIdAndOrderIdAndProductId(
                 this.context.getUserId(),
                 reviewCreateDto.orderId(),
@@ -41,7 +40,7 @@ public class ReviewService implements IReviewService {
         if (!isProductPresentInOrder(reviewCreateDto.productId(), order))
             throw new ReviewException(ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER);
 
-        var review = this.reviewMapper.toReview(reviewCreateDto);
+        var review = this.reviewMapper.toReview(reviewCreateDto, this.context.getUserId());
 
         var reviewSaved = this.reviewRepository.save(review);
 

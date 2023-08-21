@@ -48,10 +48,11 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
                         .header("CorrelationID", correlationID)
                         .retrieve()
                         .toBodilessEntity()
-                        .flatMap(this.getResponseEntityMonoFunction(exchange, chain));
-            } catch (WebClientResponseException e) {
-                log.error(e.getMessage());
-                return this.onError(exchange, e.getStatusCode());
+                        .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
+                        .onErrorResume(WebClientResponseException.class, e -> {
+                            log.error(e.getMessage());
+                            return this.onError(exchange, e.getStatusCode());
+                        });
             } catch (Exception e) {
                 log.error(e.getMessage());
                 return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +64,6 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             final ServerWebExchange exchange,
             final GatewayFilterChain chain) {
         return response -> {
-
             if (!response.getStatusCode().is2xxSuccessful()) {
                 return this.onError(exchange, response.getStatusCode());
             }

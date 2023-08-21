@@ -6,6 +6,8 @@ import com.example.authservice.dtos.UserHeader;
 import com.example.authservice.jwt.JWTHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +34,6 @@ public class AuthService implements IAuthService {
     @Override
     public UserHeader validateToken(final String jwt) {
         return this.jwtHelper.decodeJWT(jwt)
-                .orElseThrow(() -> new AuthException(AuthException.GENERIC_LOGIN_FAIL));
+                .orElseThrow(() -> new AuthException(HttpStatus.UNAUTHORIZED, AuthException.GENERIC_LOGIN_FAIL));
     }
 }

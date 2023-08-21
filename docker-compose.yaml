@@ -40,7 +40,22 @@ services:
     volumes:
       - db-pgdata-reviews:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5434:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-store
+
+  db-orders:
+    container_name: db-orders
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    volumes:
+      - db-pgdata-orders:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
     restart: unless-stopped
     networks:
       - e-commerce-store
@@ -111,10 +126,37 @@ services:
     networks:
       - e-commerce-store
 
+  order-service:
+    container_name: order-service
+    build:
+      context: ./order-service
+    image: order-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    restart: unless-stopped
+    depends_on:
+      - eureka-service
+    networks:
+      - e-commerce-store
+
+  reviews-service:
+    container_name: reviews-service
+    build:
+      context: ./reviews-service
+    image: reviews-service
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    restart: unless-stopped
+    depends_on:
+      - eureka-service
+    networks:
+      - e-commerce-store
+
 volumes:
   db-pgdata-users:
   db-pgdata-inventory:
   db-pgdata-reviews:
+  db-pgdata-orders:
 
 networks:
   e-commerce-store:

@@ -12,7 +12,8 @@ public interface IReviewMapper {
 
     List<ReviewDto> toDto(List<Review> review);
 
-    Review toReview(ReviewCreateDto reviewCreateDto);
+    @Mapping(target = "userId", expression = "java(userId)")
+    Review toReview(ReviewCreateDto reviewCreateDto, @Context Long userId);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Review partialUpdate(ReviewDto reviewDto, @MappingTarget Review review);

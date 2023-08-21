@@ -97,7 +97,7 @@ class ReviewServiceTest {
                 .thenReturn(false);
         when(this.orderServiceClient.getOrder(anyLong()))
                 .thenReturn(Optional.of(orderDto));
-        when(this.reviewMapper.toReview(any(ReviewCreateDto.class)))
+        when(this.reviewMapper.toReview(any(ReviewCreateDto.class), anyLong()))
                 .thenReturn(new Review());
         when(this.reviewRepository.save(any(Review.class)))
                 .thenReturn(new Review());

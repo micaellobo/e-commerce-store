@@ -17,7 +17,6 @@ public class AuthenticationAspect {
     private final ContextHolder contextHolder;
     private final HttpServletRequest request;
 
-
     @Before("@annotation(RequiresAuthentication)")
     public void beforeRequiresAuthentication() {
         if (!this.contextHolder.isAuthenticated()) {

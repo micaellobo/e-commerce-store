@@ -1,5 +1,6 @@
 package com.example.authservice.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class AuthException extends RuntimeException {
@@ -15,7 +16,8 @@ public class AuthException extends RuntimeException {
         super(message);
     }
 
-    public AuthException(final HttpStatusCode statusCode) {
+    public AuthException(final HttpStatus statusCode, String message) {
+        super(message);
         this.statusCode = statusCode;
     }
 

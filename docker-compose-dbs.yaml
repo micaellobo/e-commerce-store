@@ -44,6 +44,7 @@ services:
     restart: unless-stopped
     networks:
       - e-commerce-store-dbs
+
   db-orders:
     container_name: db-orders
     image: postgres
