@@ -26,7 +26,8 @@ run the following command:
 
 ### Local Development with Docker Compose
 
-This option builds new Docker images from your current local codebase, can be a bit slower.
+This option builds new Docker images and packages the application to an JAR file from your current local codebase, can
+be a bit slower.
 
 1. Clone the repository.
 2. Run the following command:
