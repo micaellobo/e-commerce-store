@@ -19,7 +19,7 @@ Spring microservice-based application to manage orders, products, inventory and 
 This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
 
 Clone the repository or just download the
-[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/docker-compose.yaml) file and run the
+[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml) file and run the
 following command:
 
         docker-compose up -d
