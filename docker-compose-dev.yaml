@@ -62,7 +62,9 @@ services:
 
   eureka-service:
     container_name: eureka-service
-    image: 8160202/eureka-service:latest
+    build:
+      context: ./eureka-service
+    image: eureka-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
@@ -71,7 +73,9 @@ services:
 
   api-gateway:
     container_name: api-gateway
-    image: 8160202/api-gateway:latest
+    build:
+      context: ./api-gateway
+    image: api-gateway
     ports:
       - "8080:8080"
     environment:
@@ -84,7 +88,9 @@ services:
 
   user-service:
     container_name: user-service
-    image: 8160202/user-service:latest
+    build:
+      context: ./user-service
+    image: user-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
@@ -96,7 +102,9 @@ services:
 
   auth-service:
     container_name: auth-service
-    image: 8160202/auth-service:latest
+    build:
+      context: ./auth-service
+    image: auth-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
@@ -107,7 +115,9 @@ services:
 
   inventory-service:
     container_name: inventory-service
-    image: 8160202/inventory-service:latest
+    build:
+      context: ./inventory-service
+    image: inventory-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
@@ -118,7 +128,9 @@ services:
 
   order-service:
     container_name: order-service
-    image: 8160202/order-service:latest
+    build:
+      context: ./order-service
+    image: order-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
@@ -129,7 +141,9 @@ services:
 
   reviews-service:
     container_name: reviews-service
-    image: 8160202/reviews-service:latest
+    build:
+      context: ./reviews-service
+    image: reviews-service
     environment:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
