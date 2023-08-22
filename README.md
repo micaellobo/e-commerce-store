@@ -15,9 +15,8 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 ## How to run
 
-Clone the repository or just download
-the [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/docker-compose.yaml) file
-and run:
+Clone the repository or just download the
+[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/docker-compose.yaml) file and run:
 
         docker-compose up -d
 
@@ -26,8 +25,8 @@ and run:
 As the project is actively being developed, there are several possibilities for future enhancements and progress. Here
 are a few ideas:
 
-- **API Documentation:** API documentation using Swagger.
-- **Security:** Use OAuth 2.0 with Keycloak instead of JWT.
-- **Testing:** Implement integration tests using testcontainers to mock databases.
-- **CI/CD:** Set up pipelines to automate testing and deployment processes with Jenkins.
-- **Container Orchestration:** Explore container orchestration platforms like Kubernetes.
+- **API Documentation:** API documentation using `Swagger`.
+- **Security:** Use OAuth 2.0 with `Keycloak` instead of JWT.
+- **Testing:** Implement integration tests using `testContainers` to mock databases.
+- **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`.
+- **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
