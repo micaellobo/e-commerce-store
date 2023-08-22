@@ -1,0 +1,12 @@
+#!/bin/bash
+
+microservices=($(find . -type d -name "*-service"))
+
+for service in "${microservices[@]}"; do
+  cd "$service" || continue
+  echo "Running tests in $service..."
+  mvn test
+  cd ..
+done
+
+echo "All tests completed."
