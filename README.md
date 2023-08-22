@@ -14,25 +14,31 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 # How to run
 
-### Docker Compose (Docker Hub Registry)
+### Docker Compose
 
 This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
 
 Clone the repository or just download the
-[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml) file and run the
-following command:
+[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml) file and
+run the following command:
 
-        docker-compose up -d
+        docker-compose up
 
 ### Local Development with Docker Compose
 
-This option builds each time new Docker images from your current local codebase, can be a bit slower. \
-For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases in separated containers.
+This option builds new Docker images from your current local codebase, can be a bit slower.
 
-1. Clone the repository to your local machine.
+1. Clone the repository.
 2. Run the following command:
 
-       docker-compose -f docker-compose-dev.yaml up -d
+       docker-compose -f docker-compose-dev.yaml up
+
+For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases with
+docker([docker-compose-dbs.yaml](https://githubcom/micaellobo/e-commerce-store/raw/master/deployment/docker
+-compose-dbs.yaml)). \
+And run each service individually with the following command:
+
+        mvn spring-boot:run
 
 # Next Steps and Improvements
 

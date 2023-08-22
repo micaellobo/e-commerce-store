@@ -1,14 +1,14 @@
 name: e-commerce-store-dbs
 services:
   db-users:
-    container_name: db-users
+    container_name: dbs-users
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: users
     volumes:
-      - db-pgdata-users:/var/lib/postgresql/data
+      - db-pgdata-users-dbs:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -16,14 +16,14 @@ services:
       - e-commerce-store-dbs
 
   db-inventory:
-    container_name: db-inventory
+    container_name: dbs-inventory
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: inventory
     volumes:
-      - db-pgdata-inventory:/var/lib/postgresql/data
+      - db-pgdata-inventory-dbs:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     restart: unless-stopped
@@ -31,14 +31,14 @@ services:
       - e-commerce-store-dbs
 
   db-reviews:
-    container_name: db-reviews
+    container_name: dbs-reviews
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: reviews
     volumes:
-      - db-pgdata-reviews:/var/lib/postgresql/data
+      - db-pgdata-reviews-dbs:/var/lib/postgresql/data
     ports:
       - "5434:5432"
     restart: unless-stopped
@@ -46,14 +46,14 @@ services:
       - e-commerce-store-dbs
 
   db-orders:
-    container_name: db-orders
+    container_name: dbs-orders
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: orders
     volumes:
-      - db-pgdata-orders:/var/lib/postgresql/data
+      - db-pgdata-orders-dbs:/var/lib/postgresql/data
     ports:
       - "5435:5432"
     restart: unless-stopped
@@ -61,10 +61,10 @@ services:
       - e-commerce-store-dbs
 
 volumes:
-  db-pgdata-users:
-  db-pgdata-inventory:
-  db-pgdata-reviews:
-  db-pgdata-orders:
+  db-pgdata-users-dbs:
+  db-pgdata-inventory-dbs:
+  db-pgdata-reviews-dbs:
+  db-pgdata-orders-dbs:
 
 networks:
   e-commerce-store-dbs:
