@@ -32,13 +32,12 @@ Follow these steps:
 
 ### Local Development with Docker Compose
 
+This option builds Docker images from your current local codebase:
+
 #### Prerequisites
 
 - Docker
 - Docker Compose
-
-If you prefer to work with Docker, you can use the `docker-compose-dev.yaml` file. This option builds Docker images from
-your current local codebase:
 
 1. Clone the repository to your local machine.
 2. Run the following command:
@@ -47,7 +46,7 @@ your current local codebase:
 
 ### Docker Compose (Docker Hub Registry)
 
-Simpler and faster way to run the application, this option uses pre-built Docker images from a Docker Hub registry:
+This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
 
 #### Prerequisites
 
