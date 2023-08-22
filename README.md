@@ -10,39 +10,9 @@ Spring microservice-based application to manage orders, products, inventory and 
 - **Auth Service:** Provides authentication.
 - **Inventory Service:** Manages product inventory and availability.
 - **Reviews Service:** Gather and display product reviews and ratings from users.
-- **Reviews Service:** Manages product reviews and ratings.
 - **Order Service:** Manage and process customer orders.
 
 # How to run
-
-### Local Development
-
-#### Prerequisites
-
-- Postgres
-- Java 17
-- Maven
-
-Follow these steps:
-
-1. Clone the repository to your local machine.
-2. Navigate to the project's root directory.
-3. Configure your local Postgres database.
-4. Build and run each microservice using Maven.
-
-### Local Development with Docker Compose
-
-This option builds Docker images from your current local codebase:
-
-#### Prerequisites
-
-- Docker
-- Docker Compose
-
-1. Clone the repository to your local machine.
-2. Run the following command:
-
-        docker-compose -f docker-compose-dev.yaml up -d
 
 ### Docker Compose (Docker Hub Registry)
 
@@ -58,6 +28,21 @@ Clone the repository or just download the
 following command:
 
         docker-compose up -d
+
+### Local Development with Docker Compose
+
+This option builds each time new Docker images from your current local codebase, can be a bit slower. \
+For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases in separated containers.
+
+#### Prerequisites
+
+- Docker
+- Docker Compose
+
+1. Clone the repository to your local machine.
+2. Run the following command:
+
+       docker-compose -f docker-compose-dev.yaml up -d
 
 # Next Steps and Improvements
 
