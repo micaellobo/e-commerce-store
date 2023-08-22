@@ -16,7 +16,7 @@ Spring microservice-based application to manage orders, products, inventory and 
 ## How to run
 
 Clone the repository or just download
-the [docker-compose.yaml](https://raw.githubusercontent.com/micaellobo/e-commerce-store/master/docker-compose.yaml) file
+the [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/blob/master/docker-compose.yaml) file
 and run:
 
         docker-compose up -d
