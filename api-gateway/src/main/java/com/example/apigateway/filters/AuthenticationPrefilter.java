@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
+import static com.example.apigateway.filters.CorrelationIdFilter.CORRELATION_ID;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -32,20 +34,19 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
             var headers = exchange.getRequest()
                     .getHeaders();
 
-            var bearerToken = headers.getFirst("Authorization");
-            var correlationID = headers.getFirst("CorrelationID");
+            var bearerToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
+            var correlationID = headers.getFirst(CORRELATION_ID);
 
             if (bearerToken == null) {
                 log.error("bearerToken NULL");
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-
             try {
                 return this.webClientBuilder.build()
                         .post()
                         .uri(this.authServiceUrl + "/validate")
-                        .header("Authorization", bearerToken)
-                        .header("CorrelationID", correlationID)
+                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                        .header(CORRELATION_ID, correlationID)
                         .retrieve()
                         .toBodilessEntity()
                         .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
@@ -94,9 +95,7 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
         return response.setComplete();
     }
 
-
     public static class Config {
-
 
     }
 }

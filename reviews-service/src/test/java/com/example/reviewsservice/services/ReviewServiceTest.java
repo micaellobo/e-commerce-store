@@ -193,8 +193,6 @@ class ReviewServiceTest {
     @Test
     void deleteOne_WhenReviewExists_ShouldDeleteReview() {
         //Arrange
-        when(this.reviewRepository.findByUserIdAndId(anyLong(), anyLong()))
-                .thenReturn(Optional.of(new Review()));
         when(this.reviewRepository.deleteOneById(anyLong()))
                 .thenReturn(1);
         //Act
@@ -207,13 +205,13 @@ class ReviewServiceTest {
     @Test
     void deleteOne_WhenReviewDoesNotExists_ShouldThrowReviewException() {
         //Arrange
-        when(this.reviewRepository.findByUserIdAndId(anyLong(), anyLong()))
-                .thenReturn(Optional.empty());
+        when(this.reviewRepository.deleteOneById(anyLong()))
+                .thenReturn(0);
 
-        //Act and Assert
-        Assertions.assertThrows(ReviewException.class,
-                () -> this.reviewService.deleteOne(this.reviewDto.id()),
-                ReviewException.REVIEW_DOES_NOT_EXISTS);
+        var hasDeleted = this.reviewService.deleteOne(this.reviewDto.id());
+
+        //Assert
+        Assertions.assertFalse(hasDeleted);
     }
 
     @Test

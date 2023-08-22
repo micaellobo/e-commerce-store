@@ -12,9 +12,11 @@ public class OrderException extends RuntimeException {
 
     public OrderException(final String s) {
         super(s);
+        this.statusCode = null;
     }
 
     public OrderException(final HttpStatusCode statusCode) {
+        super();
         this.statusCode = statusCode;
     }
 }

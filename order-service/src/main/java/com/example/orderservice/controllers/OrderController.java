@@ -46,7 +46,9 @@ public class OrderController {
         return ResponseEntity.ok(orderDto);
     }
 
-    private void logRequest(final HttpServletRequest request, final Object obj) {
+    private void logRequest(
+            final HttpServletRequest request,
+            final Object obj) {
         log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

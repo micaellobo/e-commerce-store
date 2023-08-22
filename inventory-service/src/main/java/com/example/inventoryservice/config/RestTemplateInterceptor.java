@@ -9,6 +9,8 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
+import static com.example.inventoryservice.config.ContextHolder.CORRELATION_ID;
+
 @Slf4j
 @RequiredArgsConstructor
 public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
@@ -26,7 +28,7 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
         var username = this.context.getUsername();
 
         var headers = request.getHeaders();
-        headers.add("CorrelationId", correlationId);
+        headers.add(CORRELATION_ID, correlationId);
 
         if (this.context.isAuthenticated()) {
             headers.add("userId", userId.toString());

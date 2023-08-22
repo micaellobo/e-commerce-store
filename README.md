@@ -22,11 +22,10 @@ Clone the repository or just download the
 
 ## Next Steps and Improvements
 
-As the project is actively being developed, there are several possibilities for future enhancements and progress. Here
-are a few ideas:
+As the project is actively being developed, there are several possibilities for future enhancements and progress. Here are a few ideas:
 
 - **API Documentation:** API documentation using `Swagger`.
 - **Security:** Use OAuth 2.0 with `Keycloak` instead of JWT.
-- **Testing:** Implement integration tests using `testContainers` to mock databases.
+- **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`.
 - **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.

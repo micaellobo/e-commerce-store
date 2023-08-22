@@ -70,9 +70,6 @@ public class ReviewService implements IReviewService {
 
     @Override
     public boolean deleteOne(final Long reviewId) {
-        this.reviewRepository.findByUserIdAndId(this.context.getUserId(), reviewId)
-                .orElseThrow(() -> new ReviewException(ReviewException.REVIEW_DOES_NOT_EXISTS));
-
         return this.reviewRepository.deleteOneById(reviewId) == 1;
     }
 

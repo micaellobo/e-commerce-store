@@ -1,18 +1,24 @@
 #!/bin/bash
 
+# Build jar's
 cd eureka-service; mvn clean package; cd ..
 cd api-gateway; mvn clean package; cd ..
 cd user-service; mvn clean package; cd ..
 cd auth-service; mvn clean package; cd ..
 cd inventory-service; mvn clean package; cd ..
 cd order-service; mvn clean package; cd ..
+cd reviews-service; mvn clean package; cd ..
 
+# Delete old docker images
 docker rmi eureka-service;
 docker rmi api-gateway
 docker rmi user-service
 docker rmi auth-service
 docker rmi inventory-service
+docker rmi order-service
+docker rmi reviews-service
 
+# Build new docker images
 docker build -t eureka-service ./eureka-service
 docker build -t api-gateway ./api-gateway
 docker build -t user-service ./user-service

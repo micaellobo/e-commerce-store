@@ -21,7 +21,7 @@ public class UserService implements IUserService {
     @Override
     public UserDto addOne(final UserCreateDto userCreateDto) {
 
-        var password = HashUtils.Sha256Hash(userCreateDto.password());
+        var password = HashUtils.sha256Hash(userCreateDto.password());
 
         var user = this.userMapper.toUser(userCreateDto, password);
 
@@ -45,7 +45,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto getUserLogin(LoginDto loginDto) {
-        var password = HashUtils.Sha256Hash(loginDto.password());
+        var password = HashUtils.sha256Hash(loginDto.password());
 
         var user = this.userRepository.findByUsernameAndPassword(loginDto.username(), password)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND));

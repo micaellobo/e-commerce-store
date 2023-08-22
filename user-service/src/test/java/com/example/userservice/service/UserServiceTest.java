@@ -47,7 +47,7 @@ class UserServiceTest {
         this.user = User.builder()
                 .email(this.userCreateDto.email())
                 .name(this.userCreateDto.name())
-                .password(HashUtils.Sha256Hash(this.userCreateDto.password()))
+                .password(HashUtils.sha256Hash(this.userCreateDto.password()))
                 .username(this.userCreateDto.username())
                 .build();
 

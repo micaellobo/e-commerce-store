@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class AuthControllerErrorHandling {
 
     @ExceptionHandler(AuthException.class)
-    public ProblemDetail OnUserException(AuthException exception) {
+    public ProblemDetail onAuthException(AuthException exception) {
         HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
         if (exception.statusCode != null) {
@@ -24,7 +24,7 @@ public class AuthControllerErrorHandling {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    protected ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
@@ -32,13 +32,11 @@ public class AuthControllerErrorHandling {
 
 
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
+    public ResponseEntity<ProblemDetail> onMissingRequestHeaderException(MissingRequestHeaderException ex) {
         var httpStatus = HttpStatus.BAD_REQUEST;
 
         var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
 
         return ResponseEntity.status(httpStatus).body(problemDetail);
     }
-
-
 }

@@ -11,6 +11,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.example.inventoryservice.config.ContextHolder.CORRELATION_ID;
+
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class PerRequestFilter extends OncePerRequestFilter {
             final HttpServletResponse response,
             final FilterChain filterChain) throws ServletException, IOException {
 
-        var correlationId = request.getHeader("CorrelationId");
+        var correlationId = request.getHeader(CORRELATION_ID);
         var userId = parseUserId(request);
         var username = request.getHeader("username");
 

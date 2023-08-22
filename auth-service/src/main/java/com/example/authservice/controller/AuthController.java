@@ -30,7 +30,7 @@ public class AuthController {
         var jwt = this.authService.login(loginDto);
 
         var responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authorization", "Bearer " + jwt);
+        responseHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         return ResponseEntity.ok().headers(responseHeaders).build();
     }
@@ -38,7 +38,7 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<Object> validateToken(
             HttpServletRequest request,
-            @RequestHeader("Authorization") String headerAuthorization) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String headerAuthorization) {
 
         this.logRequest(request, null);
 
@@ -53,7 +53,9 @@ public class AuthController {
         return ResponseEntity.ok().headers(responseHeaders).build();
     }
 
-    private void logRequest(final HttpServletRequest request, final Object obj) {
+    private void logRequest(
+            final HttpServletRequest request,
+            final Object obj) {
         log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

@@ -57,7 +57,9 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    private void logRequest(final HttpServletRequest request, final Object obj) {
+    private void logRequest(
+            final HttpServletRequest request,
+            final Object obj) {
         log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
     }
 }

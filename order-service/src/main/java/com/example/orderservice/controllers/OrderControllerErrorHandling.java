@@ -13,7 +13,7 @@ public class OrderControllerErrorHandling {
 
 
     @ExceptionHandler(OrderException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(OrderException exception) {
+    public ResponseEntity<ProblemDetail> onOrderException(OrderException exception) {
         HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
         if (exception.statusCode != null) {
@@ -26,7 +26,7 @@ public class OrderControllerErrorHandling {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
@@ -35,7 +35,7 @@ public class OrderControllerErrorHandling {
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ProblemDetail> OnAuthException(AuthException ex) {
+    public ResponseEntity<ProblemDetail> onAuthException(AuthException ex) {
         return ResponseEntity.status(ex.httpStatus).build();
     }
 

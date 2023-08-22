@@ -14,14 +14,14 @@ import java.util.UUID;
 @Slf4j
 public class CorrelationIdFilter implements GlobalFilter, Ordered {
 
-    public static final String CORRELATION_ID_HEADER = "CorrelationID";
+    public static final String CORRELATION_ID = "correlationId";
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         var correlationId = this.generateOrRetrieveCorrelationId();
         var request = exchange.getRequest()
                 .mutate()
-                .header(CORRELATION_ID_HEADER, correlationId)
+                .header(CORRELATION_ID, correlationId)
                 .build();
 
         log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getPath(), correlationId, null, null);

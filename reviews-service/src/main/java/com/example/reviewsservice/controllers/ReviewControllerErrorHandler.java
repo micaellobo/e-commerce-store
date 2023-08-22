@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ReviewControllerErrorHandler {
 
     @ExceptionHandler(ReviewException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(ReviewException exception) {
+    public ResponseEntity<ProblemDetail> onReviewException(ReviewException exception) {
         HttpStatusCode status = HttpStatus.BAD_REQUEST;
 
         if (exception.statusCode != null) {
@@ -26,7 +26,7 @@ public class ReviewControllerErrorHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
@@ -35,7 +35,7 @@ public class ReviewControllerErrorHandler {
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<ProblemDetail> OnUserException(MissingRequestHeaderException ex) {
+    public ResponseEntity<ProblemDetail> onMissingRequestHeaderException(MissingRequestHeaderException ex) {
 
         var httpStatus = HttpStatus.BAD_REQUEST;
         var message = ex.getMessage();
@@ -52,7 +52,7 @@ public class ReviewControllerErrorHandler {
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ProblemDetail> OnAuthException(AuthException ex) {
+    public ResponseEntity<ProblemDetail> onAuthException(AuthException ex) {
         return ResponseEntity.status(ex.httpStatus).build();
     }
 }

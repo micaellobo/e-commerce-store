@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class    ContextHolder {
+
+    public static final String CORRELATION_ID = "correlationId";
     private static final ThreadLocal<ContextData> holder = new ThreadLocal<>();
 
     public void set(ContextData context) {
