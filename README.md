@@ -18,11 +18,6 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
 
-#### Prerequisites
-
-- Docker
-- Docker Compose
-
 Clone the repository or just download the
 [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/docker-compose.yaml) file and run the
 following command:
@@ -33,11 +28,6 @@ following command:
 
 This option builds each time new Docker images from your current local codebase, can be a bit slower. \
 For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases in separated containers.
-
-#### Prerequisites
-
-- Docker
-- Docker Compose
 
 1. Clone the repository to your local machine.
 2. Run the following command:
