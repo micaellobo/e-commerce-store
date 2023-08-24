@@ -1,5 +1,6 @@
 package com.example.orderservice.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -7,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.net.URI;
 
 @ControllerAdvice
 public class OrderControllerErrorHandling {
@@ -26,12 +29,17 @@ public class OrderControllerErrorHandling {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        var message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        var fieldError = ex.getBindingResult().getFieldErrors().get(0);
+        var message = fieldError.getDefaultMessage();
+        var field = fieldError.getField();
 
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, field + " " + message);
 
-        return this.buildResponseEntity(problemDetail);
+        problemDetail.setTitle("Validation error");
+        problemDetail.setType(URI.create(request.getRequestURI()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 
     @ExceptionHandler(AuthException.class)
