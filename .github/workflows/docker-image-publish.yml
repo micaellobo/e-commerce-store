@@ -3,6 +3,9 @@ name: Docker Publish
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - 'documentation/**'
+      - 'README.md'
 
 jobs:
   docker:

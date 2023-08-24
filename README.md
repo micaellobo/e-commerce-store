@@ -4,15 +4,18 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 # Microservices Overview
 
-- **Eureka Service:** Service discovery and registration.
 - **API Gateway:** Routes requests to appropriate microservices.
+- **Eureka Service:** Service discovery and registration.
 - **User Service:** Handles user management.
 - **Auth Service:** Provides authentication.
 - **Inventory Service:** Manages product inventory and availability.
-- **Reviews Service:** Gather and display product reviews and ratings from users.
 - **Order Service:** Manage and process customer orders.
+- **Reviews Service:** Gather and display product reviews and ratings from users.
 
 # How to run
+
+Once the application is up and running, you can test the API endpoints using your preferred API testing tool. We've
+provided a `postman.collection.json` file that you can import into your testing tool for convenience.
 
 ### Docker Compose
 
@@ -22,7 +25,7 @@ Clone the repository or just download the
 [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml) file and
 run the following command:
 
-        docker-compose up
+        docker-compose up -d
 
 ### Local Development with Docker Compose
 
@@ -32,14 +35,18 @@ be a bit slower.
 1. Clone the repository.
 2. Run the following command:
 
-       docker-compose -f docker-compose-dev.yaml up
+       docker-compose -f docker-compose-dev.yaml up -d
 
 For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases with
-docker([docker-compose-dbs.yaml](https://githubcom/micaellobo/e-commerce-store/raw/master/deployment/docker
--compose-dbs.yaml)). \
+docker([docker-compose-dbs.yaml](https://githubcom/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
 And run each service individually with the following command:
 
         mvn spring-boot:run
+
+### Exploring and Interacting with API
+
+[//]: # (- **Swagger:** http://localhost:8080/swagger-ui.html)
+- **Postman Collection:** [postman_collection.json](https://githubcom/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
 
 # Next Steps and Improvements
 
