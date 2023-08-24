@@ -36,9 +36,7 @@ be a bit slower.
 
 For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases with
 docker([docker-compose-dbs.yaml](https://githubcom/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
-And run each service individually with the following command:
-
-        mvn spring-boot:run
+And run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
 
