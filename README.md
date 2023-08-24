@@ -34,7 +34,7 @@ be a bit slower.
 
        docker-compose -f docker-compose-dev.yaml up -d
 
-For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases with
+For local development is preferable/easier to have locally installed `Java 17`, `Maven` and run the necessary databases with
 docker([docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
 And run each service individually with `mvn spring-boot:run`.
 
