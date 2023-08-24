@@ -35,13 +35,13 @@ be a bit slower.
        docker-compose -f docker-compose-dev.yaml up -d
 
 For local development is preferable to have installed `Java 17`, `Maven` and run the necessary databases with
-docker([docker-compose-dbs.yaml](https://githubcom/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
+docker([docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
 And run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
 
 [//]: # (- **Swagger:** http://localhost:8080/swagger-ui.html)
-- **Postman Collection:** [postman_collection.json](https://githubcom/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
+- **Postman Collection:** [postman_collection.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
 
 # Next Steps and Improvements
 
