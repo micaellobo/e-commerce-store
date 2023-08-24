@@ -14,9 +14,6 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 # How to run
 
-Once the application is up and running, you can test the API endpoints using your preferred API testing tool. We've
-provided a `postman.collection.json` file that you can import into your testing tool for convenience.
-
 ### Docker Compose
 
 This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
