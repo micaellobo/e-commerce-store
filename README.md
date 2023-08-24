@@ -16,27 +16,25 @@ Spring microservice-based application to manage orders, products, inventory and 
 
 ### Docker Compose
 
-This option uses pre-built Docker images from a Docker Hub registry. Simpler and faster way to run the application.
+Use pre-built Docker images for a fast and straightforward way to run the application:
 
-Clone the repository or just download the
-[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml) file and
-run the following command:
+1. Clone the repository or download the
+[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml)
+2. Run the following command:
 
         docker-compose up -d
 
-### Local Development with Docker Compose
+### Local Development with Docker
 
-This option builds new Docker images and packages the application to an JAR file from your current local codebase, can
-be a bit slower.
+Build new Docker images and package the application into a JAR file from your local codebase, although it may be a bit slower.
 
 1. Clone the repository.
 2. Run the following command:
 
        docker-compose -f docker-compose-dev.yaml up -d
 
-For local development is preferable/easier to have locally installed `Java 17`, `Maven` and run the necessary databases with
-docker([docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
-And run each service individually with `mvn spring-boot:run`.
+For smoother local development, it's recommended to have `Java 17` and `Maven` installed. You can also configure the essential databases using ([docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
+Run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
 
