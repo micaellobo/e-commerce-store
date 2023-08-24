@@ -33,7 +33,7 @@ Build new Docker images and package the application into a JAR file from your lo
 
        docker-compose -f docker-compose-dev.yaml up -d
 
-For smoother local development, it's recommended to have `Java 17` and `Maven` installed. You can also configure the essential databases using ([docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml)). \
+For smoother local development, it's recommended to have `Java 17` and `Maven` installed. You can also configure the essential databases using [docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml). \
 Run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
