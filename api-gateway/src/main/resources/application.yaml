@@ -14,5 +14,6 @@ springdoc:
     urls:
       - name: user-service
         url: /user-service/api-docs
+      - name: inventory-service
+        url: /inventory-service/api-docs
     path: /swagger
-    use-root-path: true

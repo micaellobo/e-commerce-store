@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition(servers = @Server(description = "user service"), info = @Info(title = "User Service"))
+@OpenAPIDefinition(info = @Info(title = "User Service"), servers = {@Server(url = "http://localhost:8080", description = "localhost")})
 public class UserServiceApplication {
 
     public static void main(String[] args) {

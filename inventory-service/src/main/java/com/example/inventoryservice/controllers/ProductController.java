@@ -2,13 +2,21 @@ package com.example.inventoryservice.controllers;
 
 import com.example.inventoryservice.config.ContextHolder;
 import com.example.inventoryservice.dtos.ProductCreateDto;
+import com.example.inventoryservice.dtos.ProductDto;
 import com.example.inventoryservice.dtos.ProductStockQuantityDto;
 import com.example.inventoryservice.services.IProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +31,21 @@ public class ProductController {
     private final IProductService productService;
     private final ContextHolder contextHolder;
 
+
+    /**
+     * Create a new product
+     *
+     * @param request          The HttpServletRequest.
+     * @param productCreateDto The product to create.
+     * @return The response entity with product details.
+     */
+    @Operation(summary = "Create a new product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+    })
     @PostMapping("/add")
-    public ResponseEntity<Object> add(
+    public ResponseEntity<ProductDto> add(
             HttpServletRequest request,
             @Valid @RequestBody ProductCreateDto productCreateDto) {
 
