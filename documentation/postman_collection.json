@@ -149,7 +149,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Telemovel 3\",\n  \"price\": 20.30,\n  \"quantity\": 1000,\n  \"description\": \"desc\"\n}",
+							"raw": "{\n  \"name\": \"Telemovel 2\",\n  \"price\": 20.30,\n  \"quantity\": 1000,\n  \"description\": \"desc\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -179,7 +179,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/products/2",
+							"raw": "http://localhost:8080/api/v1/products/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -189,7 +189,7 @@
 								"api",
 								"v1",
 								"products",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -369,7 +369,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/reviews/products/1",
+							"raw": "http://localhost:8080/api/v1/reviews/products/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -380,7 +380,7 @@
 								"v1",
 								"reviews",
 								"products",
-								"1"
+								"3"
 							]
 						}
 					},

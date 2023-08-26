@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.filter.factory.RewritePathGatewayFilterFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,46 +22,12 @@ import static com.example.apigateway.filters.CorrelationIdFilter.CORRELATION_ID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<AuthenticationPrefilter.Config> {
+public class AuthenticationPrefilter implements GatewayFilter {
 
     private final WebClient.Builder webClientBuilder;
 
     @Value("${api.auth-service}")
     private String authServiceUrl;
-
-    @Override
-    public GatewayFilter apply(Config config) {
-        return (exchange, chain) -> {
-
-            var headers = exchange.getRequest()
-                    .getHeaders();
-
-            var bearerToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
-            var correlationID = headers.getFirst(CORRELATION_ID);
-
-            if (bearerToken == null) {
-                log.error("bearerToken NULL");
-                return this.onError(exchange, HttpStatus.UNAUTHORIZED);
-            }
-            try {
-                return this.webClientBuilder.build()
-                        .post()
-                        .uri(this.authServiceUrl + "/validate")
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                        .header(CORRELATION_ID, correlationID)
-                        .retrieve()
-                        .toBodilessEntity()
-                        .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
-                        .onErrorResume(WebClientResponseException.class, e -> {
-                            log.error(e.getMessage());
-                            return this.onError(exchange, e.getStatusCode());
-                        });
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        };
-    }
 
     private Function<ResponseEntity<Void>, Mono<? extends Void>> getResponseEntityMonoFunction(
             final ServerWebExchange exchange,
@@ -95,7 +63,35 @@ public class AuthenticationPrefilter extends AbstractGatewayFilterFactory<Authen
         return response.setComplete();
     }
 
-    public static class Config {
+    @Override
+    public Mono<Void> filter(final ServerWebExchange exchange, final GatewayFilterChain chain) {
 
+        var headers = exchange.getRequest()
+                .getHeaders();
+
+        var bearerToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
+        var correlationID = headers.getFirst(CORRELATION_ID);
+
+        if (bearerToken == null) {
+            log.error("bearerToken NULL");
+            return this.onError(exchange, HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            return this.webClientBuilder.build()
+                    .post()
+                    .uri(this.authServiceUrl + "/validate")
+                    .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                    .header(CORRELATION_ID, correlationID)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
+                    .onErrorResume(WebClientResponseException.class, e -> {
+                        log.error(e.getMessage());
+                        return this.onError(exchange, e.getStatusCode());
+                    });
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

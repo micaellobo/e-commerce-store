@@ -7,3 +7,12 @@ spring:
     name: api-gateway
   profiles:
     active: dev
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    urls:
+      - name: user-service
+        url: /user-service/api-docs
+    path: /swagger
+    use-root-path: true

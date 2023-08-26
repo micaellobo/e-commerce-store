@@ -21,9 +21,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-springdoc:
-  swagger-ui:
-    path: /swagger
-  api-docs:
-    path: /api-docs
-
