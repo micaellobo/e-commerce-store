@@ -37,7 +37,6 @@ public class OrderControllerErrorHandling {
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, field + " " + message);
 
         problemDetail.setTitle("Validation error");
-        problemDetail.setType(URI.create(request.getRequestURI()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
