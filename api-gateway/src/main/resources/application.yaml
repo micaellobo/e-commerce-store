@@ -10,6 +10,7 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+    enabled: false
   swagger-ui:
     urls:
       - name: User Service
