@@ -46,9 +46,12 @@ Run each service individually with `mvn spring-boot:run`.
 As the project is actively being developed, there are several possibilities for future enhancements and progress. Here
 are a few ideas:
 
-- **API Documentation:** API documentation using `Swagger`.
+- **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - **Security:** Transitioning from `JWT` to `OAuth` 2.0 with `Keycloak` for more robust authentication and authorization
   mechanisms.
-- **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`.
 - **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
+- **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
+- **Distributed Tracing:** Explore distributed tracing tools like `Zipkin`.
+- **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
+
