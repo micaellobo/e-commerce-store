@@ -43,7 +43,7 @@ public class ProductController {
     @Operation(summary = "Create a new product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PostMapping("/add")
     public ResponseEntity<ProductDto> add(
@@ -65,11 +65,11 @@ public class ProductController {
      * @param id      The product id.
      * @return The product.
      */
-    @Operation(summary = "Get the product by id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Get the product by id",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getOneById(
             HttpServletRequest request,
@@ -88,11 +88,11 @@ public class ProductController {
      * @param request The HttpServletRequest.
      * @return List of products.
      */
-    @Operation(summary = "Get all products")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Get all products",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAll(HttpServletRequest request) {
 
@@ -110,11 +110,11 @@ public class ProductController {
      * @param productsQuantities The products and quantities to increase.
      * @return No content.
      */
-    @Operation(summary = "Increase the stock of products")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204"),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Increase the stock of products",
+            responses = {
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @PutMapping("/increase-stock")
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
@@ -134,11 +134,11 @@ public class ProductController {
      * @param productsQuantities The products and quantities to decrease.
      * @return No content.
      */
-    @Operation(summary = "Decrease the stock of products")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204"),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Decrease the stock of products",
+            responses = {
+                    @ApiResponse(responseCode = "204"),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @PutMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
@@ -158,11 +158,11 @@ public class ProductController {
      * @param ids     The products ids.
      * @return List of products.
      */
-    @Operation(summary = "Get all products by ids")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Get all products by ids",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @GetMapping("/by-ids")
     public ResponseEntity<List<ProductDto>> getByIds(
             HttpServletRequest request,

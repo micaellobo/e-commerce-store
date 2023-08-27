@@ -37,11 +37,11 @@ public class UserController {
      * @param userCreateDto The user to create.
      * @return The created user.
      */
-    @Operation(summary = "Create a new user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-            @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Create a new user",
+            responses = {
+                    @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @PostMapping
     public ResponseEntity<UserDto> createUser(
             HttpServletRequest request,
@@ -61,11 +61,11 @@ public class UserController {
      * @param loginDto The user to login.
      * @return The user.
      */
-    @Operation(summary = "Get the user for login")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Get the user for login",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @PostMapping("/login")
     public ResponseEntity<UserDto> getUserLogin(
             HttpServletRequest request,
@@ -84,11 +84,11 @@ public class UserController {
      * @param request The HttpServletRequest.
      * @return The user.
      */
-    @Operation(summary = "Get the current user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-            @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(summary = "Get the current user",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            })
     @GetMapping("/me")
     @RequiresAuthentication
     public ResponseEntity<UserDto> getUser(HttpServletRequest request) {

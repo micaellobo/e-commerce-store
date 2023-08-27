@@ -69,6 +69,12 @@ public class ApiGatewayApplication {
                 .route("inventory-service-api-docs", r -> r.path("/inventory-service/api-docs")
                         .filters(f -> f.filter(swaggerFilter.apply(new SwaggerFilter.Config())))
                         .uri("lb://inventory-service"))
+                .route("order-service-api-docs", r -> r.path("/order-service/api-docs")
+                        .filters(f -> f.filter(swaggerFilter.apply(new SwaggerFilter.Config())))
+                        .uri("lb://order-service"))
+                .route("reviews-service-api-docs", r -> r.path("/reviews-service/api-docs")
+                        .filters(f -> f.filter(swaggerFilter.apply(new SwaggerFilter.Config())))
+                        .uri("lb://reviews-service"))
                 .build();
     }
 }
