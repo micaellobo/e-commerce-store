@@ -102,6 +102,7 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - user-service
     networks:
       - e-commerce-store
 
@@ -113,6 +114,7 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-inventory
     networks:
       - e-commerce-store
 
@@ -124,6 +126,7 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-orders
     networks:
       - e-commerce-store
 
@@ -135,6 +138,7 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-reviews
     networks:
       - e-commerce-store
 

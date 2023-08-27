@@ -1,4 +1,4 @@
-name: e-commerce-store
+name: e-commerce-store-dev
 services:
   db-users:
     container_name: db-users
@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   db-inventory:
     container_name: db-inventory
@@ -28,7 +28,7 @@ services:
       - "5433:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   db-reviews:
     container_name: db-reviews
@@ -43,7 +43,7 @@ services:
       - "5434:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   db-orders:
     container_name: db-orders
@@ -58,7 +58,7 @@ services:
       - "5435:5432"
     restart: unless-stopped
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   eureka-service:
     container_name: eureka-service
@@ -69,7 +69,7 @@ services:
       SPRING_PROFILES_ACTIVE: 'docker'
     restart: unless-stopped
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   api-gateway:
     container_name: api-gateway
@@ -84,7 +84,7 @@ services:
     depends_on:
       - eureka-service
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   user-service:
     container_name: user-service
@@ -98,7 +98,7 @@ services:
       - eureka-service
       - db-users
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   auth-service:
     container_name: auth-service
@@ -110,8 +110,9 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - user-service
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   inventory-service:
     container_name: inventory-service
@@ -123,8 +124,9 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-inventory
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   order-service:
     container_name: order-service
@@ -136,8 +138,9 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-users
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
   reviews-service:
     container_name: reviews-service
@@ -149,8 +152,9 @@ services:
     restart: unless-stopped
     depends_on:
       - eureka-service
+      - db-reviews
     networks:
-      - e-commerce-store
+      - e-commerce-store-dev
 
 volumes:
   db-pgdata-users:
@@ -159,6 +163,6 @@ volumes:
   db-pgdata-orders:
 
 networks:
-  e-commerce-store:
+  e-commerce-store-dev:
     driver: bridge
 
