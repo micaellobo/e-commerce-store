@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(path = {"api/v1/users"})
+@Tag(name = "User")
 public class UserController {
 
     private final IUserService userService;
@@ -37,11 +39,13 @@ public class UserController {
      * @param userCreateDto The user to create.
      * @return The created user.
      */
-    @Operation(summary = "Create a new user",
+    @Operation(
+            summary = "Create a new user",
             responses = {
                     @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
+            }
+    )
     @PostMapping
     public ResponseEntity<UserDto> createUser(
             HttpServletRequest request,
@@ -61,11 +65,13 @@ public class UserController {
      * @param loginDto The user to login.
      * @return The user.
      */
-    @Operation(summary = "Get the user for login",
+    @Operation(
+            summary = "Get the user for login",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
+            }
+    )
     @PostMapping("/login")
     public ResponseEntity<UserDto> getUserLogin(
             HttpServletRequest request,
@@ -84,11 +90,14 @@ public class UserController {
      * @param request The HttpServletRequest.
      * @return The user.
      */
-    @Operation(summary = "Get the current user",
+    @Operation(
+            summary = "Get the current user",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/me")
     @RequiresAuthentication
     public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
