@@ -75,6 +75,9 @@ public class ApiGatewayApplication {
                 .route("reviews-service-api-docs", r -> r.path("/reviews-service/api-docs")
                         .filters(f -> f.filter(swaggerFilter.apply(new SwaggerFilter.Config())))
                         .uri("lb://reviews-service"))
+                .route("auth-service-api-docs", r -> r.path("/auth-service/api-docs")
+                        .filters(f -> f.filter(swaggerFilter.apply(new SwaggerFilter.Config())))
+                        .uri("lb://auth-service"))
                 .build();
     }
 }

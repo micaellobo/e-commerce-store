@@ -20,4 +20,6 @@ springdoc:
         url: /order-service/api-docs
       - name: reviews-service
         url: /reviews-service/api-docs
+      - name: auth-service
+        url: /auth-service/api-docs
     path: /swagger

@@ -3,6 +3,10 @@ package com.example.authservice.controller;
 import com.example.authservice.dtos.LoginDto;
 import com.example.authservice.config.*;
 import com.example.authservice.service.IAuthService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +19,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = {"api/v1/auth"})
 @RequiredArgsConstructor
+@Tag(name = "Auth")
 public class AuthController {
 
     private final IAuthService authService;
     private final ContextHolder contextHolder;
 
+    /**
+     * Performs the login by setting the jwt in the response header.
+     *
+     * @param request  The HttpServletRequest.
+     * @param loginDto The login dto.
+     * @return The jwt.
+     */
+    @Operation(
+            summary = "Performs the login",
+            responses = {
+                    @ApiResponse(responseCode = "204")
+            }
+    )
     @PostMapping("/login")
     public ResponseEntity<Object> login(
             HttpServletRequest request,
@@ -32,9 +50,10 @@ public class AuthController {
         var responseHeaders = new HttpHeaders();
         responseHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        return ResponseEntity.ok().headers(responseHeaders).build();
+        return ResponseEntity.noContent().headers(responseHeaders).build();
     }
 
+    @Hidden
     @PostMapping("/validate")
     public ResponseEntity<Object> validateToken(
             HttpServletRequest request,

@@ -6,6 +6,7 @@ import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.UserCreateDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.IUserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,13 +66,7 @@ public class UserController {
      * @param loginDto The user to login.
      * @return The user.
      */
-    @Operation(
-            summary = "Get the user for login",
-            responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
-            }
-    )
+    @Hidden
     @PostMapping("/login")
     public ResponseEntity<UserDto> getUserLogin(
             HttpServletRequest request,
