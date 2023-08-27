@@ -9,3 +9,6 @@ spring:
     name: reviews-service
   profiles:
     active: dev
+springdoc:
+  api-docs:
+    path: /api-docs
