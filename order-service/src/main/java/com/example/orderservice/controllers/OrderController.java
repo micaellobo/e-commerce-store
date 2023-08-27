@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(path = {"api/v1/orders"})
+@Tag(name = "Order")
 public class OrderController {
 
     private final IOrderService orderService;
@@ -35,11 +38,14 @@ public class OrderController {
      * @param orderCreateDto The order to create.
      * @return The created order.
      */
-    @Operation(summary = "Create a new order",
+    @Operation(
+            summary = "Create a new order",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderDto.class))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PostMapping("users/me")
     @RequiresAuthentication
     public ResponseEntity<OrderDto> add(
@@ -60,11 +66,14 @@ public class OrderController {
      * @param orderId The order id.
      * @return The order.
      */
-    @Operation(summary = "Get an order for the current user",
+    @Operation(
+            summary = "Get an order for the current user",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = OrderDto.class))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("users/me/{orderId}")
     @RequiresAuthentication
     public ResponseEntity<OrderDto> getOne(

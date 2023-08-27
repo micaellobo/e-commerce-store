@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping({"api/v1/reviews"})
+@Tag(name = "Review")
 public class ReviewController {
 
     private final IReviewService reviewService;
@@ -39,11 +42,14 @@ public class ReviewController {
      * @param reviewCreateDto The review to create.
      * @return The created review.
      */
-    @Operation(summary = "Create a new review for the current user",
+    @Operation(
+            summary = "Create a new review for the current user",
             responses = {
                     @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @PostMapping("users/me")
     @RequiresAuthentication
     public ResponseEntity<ReviewDto> add(
@@ -63,11 +69,14 @@ public class ReviewController {
      * @param request The HttpServletRequest.
      * @return The list of reviews.
      */
-    @Operation(summary = "Get all reviews for the current user",
+    @Operation(
+            summary = "Get all reviews for the current user",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("users/me")
     @RequiresAuthentication
     public ResponseEntity<List<ReviewDto>> getAllByUser(final HttpServletRequest request) {
@@ -86,11 +95,14 @@ public class ReviewController {
      * @param reviewId The review id.
      * @return The review.
      */
-    @Operation(summary = "Get the review by id for the current user",
+    @Operation(
+            summary = "Get the review by id for the current user",
             responses = {
                     @ApiResponse(responseCode = "204", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            },
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @DeleteMapping("users/me/{reviewId}")
     @RequiresAuthentication
     public ResponseEntity<Object> deleteOne(
@@ -114,11 +126,13 @@ public class ReviewController {
      * @param productId The product id.
      * @return The list of reviews.
      */
-    @Operation(summary = "Get all reviews for the product",
+    @Operation(
+            summary = "Get all reviews for the product",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @GetMapping("products/{productId}")
     public ResponseEntity<List<ReviewDto>> getAllByProduct(
             final HttpServletRequest request,
@@ -138,11 +152,13 @@ public class ReviewController {
      * @param max     The max number of reviews.
      * @return The list of avg rating by product.
      */
-    @Operation(summary = "Get the top reviews for the product",
+    @Operation(
+            summary = "Get the top reviews for the product",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductAvgRatDto.class)))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @GetMapping("products/top")
     public ResponseEntity<List<ProductAvgRatDto>> getTopByProduct(
             final HttpServletRequest request,

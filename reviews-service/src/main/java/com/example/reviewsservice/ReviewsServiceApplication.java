@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Reviews Service"), servers = {@Server(url = "http://localhost:8080", description = "localhost")})
 public class ReviewsServiceApplication {
 
     public static void main(String[] args) {

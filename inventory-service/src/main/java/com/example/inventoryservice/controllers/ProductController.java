@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(path = {"api/v1/products"})
+@Tag(name = "Product")
 public class ProductController {
 
     private final IProductService productService;
@@ -40,11 +42,13 @@ public class ProductController {
      * @param productCreateDto The product to create.
      * @return The created product.
      */
-    @Operation(summary = "Create a new product")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
-            @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @Operation(
+            summary = "Create a new product",
+            responses = {
+                    @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
+                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+            }
+    )
     @PostMapping("/add")
     public ResponseEntity<ProductDto> add(
             HttpServletRequest request,
@@ -65,11 +69,13 @@ public class ProductController {
      * @param id      The product id.
      * @return The product.
      */
-    @Operation(summary = "Get the product by id",
+    @Operation(
+            summary = "Get the product by id",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getOneById(
             HttpServletRequest request,
@@ -88,11 +94,13 @@ public class ProductController {
      * @param request The HttpServletRequest.
      * @return List of products.
      */
-    @Operation(summary = "Get all products",
+    @Operation(
+            summary = "Get all products",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAll(HttpServletRequest request) {
 
@@ -110,11 +118,13 @@ public class ProductController {
      * @param productsQuantities The products and quantities to increase.
      * @return No content.
      */
-    @Operation(summary = "Increase the stock of products",
+    @Operation(
+            summary = "Increase the stock of products",
             responses = {
                     @ApiResponse(responseCode = "204"),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @PutMapping("/increase-stock")
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
@@ -134,11 +144,13 @@ public class ProductController {
      * @param productsQuantities The products and quantities to decrease.
      * @return No content.
      */
-    @Operation(summary = "Decrease the stock of products",
+    @Operation(
+            summary = "Decrease the stock of products",
             responses = {
                     @ApiResponse(responseCode = "204"),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @PutMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
@@ -158,11 +170,13 @@ public class ProductController {
      * @param ids     The products ids.
      * @return List of products.
      */
-    @Operation(summary = "Get all products by ids",
+    @Operation(
+            summary = "Get all products by ids",
             responses = {
                     @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
                     @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
-            })
+            }
+    )
     @GetMapping("/by-ids")
     public ResponseEntity<List<ProductDto>> getByIds(
             HttpServletRequest request,

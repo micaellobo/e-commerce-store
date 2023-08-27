@@ -12,14 +12,14 @@ springdoc:
     path: /api-docs
   swagger-ui:
     urls:
-      - name: user-service
+      - name: User Service
         url: /user-service/api-docs
-      - name: inventory-service
+      - name: Inventory Service
         url: /inventory-service/api-docs
-      - name: order-service
+      - name: Order Service
         url: /order-service/api-docs
-      - name: reviews-service
+      - name: Reviews Service
         url: /reviews-service/api-docs
-      - name: auth-service
+      - name: Auth Service
         url: /auth-service/api-docs
     path: /swagger
