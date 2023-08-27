@@ -35,7 +35,7 @@ public class UserController {
      *
      * @param request       The HttpServletRequest.
      * @param userCreateDto The user to create.
-     * @return The response entity with user details.
+     * @return The created user.
      */
     @Operation(summary = "Create a new user")
     @ApiResponses(value = {
@@ -59,7 +59,7 @@ public class UserController {
      *
      * @param request  The HttpServletRequest.
      * @param loginDto The user to login.
-     * @return The response entity with user details.
+     * @return The user.
      */
     @Operation(summary = "Get the user for login")
     @ApiResponses(value = {
@@ -67,7 +67,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<Object> getUserLogin(
+    public ResponseEntity<UserDto> getUserLogin(
             HttpServletRequest request,
             @RequestBody LoginDto loginDto) {
 
@@ -82,7 +82,7 @@ public class UserController {
      * Get the current user
      *
      * @param request The HttpServletRequest.
-     * @return The response entity with user details.
+     * @return The user.
      */
     @Operation(summary = "Get the current user")
     @ApiResponses(value = {
@@ -91,8 +91,7 @@ public class UserController {
     })
     @GetMapping("/me")
     @RequiresAuthentication
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getUser(HttpServletRequest request) {
+    public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
 
         this.logRequest(request, null);
 

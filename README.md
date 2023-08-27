@@ -23,7 +23,7 @@ Use pre-built Docker images for a fast and straightforward way to run the applic
 2. Run the following command:
 
         docker-compose up -d
-
+a
 ### Local Development with Docker
 
 Build new Docker images and package the application into a JAR file from your local codebase, although it may be a bit slower.
@@ -38,7 +38,7 @@ Run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
 
-[//]: # (- **Swagger:** http://localhost:8080/swagger-ui.html)
+[//]: # (- **Swagger:** http://localhost:8080/swagger)
 - **Postman Collection:** [postman_collection.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
 
 # Next Steps and Improvements
