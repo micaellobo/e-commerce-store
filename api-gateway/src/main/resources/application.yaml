@@ -10,7 +10,6 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
-    enabled: false
   swagger-ui:
     urls:
       - name: User Service
@@ -24,3 +23,4 @@ springdoc:
       - name: Auth Service
         url: /auth-service/api-docs
     path: /swagger
+    groups-order: desc

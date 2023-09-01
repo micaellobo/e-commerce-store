@@ -9,8 +9,6 @@ services:
       POSTGRES_DB: users
     volumes:
       - db-pgdata-users:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     restart: unless-stopped
     networks:
       - e-commerce-store
@@ -24,8 +22,6 @@ services:
       POSTGRES_DB: inventory
     volumes:
       - db-pgdata-inventory:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
     restart: unless-stopped
     networks:
       - e-commerce-store
@@ -39,8 +35,6 @@ services:
       POSTGRES_DB: reviews
     volumes:
       - db-pgdata-reviews:/var/lib/postgresql/data
-    ports:
-      - "5434:5432"
     restart: unless-stopped
     networks:
       - e-commerce-store
@@ -54,8 +48,6 @@ services:
       POSTGRES_DB: orders
     volumes:
       - db-pgdata-orders:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
     restart: unless-stopped
     networks:
       - e-commerce-store

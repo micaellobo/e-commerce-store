@@ -1,6 +1,6 @@
 # e-commerce-store
 
-Spring microservice-based application to manage orders, products, inventory and product reviews.
+Spring Boot microservice-based application to manage orders, products, inventory and product reviews.
 
 # Microservices Overview
 
@@ -31,7 +31,7 @@ Build new Docker images and package the application into a JAR file from your lo
 1. Clone the repository.
 2. Run the following command:
 
-       docker-compose -f docker-compose-dev.yaml up -d
+       docker-compose -f docker-compose-dev.yaml up -d --build
 
 For smoother local development, it's recommended to have `Java 17` or higher and `Maven` installed. You can also configure the essential databases using [docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml). \
 Run each service individually with `mvn spring-boot:run`.
