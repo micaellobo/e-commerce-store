@@ -49,9 +49,8 @@ are a few ideas:
 - **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - **Security:** Transitioning from `JWT` to `OAuth` 2.0 with `Keycloak` for more robust authentication and authorization
   mechanisms.
-- **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`.
+- **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
 - **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
 - **Distributed Tracing:** Explore distributed tracing tools like `Zipkin`.
 - **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
-
