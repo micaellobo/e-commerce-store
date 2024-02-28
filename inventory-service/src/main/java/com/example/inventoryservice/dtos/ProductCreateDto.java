@@ -21,5 +21,7 @@ public record ProductCreateDto(
         BigDecimal price,
         @Positive(message = "Only positive number allowed")
         int quantity,
-        String description) implements Serializable {
+        String description
+)
+        implements Serializable {
 }

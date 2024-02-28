@@ -37,7 +37,8 @@ public class Review {
     private String reviewText;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false,
+            updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -46,8 +47,12 @@ public class Review {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         var user = (Review) o;
         return this.id.equals(user.id);
     }

@@ -43,55 +43,55 @@ class ReviewServiceTest {
     @BeforeEach
     void beforeEach() {
         var productDto = ProductDto.builder()
-                .id(1L)
-                .name("Trackpad")
-                .description("Apple Magic Trackpad")
-                .price(BigDecimal.valueOf(99.99))
-                .quantity(100)
-                .build();
+                                   .id(1L)
+                                   .name("Trackpad")
+                                   .description("Apple Magic Trackpad")
+                                   .price(BigDecimal.valueOf(99.99))
+                                   .quantity(100)
+                                   .build();
 
         this.reviewCreateDto = ReviewCreateDto.builder()
-                .orderId(1L)
-                .productId(productDto.id())
-                .reviewText("textReview")
-                .rating(5)
-                .build();
+                                              .orderId(1L)
+                                              .productId(productDto.id())
+                                              .reviewText("textReview")
+                                              .rating(5)
+                                              .build();
 
         this.review = Review.builder()
-                .id(1L)
-                .productId(this.reviewCreateDto.productId())
-                .rating(this.reviewCreateDto.rating())
-                .orderId(this.reviewCreateDto.orderId())
-                .reviewText(this.reviewCreateDto.reviewText())
-                .build();
+                            .id(1L)
+                            .productId(this.reviewCreateDto.productId())
+                            .rating(this.reviewCreateDto.rating())
+                            .orderId(this.reviewCreateDto.orderId())
+                            .reviewText(this.reviewCreateDto.reviewText())
+                            .build();
 
         this.reviewDto = ReviewDto.builder()
-                .id(this.review.getId())
-                .orderId(this.review.getOrderId())
-                .productId(this.review.getProductId())
-                .reviewText(this.review.getReviewText())
-                .rating(this.review.getRating())
-                .build();
+                                  .id(this.review.getId())
+                                  .orderId(this.review.getOrderId())
+                                  .productId(this.review.getProductId())
+                                  .reviewText(this.review.getReviewText())
+                                  .rating(this.review.getRating())
+                                  .build();
 
         this.orderProduct = OrderProductDto.builder()
-                .productId(productDto.id())
-                .price(productDto.price())
-                .quantity(10)
-                .build();
+                                           .productId(productDto.id())
+                                           .price(productDto.price())
+                                           .quantity(10)
+                                           .build();
 
         lenient().when(this.contextHolder.getUserId())
-                .thenReturn(1L);
+                 .thenReturn(1L);
         lenient().when(this.contextHolder.getUsername())
-                .thenReturn("JhonDoe");
+                 .thenReturn("JhonDoe");
     }
 
     @Test
     void addOne_WhenValidReview_ShouldSaveReview() {
         //Arrange
         var orderDto = OrderDto.builder()
-                .userId(this.contextHolder.getUserId())
-                .products(List.of(this.orderProduct))
-                .build();
+                               .userId(this.contextHolder.getUserId())
+                               .products(List.of(this.orderProduct))
+                               .build();
 
         when(this.reviewRepository.existsByUserIdAndOrderIdAndProductId(anyLong(), anyLong(), anyLong()))
                 .thenReturn(false);
@@ -102,7 +102,8 @@ class ReviewServiceTest {
         when(this.reviewRepository.save(any(Review.class)))
                 .thenReturn(new Review());
         when(this.reviewMapper.toDto(any(Review.class)))
-                .thenReturn(ReviewDto.builder().build());
+                .thenReturn(ReviewDto.builder()
+                                     .build());
 
         //Act
         var reviewCreated = this.reviewService.addOne(this.reviewCreateDto);
@@ -118,9 +119,11 @@ class ReviewServiceTest {
                 .thenReturn(true);
 
         // Act and Assert
-        Assertions.assertThrows(ReviewException.class,
+        Assertions.assertThrows(
+                ReviewException.class,
                 () -> this.reviewService.addOne(this.reviewCreateDto),
-                ReviewException.REVIEW_ALREADY_EXISTS);
+                ReviewException.REVIEW_ALREADY_EXISTS
+        );
     }
 
     @Test
@@ -132,18 +135,20 @@ class ReviewServiceTest {
                 .thenReturn(Optional.empty());
 
         // Act and Assert
-        Assertions.assertThrows(ReviewException.class,
+        Assertions.assertThrows(
+                ReviewException.class,
                 () -> this.reviewService.addOne(this.reviewCreateDto),
-                ReviewException.ORDER_DOES_NOT_EXIST);
+                ReviewException.ORDER_DOES_NOT_EXIST
+        );
     }
 
     @Test
     void addOne_WhenProductNotPresentInOrder_ShouldThrowReviewException() {
         // Arrange
         var orderDto = OrderDto.builder()
-                .userId(this.contextHolder.getUserId())
-                .products(new ArrayList<>())
-                .build();
+                               .userId(this.contextHolder.getUserId())
+                               .products(new ArrayList<>())
+                               .build();
 
         when(this.reviewRepository.existsByUserIdAndOrderIdAndProductId(anyLong(), anyLong(), anyLong()))
                 .thenReturn(false);
@@ -151,9 +156,11 @@ class ReviewServiceTest {
                 .thenReturn(Optional.of(orderDto));
 
         // Act & Assert
-        Assertions.assertThrows(ReviewException.class,
+        Assertions.assertThrows(
+                ReviewException.class,
                 () -> this.reviewService.addOne(this.reviewCreateDto),
-                ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER);
+                ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER
+        );
     }
 
     @Test
@@ -219,20 +226,20 @@ class ReviewServiceTest {
         //Arrange
 
         var review1 = Review.builder()
-                .rating(5)
-                .productId(1L)
-                .orderId(1L)
-                .build();
+                            .rating(5)
+                            .productId(1L)
+                            .orderId(1L)
+                            .build();
         var review2 = Review.builder()
-                .rating(4)
-                .productId(1L)
-                .orderId(1L)
-                .build();
+                            .rating(4)
+                            .productId(1L)
+                            .orderId(1L)
+                            .build();
         var review3 = Review.builder()
-                .rating(3)
-                .productId(2L)
-                .orderId(1L)
-                .build();
+                            .rating(3)
+                            .productId(2L)
+                            .orderId(1L)
+                            .build();
 
         var expectedTopRatedProducts = List.of(
                 new ProductAvgRatDto(1L, BigDecimal.valueOf(4.5)),

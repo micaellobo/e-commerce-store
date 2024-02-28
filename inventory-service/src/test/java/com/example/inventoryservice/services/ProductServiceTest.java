@@ -16,7 +16,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -44,19 +46,19 @@ class ProductServiceTest {
                 .build();
 
         this.product = Product.builder()
-                .id(1L)
-                .name(this.productCreate.name())
-                .description(this.productCreate.description())
-                .price(this.productCreate.price())
-                .quantity(this.productCreate.quantity())
-                .build();
+                              .id(1L)
+                              .name(this.productCreate.name())
+                              .description(this.productCreate.description())
+                              .price(this.productCreate.price())
+                              .quantity(this.productCreate.quantity())
+                              .build();
 
         this.productDto = ProductDto.builder()
-                .name(this.product.getName())
-                .description(this.product.getDescription())
-                .price(this.product.getPrice())
-                .quantity(this.product.getQuantity())
-                .build();
+                                    .name(this.product.getName())
+                                    .description(this.product.getDescription())
+                                    .price(this.product.getPrice())
+                                    .quantity(this.product.getQuantity())
+                                    .build();
     }
 
     @Test
@@ -85,9 +87,11 @@ class ProductServiceTest {
         when(this.productRepository.existsByName(anyString())).thenReturn(true);
 
         //Act and Assert
-        Assertions.assertThrows(ProductException.class,
+        Assertions.assertThrows(
+                ProductException.class,
                 () -> this.productService.addOne(this.productCreate),
-                ProductException.ALREADY_EXISTS_PRODUCT);
+                ProductException.ALREADY_EXISTS_PRODUCT
+        );
 
         verify(this.productRepository, never()).save(any(Product.class));
     }
@@ -131,9 +135,11 @@ class ProductServiceTest {
                 .thenReturn(Optional.empty());
 
         //Act and Assert
-        Assertions.assertThrows(ProductException.class,
+        Assertions.assertThrows(
+                ProductException.class,
                 () -> this.productService.getOneById(anyLong()),
-                ProductException.PRODUCT_DOES_NOT_EXIST);
+                ProductException.PRODUCT_DOES_NOT_EXIST
+        );
     }
 
     @Test
@@ -188,9 +194,11 @@ class ProductServiceTest {
                 .thenReturn(Collections.emptyList());
 
         //Act and Assert
-        Assertions.assertThrows(ProductException.class,
+        Assertions.assertThrows(
+                ProductException.class,
                 () -> this.productService.increaseStock(quantities),
-                ProductException.PRODUCT_DOES_NOT_EXIST);
+                ProductException.PRODUCT_DOES_NOT_EXIST
+        );
     }
 
 
@@ -229,9 +237,11 @@ class ProductServiceTest {
                 .thenReturn(Collections.emptyList());
 
         //Act and Assert
-        Assertions.assertThrows(ProductException.class,
+        Assertions.assertThrows(
+                ProductException.class,
                 () -> this.productService.decreaseStock(quantities),
-                ProductException.PRODUCT_DOES_NOT_EXIST);
+                ProductException.PRODUCT_DOES_NOT_EXIST
+        );
     }
 
     @Test
@@ -249,8 +259,10 @@ class ProductServiceTest {
                 .thenReturn(List.of(this.product));
 
         //Act and Assert
-        Assertions.assertThrows(ProductException.class,
+        Assertions.assertThrows(
+                ProductException.class,
                 () -> this.productService.decreaseStock(quantities),
-                ProductException.QUANTITY_LOWER_ZERO);
+                ProductException.QUANTITY_LOWER_ZERO
+        );
     }
 }

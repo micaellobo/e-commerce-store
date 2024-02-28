@@ -1,5 +1,6 @@
 package com.example.orderservice.config;
 
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,15 +17,26 @@ import static com.example.orderservice.config.ContextHolder.CORRELATION_ID;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-public class PerRequestFilter extends OncePerRequestFilter {
+public class PerRequestFilter
+        extends OncePerRequestFilter {
 
     private final ContextHolder contextHolder;
+
+    private static Long parseUserId(final HttpServletRequest request) {
+        try {
+            var userIdString = request.getHeader("userId");
+            return Long.parseLong(userIdString);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
 
     @Override
     protected void doFilterInternal(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final FilterChain filterChain) throws ServletException, IOException {
+            final FilterChain filterChain
+    ) throws ServletException, IOException {
 
         var correlationId = request.getHeader(CORRELATION_ID);
         var userId = parseUserId(request);
@@ -38,15 +50,6 @@ public class PerRequestFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } finally {
             this.contextHolder.remove();
-        }
-    }
-
-    private static Long parseUserId(final HttpServletRequest request) {
-        try {
-            var userIdString = request.getHeader("userId");
-            return Long.parseLong(userIdString);
-        } catch (NumberFormatException ignored) {
-            return null;
         }
     }
 }

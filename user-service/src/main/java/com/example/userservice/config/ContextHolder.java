@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class    ContextHolder {
+public class ContextHolder {
 
     public static final String CORRELATION_ID = "correlationId";
     private static final ThreadLocal<ContextData> holder = new ThreadLocal<>();
@@ -30,14 +30,17 @@ public class    ContextHolder {
     }
 
     public String getCorrelationId() {
-        return this.get().getCorrelationId();
+        return this.get()
+                   .getCorrelationId();
     }
 
     public Long getUserId() {
-        return this.get().getUserId();
+        return this.get()
+                   .getUserId();
     }
 
     public String getUsername() {
-        return this.get().getUsername();
+        return this.get()
+                   .getUsername();
     }
 }

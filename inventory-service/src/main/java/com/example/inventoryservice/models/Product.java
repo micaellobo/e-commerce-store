@@ -23,7 +23,8 @@ public class Product {
     @NotNull
     private String name;
 
-    @Column(precision = 20, scale = 2)
+    @Column(precision = 20,
+            scale = 2)
     private BigDecimal price;
 
     @NotNull
@@ -33,8 +34,12 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         var user = (Product) o;
         return this.id.equals(user.id) || this.name.equals(user.name);
     }

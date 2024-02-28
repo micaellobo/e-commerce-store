@@ -38,8 +38,12 @@ public class OrderProduct {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         var user = (OrderProduct) o;
         return this.id.equals(user.getId());
     }

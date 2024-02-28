@@ -18,5 +18,6 @@ public record ReviewDto(
         String reviewText,
         LocalDateTime createdAt,
         int rating
-) implements Serializable {
+)
+        implements Serializable {
 }

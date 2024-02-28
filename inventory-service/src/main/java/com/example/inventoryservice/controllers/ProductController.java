@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -45,21 +44,31 @@ public class ProductController {
     @Operation(
             summary = "Create a new product",
             responses = {
-                    @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "201",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ProductDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @PostMapping("/add")
     public ResponseEntity<ProductDto> add(
             HttpServletRequest request,
-            @Valid @RequestBody ProductCreateDto productCreateDto) {
+            @Valid
+            @RequestBody
+            ProductCreateDto productCreateDto
+    ) {
 
         this.logRequest(request, productCreateDto);
 
         var productDto = this.productService.addOne(productCreateDto);
 
-//        return ResponseEntity.created(URI.create("/" + productDto.id())).build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
+        //        return ResponseEntity.created(URI.create("/" + productDto.id())).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(productDto);
     }
 
     /**
@@ -72,14 +81,22 @@ public class ProductController {
     @Operation(
             summary = "Get the product by id",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProductDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ProductDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getOneById(
             HttpServletRequest request,
-            @PathVariable Long id) {
+            @PathVariable
+            Long id
+    ) {
 
         this.logRequest(request, null);
 
@@ -97,8 +114,14 @@ public class ProductController {
     @Operation(
             summary = "Get all products",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @GetMapping
@@ -122,19 +145,25 @@ public class ProductController {
             summary = "Increase the stock of products",
             responses = {
                     @ApiResponse(responseCode = "204"),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @PutMapping("/increase-stock")
     public ResponseEntity<Object> increaseStock(
             HttpServletRequest request,
-            @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
+            @Valid
+            @RequestBody
+            List<ProductStockQuantityDto> productsQuantities
+    ) {
 
         this.logRequest(request, productsQuantities);
 
         this.productService.increaseStock(productsQuantities);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+                             .build();
     }
 
     /**
@@ -148,19 +177,25 @@ public class ProductController {
             summary = "Decrease the stock of products",
             responses = {
                     @ApiResponse(responseCode = "204"),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @PutMapping("/decrease-stock")
     public ResponseEntity<Object> decreaseStock(
             HttpServletRequest request,
-            @Valid @RequestBody List<ProductStockQuantityDto> productsQuantities) {
+            @Valid
+            @RequestBody
+            List<ProductStockQuantityDto> productsQuantities
+    ) {
 
         this.logRequest(request, productsQuantities);
 
         this.productService.decreaseStock(productsQuantities);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+                             .build();
     }
 
     /**
@@ -173,14 +208,22 @@ public class ProductController {
     @Operation(
             summary = "Get all products by ids",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  array = @ArraySchema(schema = @Schema(implementation = ProductDto.class)))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @GetMapping("/by-ids")
     public ResponseEntity<List<ProductDto>> getByIds(
             HttpServletRequest request,
-            @RequestParam List<Long> ids) {
+            @RequestParam
+            List<Long> ids
+    ) {
 
         this.logRequest(request, ids);
 
@@ -191,7 +234,15 @@ public class ProductController {
 
     private void logRequest(
             final HttpServletRequest request,
-            final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
+            final Object obj
+    ) {
+        log.info(
+                "{} - {} - {} - {} - {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                this.contextHolder.getCorrelationId(),
+                this.contextHolder.getUsername(),
+                obj
+        );
     }
 }

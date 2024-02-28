@@ -2,7 +2,8 @@ package com.example.reviewsservice.controllers;
 
 import org.springframework.http.HttpStatusCode;
 
-public class ReviewException extends RuntimeException {
+public class ReviewException
+        extends RuntimeException {
 
     public static final String REVIEW_DOES_NOT_EXISTS = "Review does not exists";
     public static final String REVIEW_ALREADY_EXISTS = "There is already a review for that product";

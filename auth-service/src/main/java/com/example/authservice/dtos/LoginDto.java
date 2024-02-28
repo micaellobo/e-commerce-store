@@ -7,5 +7,7 @@ import java.io.Serializable;
 public record LoginDto(
         String username,
         @NotNull
-        String password) implements Serializable {
+        String password
+)
+        implements Serializable {
 }

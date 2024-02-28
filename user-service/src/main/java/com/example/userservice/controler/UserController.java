@@ -43,20 +43,32 @@ public class UserController {
     @Operation(
             summary = "Create a new user",
             responses = {
-                    @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
+                    @ApiResponse(responseCode = "201",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = UserDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ProblemDetail.class))
+                                 })
             }
     )
     @PostMapping
     public ResponseEntity<UserDto> createUser(
             HttpServletRequest request,
-            @Valid @RequestBody UserCreateDto userCreateDto) {
+            @Valid
+            @RequestBody
+            UserCreateDto userCreateDto
+    ) {
 
         this.logRequest(request, userCreateDto);
 
         var userDto = this.userService.addOne(userCreateDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(userDto);
     }
 
     /**
@@ -70,7 +82,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserDto> getUserLogin(
             HttpServletRequest request,
-            @RequestBody LoginDto loginDto) {
+            @RequestBody
+            LoginDto loginDto
+    ) {
 
         this.logRequest(request, null);
 
@@ -88,8 +102,16 @@ public class UserController {
     @Operation(
             summary = "Get the current user",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))}),
-                    @ApiResponse(responseCode = "400", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))})
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = UserDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ProblemDetail.class))
+                                 })
             },
             security = @SecurityRequirement(name = "bearerAuth")
     )
@@ -106,7 +128,15 @@ public class UserController {
 
     private void logRequest(
             final HttpServletRequest request,
-            final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
+            final Object obj
+    ) {
+        log.info(
+                "{} - {} - {} - {} - {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                this.contextHolder.getCorrelationId(),
+                this.contextHolder.getUsername(),
+                obj
+        );
     }
 }

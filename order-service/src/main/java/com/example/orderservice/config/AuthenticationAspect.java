@@ -4,7 +4,8 @@ import com.example.orderservice.controllers.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,14 @@ public class AuthenticationAspect {
     @Before("@annotation(RequiresAuthentication)")
     public void beforeRequiresAuthentication() {
         if (!this.contextHolder.isAuthenticated()) {
-            log.error("{} - {} - {} - {} - {}", this.request.getMethod(), this.request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), null);
+            log.error(
+                    "{} - {} - {} - {} - {}",
+                    this.request.getMethod(),
+                    this.request.getRequestURI(),
+                    this.contextHolder.getCorrelationId(),
+                    this.contextHolder.getUsername(),
+                    null
+            );
             throw new AuthException(HttpStatus.UNAUTHORIZED);
         }
     }

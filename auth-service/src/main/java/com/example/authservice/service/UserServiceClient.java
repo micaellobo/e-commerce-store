@@ -14,7 +14,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class UserServiceClient implements IUserServiceClient {
+public class UserServiceClient
+        implements IUserServiceClient {
 
     private final RestTemplate restTemplate;
 
@@ -29,8 +30,10 @@ public class UserServiceClient implements IUserServiceClient {
 
             var response = this.restTemplate.postForEntity(url, loginDto, UserDto.class);
 
-            if (response.getStatusCode().isError())
+            if (response.getStatusCode()
+                        .isError()) {
                 throw new AuthException(AuthException.GENERIC_LOGIN_FAIL);
+            }
 
             return Optional.ofNullable(response.getBody());
         } catch (Exception e) {

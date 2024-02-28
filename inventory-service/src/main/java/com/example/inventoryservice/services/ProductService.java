@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IProductService {
+public class ProductService
+        implements IProductService {
 
     private final IProductMapper productMapper;
     private final IProductRepository productRepository;
@@ -27,8 +28,9 @@ public class ProductService implements IProductService {
 
         var exists = this.productRepository.existsByName(productCreateDto.name());
 
-        if (exists)
+        if (exists) {
             throw new ProductException(ProductException.ALREADY_EXISTS_PRODUCT);
+        }
 
         var product = this.productMapper.toProduct(productCreateDto);
 
@@ -47,7 +49,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto getOneById(final Long id) {
         var product = this.productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
+                                            .orElseThrow(() -> new ProductException(ProductException.PRODUCT_DOES_NOT_EXIST));
 
         return this.productMapper.toDto(product);
     }
@@ -72,8 +74,8 @@ public class ProductService implements IProductService {
                 });
 
         var updatedProducts = productsMap.values()
-                .stream()
-                .toList();
+                                         .stream()
+                                         .toList();
 
         this.productRepository.saveAll(updatedProducts);
     }
@@ -88,23 +90,24 @@ public class ProductService implements IProductService {
                     var product = productsMap.get(productQuantity.productId());
                     var newQuantity = product.getQuantity() - productQuantity.quantity();
 
-                    if (newQuantity < 0)
+                    if (newQuantity < 0) {
                         throw new ProductException(ProductException.QUANTITY_LOWER_ZERO + ", " + product.getName() + ", " + product.getQuantity());
+                    }
 
                     product.setQuantity(newQuantity);
                 });
 
         var updatedProducts = productsMap.values()
-                .stream()
-                .toList();
+                                         .stream()
+                                         .toList();
 
         this.productRepository.saveAll(updatedProducts);
     }
 
     private Map<Long, Product> createProductsMapFromQuantities(final List<ProductStockQuantityDto> productsQuantities) {
         var productIds = productsQuantities.stream()
-                .map(ProductStockQuantityDto::productId)
-                .toList();
+                                           .map(ProductStockQuantityDto::productId)
+                                           .toList();
 
         var productsMap = this.createProductsMap(productIds);
 
@@ -116,7 +119,7 @@ public class ProductService implements IProductService {
 
     private Map<Long, Product> createProductsMap(final List<Long> productIds) {
         return this.productRepository.findAllById(productIds)
-                .stream()
-                .collect(Collectors.toMap(Product::getId, Function.identity()));
+                                     .stream()
+                                     .collect(Collectors.toMap(Product::getId, Function.identity()));
     }
 }

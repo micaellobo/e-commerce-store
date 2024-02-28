@@ -21,7 +21,14 @@ public class AuthenticationAspect {
     @Before("@annotation(RequiresAuthentication)")
     public void beforeRequiresAuthentication() {
         if (!this.contextHolder.isAuthenticated()) {
-            log.error("{} - {} - {} - {} - {}", this.request.getMethod(), this.request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), null);
+            log.error(
+                    "{} - {} - {} - {} - {}",
+                    this.request.getMethod(),
+                    this.request.getRequestURI(),
+                    this.contextHolder.getCorrelationId(),
+                    this.contextHolder.getUsername(),
+                    null
+            );
             throw new AuthException(HttpStatus.UNAUTHORIZED);
         }
     }

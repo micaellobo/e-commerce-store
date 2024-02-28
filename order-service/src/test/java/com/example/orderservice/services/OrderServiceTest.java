@@ -14,7 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -46,9 +49,9 @@ class OrderServiceTest {
                 .build();
 
         lenient().when(this.contextHolder.getUserId())
-                .thenReturn(1L);
+                 .thenReturn(1L);
         lenient().when(this.contextHolder.getUsername())
-                .thenReturn("JhonDoe");
+                 .thenReturn("JhonDoe");
     }
 
     @Test
@@ -61,8 +64,8 @@ class OrderServiceTest {
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
-                .products(List.of(orderProductCreate))
-                .build();
+                                           .products(List.of(orderProductCreate))
+                                           .build();
 
         when(this.productServiceClient.getProductById(anyList()))
                 .thenReturn(Map.of(this.productDto.id(), this.productDto));
@@ -71,7 +74,8 @@ class OrderServiceTest {
         when(this.orderRepository.save(any(Order.class)))
                 .thenReturn(new Order());
         when(this.orderMapper.toDto(any(Order.class)))
-                .thenReturn(OrderDto.builder().build());
+                .thenReturn(OrderDto.builder()
+                                    .build());
 
         //Act
         var orderCreated = this.orderService.addOne(orderCreateDto);
@@ -90,16 +94,18 @@ class OrderServiceTest {
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
-                .products(List.of(orderProductCreate))
-                .build();
+                                           .products(List.of(orderProductCreate))
+                                           .build();
 
         when(this.productServiceClient.getProductById(anyList()))
                 .thenReturn(Collections.emptyMap());
 
         //Act and Assert
-        Assertions.assertThrows(OrderException.class,
+        Assertions.assertThrows(
+                OrderException.class,
                 () -> this.orderService.addOne(orderCreateDto),
-                OrderException.PRODUCT_DOES_NOT_EXIST);
+                OrderException.PRODUCT_DOES_NOT_EXIST
+        );
     }
 
     @Test
@@ -112,16 +118,18 @@ class OrderServiceTest {
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
-                .products(List.of(orderProductCreate))
-                .build();
+                                           .products(List.of(orderProductCreate))
+                                           .build();
 
         when(this.productServiceClient.getProductById(anyList()))
                 .thenReturn(Map.of(this.productDto.id(), this.productDto));
 
         //Act and Assert
-        Assertions.assertThrows(OrderException.class,
+        Assertions.assertThrows(
+                OrderException.class,
                 () -> this.orderService.addOne(orderCreateDto),
-                OrderException.STOCK_NOT_AVAILABLE);
+                OrderException.STOCK_NOT_AVAILABLE
+        );
     }
 
     @Test
@@ -134,8 +142,8 @@ class OrderServiceTest {
                 .build();
 
         var orderCreateDto = OrderCreateDto.builder()
-                .products(List.of(orderProductCreate))
-                .build();
+                                           .products(List.of(orderProductCreate))
+                                           .build();
 
         when(this.productServiceClient.getProductById(anyList()))
                 .thenReturn(Map.of(this.productDto.id(), this.productDto));
@@ -145,9 +153,11 @@ class OrderServiceTest {
                 .thenReturn(false);
 
         //Act and Assert
-        Assertions.assertThrows(OrderException.class,
+        Assertions.assertThrows(
+                OrderException.class,
                 () -> this.orderService.addOne(orderCreateDto),
-                OrderException.ERROR_UPDATE_STOCK);
+                OrderException.ERROR_UPDATE_STOCK
+        );
     }
 
     @Test
@@ -156,7 +166,8 @@ class OrderServiceTest {
         when(this.orderRepository.findById(anyLong()))
                 .thenReturn(Optional.of(new Order()));
         when(this.orderMapper.toDto(any(Order.class)))
-                .thenReturn(OrderDto.builder().build());
+                .thenReturn(OrderDto.builder()
+                                    .build());
 
         //Act
         var orderGet = this.orderService.getOne(anyLong());
@@ -172,8 +183,10 @@ class OrderServiceTest {
                 .thenReturn(Optional.empty());
 
         //Act and Assert
-        Assertions.assertThrows(OrderException.class,
+        Assertions.assertThrows(
+                OrderException.class,
                 () -> this.orderService.getOne(anyLong()),
-                OrderException.ORDER_DOES_NOT_EXIST);
+                OrderException.ORDER_DOES_NOT_EXIST
+        );
     }
 }

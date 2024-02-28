@@ -3,7 +3,8 @@ package com.example.authservice.jwt;
 import com.example.authservice.dtos.UserDto;
 import com.example.authservice.dtos.UserHeader;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -18,12 +19,13 @@ import java.util.Optional;
 public class JWTHelper {
     private static final String SECRET_KEY = "LSE1yJq4TJuIneLtE1ZjwkGITMQJrgiFFZr8vOTGCWc=";
 
-    private static final SecretKey key = new SecretKeySpec(Base64.getDecoder().decode(SECRET_KEY), "HmacSHA256");
+    private static final SecretKey key = new SecretKeySpec(Base64.getDecoder()
+                                                                 .decode(SECRET_KEY), "HmacSHA256");
 
     public String generateToken(UserDto user) throws JsonProcessingException {
 
         var expirationDate = Date.from(Instant.now()
-                .plus(1, ChronoUnit.DAYS));
+                                              .plus(1, ChronoUnit.DAYS));
 
         var issuer = "auth-service";
         var audience = "e-commerce-store";
@@ -33,22 +35,22 @@ public class JWTHelper {
         claims.put("userId", user.id());
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setIssuer(issuer)
-                .setAudience(audience)
-                .setExpiration(expirationDate)
-                .signWith(key)
-                .compact();
+                   .setClaims(claims)
+                   .setIssuedAt(new Date())
+                   .setIssuer(issuer)
+                   .setAudience(audience)
+                   .setExpiration(expirationDate)
+                   .signWith(key)
+                   .compact();
     }
 
     public Optional<UserHeader> decodeJWT(String token) {
         try {
             var claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                             .setSigningKey(key)
+                             .build()
+                             .parseClaimsJws(token)
+                             .getBody();
 
             var userId = claims.get("userId", Long.class);
             var username = claims.get("username", String.class);

@@ -16,5 +16,6 @@ public record ProductStockQuantityDto(
         @NotNull
         @Positive
         int quantity
-) implements Serializable {
+)
+        implements Serializable {
 }

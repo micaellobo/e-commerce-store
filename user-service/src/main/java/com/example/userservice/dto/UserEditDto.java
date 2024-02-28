@@ -17,5 +17,6 @@ public record UserEditDto(
         @NotNull @NotEmpty @NotBlank
         String name,
         @NotNull @Size(min = 10) @NotEmpty @NotBlank String password
-) implements Serializable {
+)
+        implements Serializable {
 }

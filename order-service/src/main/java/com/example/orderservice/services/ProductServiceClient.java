@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductServiceClient implements IProductServiceClient {
+public class ProductServiceClient
+        implements IProductServiceClient {
 
     private final RestTemplate restTemplate;
 
@@ -41,15 +42,15 @@ public class ProductServiceClient implements IProductServiceClient {
     public Map<Long, ProductDto> getProductById(final List<Long> ids) {
         try {
             var idsStringList = ids.stream()
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(","));
+                                   .map(String::valueOf)
+                                   .collect(Collectors.joining(","));
 
             var url = this.serviceUrl + "?ids=" + idsStringList;
 
             var response = this.restTemplate.getForEntity(url, ProductDto[].class);
 
             return Arrays.stream(Objects.requireNonNull(response.getBody()))
-                    .collect(Collectors.toMap(ProductDto::id, productDto -> productDto));
+                         .collect(Collectors.toMap(ProductDto::id, productDto -> productDto));
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new HashMap<>();
@@ -68,7 +69,8 @@ public class ProductServiceClient implements IProductServiceClient {
                     Void.class
             );
 
-            return response.getStatusCode().is2xxSuccessful();
+            return response.getStatusCode()
+                           .is2xxSuccessful();
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return false;

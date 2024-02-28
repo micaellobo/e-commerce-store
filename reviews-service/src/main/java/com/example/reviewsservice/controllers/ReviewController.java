@@ -45,8 +45,14 @@ public class ReviewController {
     @Operation(
             summary = "Create a new review for the current user",
             responses = {
-                    @ApiResponse(responseCode = "201", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "201",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ReviewDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             },
             security = @SecurityRequirement(name = "bearerAuth")
     )
@@ -54,13 +60,17 @@ public class ReviewController {
     @RequiresAuthentication
     public ResponseEntity<ReviewDto> add(
             final HttpServletRequest request,
-            @Valid @RequestBody ReviewCreateDto reviewCreateDto) {
+            @Valid
+            @RequestBody
+            ReviewCreateDto reviewCreateDto
+    ) {
 
         this.logRequest(request, reviewCreateDto);
 
         var review = this.reviewService.addOne(reviewCreateDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(review);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(review);
     }
 
     /**
@@ -72,8 +82,14 @@ public class ReviewController {
     @Operation(
             summary = "Get all reviews for the current user",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             },
             security = @SecurityRequirement(name = "bearerAuth")
     )
@@ -98,8 +114,14 @@ public class ReviewController {
     @Operation(
             summary = "Get the review by id for the current user",
             responses = {
-                    @ApiResponse(responseCode = "204", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ReviewDto.class))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "204",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  schema = @Schema(implementation = ReviewDto.class))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             },
             security = @SecurityRequirement(name = "bearerAuth")
     )
@@ -107,16 +129,21 @@ public class ReviewController {
     @RequiresAuthentication
     public ResponseEntity<Object> deleteOne(
             final HttpServletRequest request,
-            @PathVariable final Long reviewId) {
+            @PathVariable
+            final Long reviewId
+    ) {
 
         this.logRequest(request, null);
 
         var hasDeleted = this.reviewService.deleteOne(reviewId);
 
-        if (hasDeleted)
-            return ResponseEntity.noContent().build();
-        else
-            return ResponseEntity.notFound().build();
+        if (hasDeleted) {
+            return ResponseEntity.noContent()
+                                 .build();
+        } else {
+            return ResponseEntity.notFound()
+                                 .build();
+        }
     }
 
     /**
@@ -129,14 +156,22 @@ public class ReviewController {
     @Operation(
             summary = "Get all reviews for the product",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  array = @ArraySchema(schema = @Schema(implementation = ReviewDto.class)))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @GetMapping("products/{productId}")
     public ResponseEntity<List<ReviewDto>> getAllByProduct(
             final HttpServletRequest request,
-            @PathVariable Long productId) {
+            @PathVariable
+            Long productId
+    ) {
 
         this.logRequest(request, null);
 
@@ -155,14 +190,23 @@ public class ReviewController {
     @Operation(
             summary = "Get the top reviews for the product",
             responses = {
-                    @ApiResponse(responseCode = "200", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ProductAvgRatDto.class)))}),
-                    @ApiResponse(responseCode = "400", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class)))
+                    @ApiResponse(responseCode = "200",
+                                 content = {
+                                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                  array = @ArraySchema(schema = @Schema(implementation = ProductAvgRatDto.class)))
+                                 }),
+                    @ApiResponse(responseCode = "400",
+                                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = ProblemDetail.class)))
             }
     )
     @GetMapping("products/top")
     public ResponseEntity<List<ProductAvgRatDto>> getTopByProduct(
             final HttpServletRequest request,
-            @RequestParam(required = false, defaultValue = "5") int max) {
+            @RequestParam(required = false,
+                          defaultValue = "5")
+            int max
+    ) {
 
         this.logRequest(request, null);
 
@@ -174,7 +218,15 @@ public class ReviewController {
 
     private void logRequest(
             final HttpServletRequest request,
-            final Object obj) {
-        log.info("{} - {} - {} - {} - {}", request.getMethod(), request.getRequestURI(), this.contextHolder.getCorrelationId(), this.contextHolder.getUsername(), obj);
+            final Object obj
+    ) {
+        log.info(
+                "{} - {} - {} - {} - {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                this.contextHolder.getCorrelationId(),
+                this.contextHolder.getUsername(),
+                obj
+        );
     }
 }

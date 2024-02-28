@@ -14,5 +14,6 @@ public record UserDto(
         String name,
         String email,
         String username
-) implements Serializable {
+)
+        implements Serializable {
 }

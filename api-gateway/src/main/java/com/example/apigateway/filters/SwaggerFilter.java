@@ -5,7 +5,8 @@ import org.springframework.cloud.gateway.filter.factory.RewritePathGatewayFilter
 import org.springframework.stereotype.Component;
 
 @Component
-public class SwaggerFilter extends RewritePathGatewayFilterFactory {
+public class SwaggerFilter
+        extends RewritePathGatewayFilterFactory {
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
@@ -16,7 +17,12 @@ public class SwaggerFilter extends RewritePathGatewayFilterFactory {
                     .path("/api-docs")
                     .build();
 
-            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            var build = exchange
+                    .mutate()
+                    .request(modifiedRequest)
+                    .build();
+
+            return chain.filter(build);
         };
     }
 }

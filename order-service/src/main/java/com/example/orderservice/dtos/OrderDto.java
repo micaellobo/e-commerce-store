@@ -18,5 +18,6 @@ public record OrderDto(
         List<OrderProductDto> products,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
-) implements Serializable {
+)
+        implements Serializable {
 }

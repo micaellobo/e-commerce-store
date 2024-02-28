@@ -2,7 +2,8 @@ package com.example.orderservice.controllers;
 
 import org.springframework.http.HttpStatusCode;
 
-public class OrderException extends RuntimeException {
+public class OrderException
+        extends RuntimeException {
 
     public static final String PRODUCT_DOES_NOT_EXIST = "Product does not exist";
     public static final String STOCK_NOT_AVAILABLE = "There is not stock available for some products";

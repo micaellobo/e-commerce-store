@@ -1,18 +1,14 @@
 package com.example.userservice.controler;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.net.URI;
 
 @ControllerAdvice
 public class UserControllerErrorHandling {
@@ -27,12 +23,18 @@ public class UserControllerErrorHandling {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(status, exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(problemDetail);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
-        var fieldError = ex.getBindingResult().getFieldErrors().get(0);
+    public ResponseEntity<ProblemDetail> onMethodArgumentNotValidException(
+            HttpServletRequest request,
+            MethodArgumentNotValidException ex
+    ) {
+        var fieldError = ex.getBindingResult()
+                           .getFieldErrors()
+                           .get(0);
         var message = fieldError.getDefaultMessage();
         var field = fieldError.getField();
 
@@ -40,7 +42,8 @@ public class UserControllerErrorHandling {
 
         problemDetail.setTitle("Validation error");
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(problemDetail);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
@@ -57,12 +60,14 @@ public class UserControllerErrorHandling {
 
         var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, message);
 
-        return ResponseEntity.status(httpStatus).body(problemDetail);
+        return ResponseEntity.status(httpStatus)
+                             .body(problemDetail);
     }
 
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ProblemDetail> onAuthException(AuthException ex) {
-        return ResponseEntity.status(ex.httpStatus).build();
+        return ResponseEntity.status(ex.httpStatus)
+                             .build();
     }
 
 }

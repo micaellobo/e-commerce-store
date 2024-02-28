@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.cloud.gateway.filter.factory.RewritePathGatewayFilterFactory;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -22,7 +22,8 @@ import static com.example.apigateway.filters.CorrelationIdFilter.CORRELATION_ID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationPrefilter implements GatewayFilter {
+public class AuthenticationPrefilter
+        implements GatewayFilter {
 
     private final WebClient.Builder webClientBuilder;
 
@@ -31,9 +32,11 @@ public class AuthenticationPrefilter implements GatewayFilter {
 
     private Function<ResponseEntity<Void>, Mono<? extends Void>> getResponseEntityMonoFunction(
             final ServerWebExchange exchange,
-            final GatewayFilterChain chain) {
+            final GatewayFilterChain chain
+    ) {
         return response -> {
-            if (!response.getStatusCode().is2xxSuccessful()) {
+            if (!response.getStatusCode()
+                         .is2xxSuccessful()) {
                 return this.onError(exchange, response.getStatusCode());
             }
 
@@ -48,26 +51,34 @@ public class AuthenticationPrefilter implements GatewayFilter {
             }
 
             var modifiedRequest = exchange.getRequest()
-                    .mutate()
-                    .header("userId", userId)
-                    .header("username", username)
-                    .build();
+                                          .mutate()
+                                          .header("userId", userId)
+                                          .header("username", username)
+                                          .build();
 
-            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            return chain.filter(exchange.mutate()
+                                        .request(modifiedRequest)
+                                        .build());
         };
     }
 
-    private Mono<Void> onError(final ServerWebExchange exchange, final HttpStatusCode statusCode) {
+    private Mono<Void> onError(
+            final ServerWebExchange exchange,
+            final HttpStatusCode statusCode
+    ) {
         var response = exchange.getResponse();
         response.setStatusCode(statusCode);
         return response.setComplete();
     }
 
     @Override
-    public Mono<Void> filter(final ServerWebExchange exchange, final GatewayFilterChain chain) {
+    public Mono<Void> filter(
+            final ServerWebExchange exchange,
+            final GatewayFilterChain chain
+    ) {
 
         var headers = exchange.getRequest()
-                .getHeaders();
+                              .getHeaders();
 
         var bearerToken = headers.getFirst(HttpHeaders.AUTHORIZATION);
         var correlationID = headers.getFirst(CORRELATION_ID);
@@ -78,17 +89,17 @@ public class AuthenticationPrefilter implements GatewayFilter {
         }
         try {
             return this.webClientBuilder.build()
-                    .post()
-                    .uri(this.authServiceUrl + "/validate")
-                    .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                    .header(CORRELATION_ID, correlationID)
-                    .retrieve()
-                    .toBodilessEntity()
-                    .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
-                    .onErrorResume(WebClientResponseException.class, e -> {
-                        log.error(e.getMessage());
-                        return this.onError(exchange, e.getStatusCode());
-                    });
+                                        .post()
+                                        .uri(this.authServiceUrl + "/validate")
+                                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                                        .header(CORRELATION_ID, correlationID)
+                                        .retrieve()
+                                        .toBodilessEntity()
+                                        .flatMap(this.getResponseEntityMonoFunction(exchange, chain))
+                                        .onErrorResume(WebClientResponseException.class, e -> {
+                                            log.error(e.getMessage());
+                                            return this.onError(exchange, e.getStatusCode());
+                                        });
         } catch (Exception e) {
             log.error(e.getMessage());
             return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);

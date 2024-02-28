@@ -15,5 +15,6 @@ import java.io.Serializable;
 public record OrderProductCreateDto(
         @NotNull Long productId,
         @Positive int quantity
-) implements Serializable {
+)
+        implements Serializable {
 }

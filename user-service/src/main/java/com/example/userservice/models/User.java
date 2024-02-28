@@ -35,7 +35,8 @@ public class User {
     private String password;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false,
+            updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -44,8 +45,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         var user = (User) o;
         return this.id.equals(user.getId()) || this.username.equals(user.username) || this.email.equals(user.email);
     }

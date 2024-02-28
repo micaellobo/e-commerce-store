@@ -12,5 +12,6 @@ public record OrderProductDto(
         Long productId,
         int quantity,
         BigDecimal price
-) implements Serializable {
+)
+        implements Serializable {
 }

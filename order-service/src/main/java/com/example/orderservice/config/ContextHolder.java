@@ -30,14 +30,17 @@ public class ContextHolder {
     }
 
     public String getCorrelationId() {
-        return this.get().getCorrelationId();
+        return this.get()
+                   .getCorrelationId();
     }
 
     public Long getUserId() {
-        return this.get().getUserId();
+        return this.get()
+                   .getUserId();
     }
 
     public String getUsername() {
-        return this.get().getUsername();
+        return this.get()
+                   .getUsername();
     }
 }

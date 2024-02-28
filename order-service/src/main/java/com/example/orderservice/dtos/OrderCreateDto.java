@@ -13,5 +13,6 @@ import java.util.List;
 @Builder
 public record OrderCreateDto(
         List<OrderProductCreateDto> products
-) implements Serializable {
+)
+        implements Serializable {
 }

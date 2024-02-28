@@ -19,27 +19,31 @@ Spring Boot microservice-based application to manage orders, products, inventory
 Use pre-built Docker images for a fast and straightforward way to run the application:
 
 1. Clone the repository or download the
-[docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml)
+   [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml)
 2. Run the following command:
 
         docker-compose up -d
 
 ### Local Development with Docker
 
-Build new Docker images and package the application into a JAR file from your local codebase, although it may be a bit slower.
+Build new Docker images and package the application into a JAR file from your local codebase, although it may be a bit
+slower.
 
 1. Clone the repository.
 2. Run the following command:
 
        docker-compose -f docker-compose-dev.yaml up -d --build
 
-For smoother local development, it's recommended to have `Java 17` or higher and `Maven` installed. You can also configure the essential databases using [docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml). \
+For smoother local development, it's recommended to have `Java 17` or higher and `Maven` installed. You can also
+configure the essential databases
+using [docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml). \
 Run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
 
 - **Swagger:** http://localhost:8080/swagger
-- **Postman Collection:** [postman_collection.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
+- **Postman Collection:
+  ** [postman_collection.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
 
 # Next Steps and Improvements
 
@@ -49,7 +53,8 @@ are a few ideas:
 - **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - **Security:** Transitioning from `JWT` to `OAuth` 2.0 with `Keycloak` for more robust authentication and authorization
   mechanisms.
-- **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
+- **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently
+  using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
 - **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
 - **Distributed Tracing:** Explore distributed tracing tools like `Zipkin`.

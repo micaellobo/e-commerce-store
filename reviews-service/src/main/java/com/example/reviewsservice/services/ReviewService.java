@@ -10,18 +10,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ReviewService implements IReviewService {
+public class ReviewService
+        implements IReviewService {
 
     private final IReviewMapper reviewMapper;
     private final IReviewRepository reviewRepository;
     private final IOrderServiceClient orderServiceClient;
     private final ContextHolder context;
+
+    private static boolean isProductPresentInOrder(
+            final Long productId,
+            final OrderDto order
+    ) {
+        return order.products()
+                    .stream()
+                    .anyMatch(orderProductDto -> orderProductDto.productId()
+                                                                .equals(productId));
+    }
 
     @Override
     public ReviewDto addOne(final ReviewCreateDto reviewCreateDto) {
@@ -31,28 +42,22 @@ public class ReviewService implements IReviewService {
                 reviewCreateDto.productId()
         );
 
-        if (existsReview)
+        if (existsReview) {
             throw new ReviewException(ReviewException.REVIEW_ALREADY_EXISTS);
+        }
 
         var order = this.orderServiceClient.getOrder(reviewCreateDto.orderId())
-                .orElseThrow(() -> new ReviewException(ReviewException.ORDER_DOES_NOT_EXIST));
+                                           .orElseThrow(() -> new ReviewException(ReviewException.ORDER_DOES_NOT_EXIST));
 
-        if (!isProductPresentInOrder(reviewCreateDto.productId(), order))
+        if (!isProductPresentInOrder(reviewCreateDto.productId(), order)) {
             throw new ReviewException(ReviewException.PRODUCT_NOT_PRESENT_IN_ORDER);
+        }
 
         var review = this.reviewMapper.toReview(reviewCreateDto, this.context.getUserId());
 
         var reviewSaved = this.reviewRepository.save(review);
 
         return this.reviewMapper.toDto(reviewSaved);
-    }
-
-    private static boolean isProductPresentInOrder(
-            final Long productId,
-            final OrderDto order) {
-        return order.products()
-                .stream()
-                .anyMatch(orderProductDto -> orderProductDto.productId().equals(productId));
     }
 
     @Override
@@ -76,14 +81,20 @@ public class ReviewService implements IReviewService {
     @Override
     public List<ProductAvgRatDto> getTopAvgRatedProducts(final int max) {
         return this.reviewRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(Review::getProductId, Collectors.averagingDouble(Review::getRating)))
-                .entrySet()
-                .stream()
-                .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
-                .limit(max)
-                .map(longDoubleEntry ->
-                        new ProductAvgRatDto(longDoubleEntry.getKey(), BigDecimal.valueOf(longDoubleEntry.getValue())))
-                .toList();
+                                    .stream()
+                                    .collect(Collectors.groupingBy(
+                                            Review::getProductId,
+                                            Collectors.averagingDouble(Review::getRating)
+                                    ))
+                                    .entrySet()
+                                    .stream()
+                                    .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
+                                    .limit(max)
+                                    .map(longDoubleEntry ->
+                                                 new ProductAvgRatDto(
+                                                         longDoubleEntry.getKey(),
+                                                         BigDecimal.valueOf(longDoubleEntry.getValue())
+                                                 ))
+                                    .toList();
     }
 }

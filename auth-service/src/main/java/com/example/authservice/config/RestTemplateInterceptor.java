@@ -13,7 +13,8 @@ import static com.example.authservice.config.ContextHolder.CORRELATION_ID;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
+public class RestTemplateInterceptor
+        implements ClientHttpRequestInterceptor {
 
     private final ContextHolder context;
 
@@ -21,7 +22,8 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(
             final HttpRequest request,
             final byte[] body,
-            final ClientHttpRequestExecution execution) throws IOException {
+            final ClientHttpRequestExecution execution
+    ) throws IOException {
 
         var correlationId = this.context.getCorrelationId();
         var userId = this.context.getUserId();

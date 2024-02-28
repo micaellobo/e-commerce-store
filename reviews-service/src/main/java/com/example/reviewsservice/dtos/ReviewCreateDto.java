@@ -21,6 +21,9 @@ public record ReviewCreateDto(
         Long orderId,
         @NotBlank
         String reviewText,
-        @Range(min = 0, max = 5)
-        int rating) implements Serializable {
+        @Range(min = 0,
+               max = 5)
+        int rating
+)
+        implements Serializable {
 }

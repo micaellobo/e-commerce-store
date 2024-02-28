@@ -24,11 +24,11 @@ class UserServiceTest {
     @Mock
     IUserRepository userRepository;
     @Mock
-    private IUserMapper userMapper;
-    @Mock
     ContextHolder contextHolder;
     @InjectMocks
     UserService userService;
+    @Mock
+    private IUserMapper userMapper;
     private UserCreateDto userCreateDto;
     private User user;
     private UserDto userDto;
@@ -38,40 +38,40 @@ class UserServiceTest {
     @BeforeEach
     void beforeEach() {
         this.userCreateDto = UserCreateDto.builder()
-                .name("John")
-                .email("jhondoe@gmail.com")
-                .username("jhondoe")
-                .password("pwd")
-                .build();
+                                          .name("John")
+                                          .email("jhondoe@gmail.com")
+                                          .username("jhondoe")
+                                          .password("pwd")
+                                          .build();
 
         this.user = User.builder()
-                .email(this.userCreateDto.email())
-                .name(this.userCreateDto.name())
-                .password(HashUtils.sha256Hash(this.userCreateDto.password()))
-                .username(this.userCreateDto.username())
-                .build();
+                        .email(this.userCreateDto.email())
+                        .name(this.userCreateDto.name())
+                        .password(HashUtils.sha256Hash(this.userCreateDto.password()))
+                        .username(this.userCreateDto.username())
+                        .build();
 
         this.userDto = UserDto.builder()
-                .email(this.user.getEmail())
-                .name(this.user.getName())
-                .username(this.user.getUsername())
-                .build();
+                              .email(this.user.getEmail())
+                              .name(this.user.getName())
+                              .username(this.user.getUsername())
+                              .build();
 
         this.loginDto = LoginDto.builder()
-                .username(this.user.getUsername())
-                .password(this.user.getPassword())
-                .build();
+                                .username(this.user.getUsername())
+                                .password(this.user.getPassword())
+                                .build();
 
         this.userEditDto = UserEditDto.builder()
-                .id(1L)
-                .name("newName")
-                .password("pwd")
-                .build();
+                                      .id(1L)
+                                      .name("newName")
+                                      .password("pwd")
+                                      .build();
 
         lenient().when(this.contextHolder.getUserId())
-                .thenReturn(1L);
+                 .thenReturn(1L);
         lenient().when(this.contextHolder.getUsername())
-                .thenReturn(this.userCreateDto.username());
+                 .thenReturn(this.userCreateDto.username());
     }
 
     @Test
@@ -102,9 +102,11 @@ class UserServiceTest {
                 .thenReturn(true);
 
         // Act and Assert
-        Assertions.assertThrows(UserException.class,
+        Assertions.assertThrows(
+                UserException.class,
                 () -> this.userService.addOne(this.userCreateDto),
-                UserException.USER_ALREADY_EXISTS);
+                UserException.USER_ALREADY_EXISTS
+        );
 
         verify(this.userRepository, never()).save(this.user);
     }
@@ -174,7 +176,8 @@ class UserServiceTest {
                 .thenReturn(Optional.of(new User()));
         when(this.userRepository.save(any(User.class)))
                 .thenReturn(new User());
-        doNothing().when(this.userMapper).partialUpdate(isA(UserEditDto.class), isA(User.class));
+        doNothing().when(this.userMapper)
+                   .partialUpdate(isA(UserEditDto.class), isA(User.class));
         when(this.userMapper.toDto(any(User.class)))
                 .thenReturn(this.userDto);
 

@@ -17,6 +17,7 @@ public record UserCreateDto(
         @NotNull @Size(min = 4) @NotEmpty @NotBlank
         String username,
         @NotNull @Size(min = 10) @NotEmpty @NotBlank
-        String password)
+        String password
+)
         implements Serializable {
 }

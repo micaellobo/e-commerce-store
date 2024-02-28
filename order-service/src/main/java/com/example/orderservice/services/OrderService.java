@@ -19,12 +19,35 @@ import java.util.function.Function;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderService implements IOrderService {
+public class OrderService
+        implements IOrderService {
 
     private final IOrderRepository orderRepository;
     private final IOrderMapper orderMapper;
     private final IProductServiceClient productServiceClient;
     private final ContextHolder contextHolder;
+
+    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
+            final Map<Long, ProductDto> productById,
+            final Order order
+    ) {
+
+        return orderProductCreateDto -> {
+            var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
+                                     .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));
+
+            if (orderProductCreateDto.quantity() > productDto.quantity()) {
+                throw new OrderException(OrderException.STOCK_NOT_AVAILABLE);
+            }
+
+            return OrderProduct.builder()
+                               .price(productDto.price())
+                               .productId(orderProductCreateDto.productId())
+                               .quantity(orderProductCreateDto.quantity())
+                               .order(order)
+                               .build();
+        };
+    }
 
     @Transactional
     @Override
@@ -50,46 +73,26 @@ public class OrderService implements IOrderService {
     @Override
     public OrderDto getOne(final Long orderId) {
         var order = this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderException(OrderException.ORDER_DOES_NOT_EXIST));
+                                        .orElseThrow(() -> new OrderException(OrderException.ORDER_DOES_NOT_EXIST));
 
         return this.orderMapper.toDto(order);
     }
 
     private List<OrderProduct> getOrderProducts(
             final OrderCreateDto orderCreateDto,
-            final Order order) {
+            final Order order
+    ) {
 
         var productsId = orderCreateDto.products()
-                .stream()
-                .map(OrderProductCreateDto::productId)
-                .toList();
+                                       .stream()
+                                       .map(OrderProductCreateDto::productId)
+                                       .toList();
 
         var productById = this.productServiceClient.getProductById(productsId);
 
         return orderCreateDto.products()
-                .stream()
-                .map(orderProductCreateDtoToOrderProduct(productById, order))
-                .toList();
-    }
-
-    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
-            final Map<Long, ProductDto> productById,
-            final Order order) {
-
-        return orderProductCreateDto -> {
-            var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
-                    .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));
-
-            if (orderProductCreateDto.quantity() > productDto.quantity()) {
-                throw new OrderException(OrderException.STOCK_NOT_AVAILABLE);
-            }
-
-            return OrderProduct.builder()
-                    .price(productDto.price())
-                    .productId(orderProductCreateDto.productId())
-                    .quantity(orderProductCreateDto.quantity())
-                    .order(order)
-                    .build();
-        };
+                             .stream()
+                             .map(orderProductCreateDtoToOrderProduct(productById, order))
+                             .toList();
     }
 }
