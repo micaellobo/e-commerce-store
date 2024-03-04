@@ -83,11 +83,14 @@ public class AuthController {
         return ResponseEntity.ok()
                              .headers(responseHeaders)
                              .build();
+
     }
 
     private void logRequest(
             final HttpServletRequest request,
             final Object obj
+
+
     ) {
         log.info(
                 "{} - {} - {} - {} - {}",
@@ -97,5 +100,6 @@ public class AuthController {
                 this.contextHolder.getUsername(),
                 obj
         );
+
     }
 }

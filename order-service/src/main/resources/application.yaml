@@ -1,5 +1,8 @@
 api:
   inventory-service: lb://inventory-service/api/v1/products
+  kafka:
+    topics:
+      order-created: "order.created.v1"
 server:
   port: 8085
 spring:
@@ -7,6 +10,10 @@ spring:
     name: order-service
   profiles:
     active: dev
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 springdoc:
   api-docs:
     path: /api-docs

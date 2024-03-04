@@ -3,6 +3,7 @@ package com.example.orderservice.services;
 import com.example.orderservice.config.ContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
+import com.example.orderservice.kafka.IOrderEventProducer;
 import com.example.orderservice.models.Order;
 import com.example.orderservice.models.OrderProduct;
 import com.example.orderservice.repository.IOrderRepository;
@@ -25,29 +26,9 @@ public class OrderService
     private final IOrderRepository orderRepository;
     private final IOrderMapper orderMapper;
     private final IProductServiceClient productServiceClient;
+    private final IOrderEventProducer orderEventProducer;
     private final ContextHolder contextHolder;
 
-    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
-            final Map<Long, ProductDto> productById,
-            final Order order
-    ) {
-
-        return orderProductCreateDto -> {
-            var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
-                                     .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));
-
-            if (orderProductCreateDto.quantity() > productDto.quantity()) {
-                throw new OrderException(OrderException.STOCK_NOT_AVAILABLE);
-            }
-
-            return OrderProduct.builder()
-                               .price(productDto.price())
-                               .productId(orderProductCreateDto.productId())
-                               .quantity(orderProductCreateDto.quantity())
-                               .order(order)
-                               .build();
-        };
-    }
 
     @Transactional
     @Override
@@ -67,7 +48,11 @@ public class OrderService
             throw new OrderException(OrderException.ERROR_UPDATE_STOCK);
         }
 
-        return this.orderMapper.toDto(orderSaved);
+        var dto = this.orderMapper.toDto(orderSaved);
+
+        this.orderEventProducer.sendOrderCreate(dto);
+
+        return dto;
     }
 
     @Override
@@ -94,5 +79,26 @@ public class OrderService
                              .stream()
                              .map(orderProductCreateDtoToOrderProduct(productById, order))
                              .toList();
+    }
+
+    private static Function<OrderProductCreateDto, OrderProduct> orderProductCreateDtoToOrderProduct(
+            final Map<Long, ProductDto> productById,
+            final Order order
+    ) {
+        return orderProductCreateDto -> {
+            var productDto = Optional.ofNullable(productById.get(orderProductCreateDto.productId()))
+                                     .orElseThrow(() -> new OrderException(OrderException.PRODUCT_DOES_NOT_EXIST));
+
+            if (orderProductCreateDto.quantity() > productDto.quantity()) {
+                throw new OrderException(OrderException.STOCK_NOT_AVAILABLE);
+            }
+
+            return OrderProduct.builder()
+                               .price(productDto.price())
+                               .productId(orderProductCreateDto.productId())
+                               .quantity(orderProductCreateDto.quantity())
+                               .order(order)
+                               .build();
+        };
     }
 }
