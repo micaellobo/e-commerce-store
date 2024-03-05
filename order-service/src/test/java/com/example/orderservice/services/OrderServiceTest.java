@@ -3,6 +3,7 @@ package com.example.orderservice.services;
 import com.example.orderservice.config.ContextHolder;
 import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.*;
+import com.example.orderservice.kafka.IOrderEventProducer;
 import com.example.orderservice.models.Order;
 import com.example.orderservice.repository.IOrderRepository;
 import org.junit.jupiter.api.Assertions;
@@ -31,6 +32,8 @@ class OrderServiceTest {
     @Mock
     IProductServiceClient productServiceClient;
     @Mock
+    IOrderEventProducer orderEventProducer;
+    @Mock
     ContextHolder contextHolder;
     @InjectMocks
     OrderService orderService;
@@ -52,6 +55,7 @@ class OrderServiceTest {
                  .thenReturn(1L);
         lenient().when(this.contextHolder.getUsername())
                  .thenReturn("JhonDoe");
+
     }
 
     @Test
@@ -76,6 +80,9 @@ class OrderServiceTest {
         when(this.orderMapper.toDto(any(Order.class)))
                 .thenReturn(OrderDto.builder()
                                     .build());
+        doNothing().when(this.orderEventProducer)
+                   .sendOrderCreate(any(OrderDto.class));
+
 
         //Act
         var orderCreated = this.orderService.addOne(orderCreateDto);

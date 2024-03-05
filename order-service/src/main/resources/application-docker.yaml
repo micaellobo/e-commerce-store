@@ -8,6 +8,8 @@ server:
   error:
     include-exception: false
 spring:
+  kafka:
+    bootstrap-servers: broker:29092
   mvc:
     problemdetails:
       enabled: false
