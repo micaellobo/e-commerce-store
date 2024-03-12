@@ -57,5 +57,4 @@ are a few ideas:
   using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
 - **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
-- **Distributed Tracing:** Explore distributed tracing tools like `Zipkin`.
 - **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
