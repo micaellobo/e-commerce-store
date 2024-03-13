@@ -24,12 +24,7 @@ public class OrderEventProducer
 
     @Override
     public void sendOrderCreate(OrderDto message) {
-        String data = null;
-        try {
-            data = this.objectMapper.writeValueAsString(message);
-        } catch (JsonProcessingException e) {
-            throw new OrderException(OrderException.ERROR_PUBLISH_ORDER_CREATED);
-        }
+        var data = this.serializeData(message);
 
         var sendResultFuture = this.kafkaTemplate.send(
                 this.topicOrderCreated,
@@ -42,6 +37,13 @@ public class OrderEventProducer
                 throw new OrderException(OrderException.ERROR_PUBLISH_ORDER_CREATED);
             }
         });
+    }
 
+    private String serializeData(final OrderDto message) {
+        try {
+            return this.objectMapper.writeValueAsString(message);
+        } catch (JsonProcessingException e) {
+            throw new OrderException(OrderException.ERROR_PUBLISH_ORDER_CREATED);
+        }
     }
 }
