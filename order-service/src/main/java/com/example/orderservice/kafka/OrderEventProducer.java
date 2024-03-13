@@ -1,5 +1,6 @@
 package com.example.orderservice.kafka;
 
+import com.example.orderservice.controllers.OrderException;
 import com.example.orderservice.dtos.OrderDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +28,7 @@ public class OrderEventProducer
         try {
             data = this.objectMapper.writeValueAsString(message);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new OrderException(OrderException.ERROR_PUBLISH_ORDER_CREATED);
         }
 
         var sendResultFuture = this.kafkaTemplate.send(
@@ -37,10 +38,8 @@ public class OrderEventProducer
         );
 
         sendResultFuture.thenAccept(sendResult -> {
-            if (sendResult != null) {
-                System.out.println("Message sent successfully to topic: " + sendResult.getRecordMetadata().topic());
-            } else {
-                System.out.println("Message send failed.");
+            if (sendResult == null) {
+                throw new OrderException(OrderException.ERROR_PUBLISH_ORDER_CREATED);
             }
         });
 
