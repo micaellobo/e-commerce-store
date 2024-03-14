@@ -1,0 +1,16 @@
+api:
+  kafka:
+    topics:
+      order-created: "order.created.v1"
+server:
+  port: 8086
+spring:
+  application:
+    name: notification-service
+  profiles:
+    active: dev
+  kafka:
+    consumer:
+      group-id: order-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

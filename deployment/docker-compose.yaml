@@ -136,6 +136,17 @@ services:
     networks:
       - e-commerce-store
 
+  notification-service:
+    container_name: notification-service
+    image: 8160202/notification-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: 'docker'
+    restart: unless-stopped
+    depends_on:
+      - eureka-service
+    networks:
+      - e-commerce-store
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
