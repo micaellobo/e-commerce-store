@@ -56,5 +56,5 @@ are a few ideas:
 - [ ] **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently
   using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - [ ] **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
-- [ ] **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
+- [x] **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
 - [ ] **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
