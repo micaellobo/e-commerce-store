@@ -1,0 +1,9 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka-service:8761/eureka/
+spring:
+  kafka:
+    bootstrap-servers: broker:29092
