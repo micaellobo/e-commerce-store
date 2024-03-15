@@ -42,8 +42,7 @@ Run each service individually with `mvn spring-boot:run`.
 ### Exploring and Interacting with API
 
 - **Swagger:** http://localhost:8080/swagger
-- **Postman Collection:
-  ** [postman_collection.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json)
+- **Postman Collection:** https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman_collection.json
 
 # Next Steps and Improvements
 
