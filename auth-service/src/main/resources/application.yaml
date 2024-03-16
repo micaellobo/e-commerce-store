@@ -10,3 +10,8 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
