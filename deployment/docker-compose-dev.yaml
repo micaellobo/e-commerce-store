@@ -203,7 +203,7 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - broker
-    entrypoint: ['/bin/sh', '-c']
+    entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
       # blocks until kafka is reachable
@@ -215,6 +215,45 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list
       "
+    networks:
+      - e-commerce-store-dev
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    restart: always
+    command:
+      - --config=/etc/otelcol-contrib/otel-collector.yaml
+    volumes:
+      - ./otel-collector/otel-collector.yaml:/etc/otelcol-contrib/otel-collector.yaml
+    ports:
+      - "1888:1888" # pprof extension
+      - "8888:8888" # Prometheus metrics exposed by the collector
+      - "8889:8889" # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP http receiver
+      - "55679:55679" # zpages extension
+    networks:
+      - e-commerce-store-dev
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    restart: always
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    ports:
+      - "9090:9090"
+    networks:
+      - e-commerce-store-dev
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
     networks:
       - e-commerce-store-dev
 

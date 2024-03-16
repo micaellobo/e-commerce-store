@@ -21,3 +21,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+management:
+  otlp:
+    metrics:
+      export:
+        url: http://otel-collector:4318/v1/metrics
+        step: 10s
