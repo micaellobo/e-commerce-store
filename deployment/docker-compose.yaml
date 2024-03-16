@@ -177,6 +177,7 @@ services:
       - e-commerce-store
 
   init-broker:
+    container_name: init-broker
     image: confluentinc/cp-kafka:latest
     depends_on:
       - broker
