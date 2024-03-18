@@ -1,0 +1,10 @@
+_id: fld_565b769b14c74560bd2581da4fea7f59
+type: RequestGroup
+parentId: fld_014e2d6fef7847f1a1fee7967e9ea139
+modified: 1710795015180
+created: 1710795015180
+name: inventory-service
+description: ""
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: -1710795015180

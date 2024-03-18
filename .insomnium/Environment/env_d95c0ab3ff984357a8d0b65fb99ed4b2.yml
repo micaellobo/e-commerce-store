@@ -1,0 +1,20 @@
+_id: env_d95c0ab3ff984357a8d0b65fb99ed4b2
+type: Environment
+parentId: env_c45d71b338b74b31977125b13b821ce1
+modified: 1710803940965
+created: 1710795316348
+name: Localhost
+data:
+  base_url: "{{ _.protocol }}://{{ _.domain }}/api/v1"
+  protocol: http
+  domain: localhost:8080
+  path: /v1
+dataPropertyOrder:
+  "&":
+    - base_url
+    - protocol
+    - domain
+    - path
+color: null
+isPrivate: false
+metaSortKey: 1710795316348

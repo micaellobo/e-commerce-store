@@ -1,0 +1,30 @@
+_id: req_3c8a1b7b70d64418a9f8df83efac16cf
+type: Request
+parentId: fld_63935207d12e453cbabcb9cf1d8d1d02
+modified: 1710795015177
+created: 1710795015177
+url: http://localhost:8080/api/v1/users
+name: insertUser
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |
+    {
+      "name": "Micael",
+      "email": "12345@gmail.com",
+      "username": "12345",
+      "password": "12345678910"
+    }
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1710795015177
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

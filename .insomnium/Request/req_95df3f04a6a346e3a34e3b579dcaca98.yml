@@ -1,0 +1,38 @@
+_id: req_95df3f04a6a346e3a34e3b579dcaca98
+type: Request
+parentId: fld_565b769b14c74560bd2581da4fea7f59
+modified: 1710795015183
+created: 1710795015183
+url: http://localhost:8080/api/v1/products/increase-stock
+name: increase-stock
+description: ""
+method: PUT
+body:
+  mimeType: ""
+  text: |-
+    [
+        {
+            "productId": 1,
+            "quantity": 100
+        },
+        {
+            "productId": 2,
+            "quantity": 200
+        },
+        {
+            "productId": 3,
+            "quantity": 300
+        }
+    ]
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1710795015183
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

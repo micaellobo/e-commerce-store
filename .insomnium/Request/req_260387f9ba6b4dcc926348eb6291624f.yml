@@ -1,0 +1,30 @@
+_id: req_260387f9ba6b4dcc926348eb6291624f
+type: Request
+parentId: fld_565b769b14c74560bd2581da4fea7f59
+modified: 1710795015181
+created: 1710795015181
+url: http://localhost:8080/api/v1/products/add
+name: add
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+      "name": "Telemovel 9",
+      "price": 29.99,
+      "quantity": 10,
+      "description": "desc"
+    }
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1710795015181
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

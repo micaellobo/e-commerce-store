@@ -1,0 +1,40 @@
+_id: req_152b3603e34b4067a7bf5635b2afab7e
+type: Request
+parentId: fld_58dfb3346a32408a8a8e635e645b3413
+modified: 1710803312428
+created: 1710795015187
+url: http://localhost:8080/api/v1/orders/users/me
+name: add
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "products": [
+            {
+                "productId": 2,
+                "quantity": 2
+            },
+            {
+                "productId": 1,
+                "quantity": 1
+            }
+        ]
+    }
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{{ _.token }}"
+  prefix: ""
+metaSortKey: -1710795015187
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

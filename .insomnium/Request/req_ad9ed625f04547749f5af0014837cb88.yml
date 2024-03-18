@@ -1,0 +1,27 @@
+_id: req_ad9ed625f04547749f5af0014837cb88
+type: Request
+parentId: fld_63935207d12e453cbabcb9cf1d8d1d02
+modified: 1710804249840
+created: 1710795015178
+url: http://localhost:8080/api/v1/users/me
+name: getUserById
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  prefix: ""
+metaSortKey: -1710795015178
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

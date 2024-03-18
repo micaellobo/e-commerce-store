@@ -1,0 +1,42 @@
+_id: req_f3354749bb934d158fb9a94512c7adb6
+type: Request
+parentId: fld_565b769b14c74560bd2581da4fea7f59
+modified: 1710804244332
+created: 1710795015183
+url: http://localhost:8080/api/v1/products/decrease-stock
+name: decrease-stock
+description: ""
+method: PUT
+body:
+  mimeType: ""
+  text: |-
+    [
+        {
+            "productId": 1,
+            "quantity": 100
+        },
+        {
+            "productId": 2,
+            "quantity": 200
+        },
+        {
+            "productId": 3,
+            "quantity": 300
+        }
+    ]
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  disabled: true
+metaSortKey: -1710795015183
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

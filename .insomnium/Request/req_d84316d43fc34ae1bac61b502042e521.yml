@@ -1,0 +1,27 @@
+_id: req_d84316d43fc34ae1bac61b502042e521
+type: Request
+parentId: fld_58dfb3346a32408a8a8e635e645b3413
+modified: 1710803873369
+created: 1710795015188
+url: "{{ _.base_url }}/orders/users/me/2"
+name: getOne
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  prefix: ""
+metaSortKey: -1710795015188
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

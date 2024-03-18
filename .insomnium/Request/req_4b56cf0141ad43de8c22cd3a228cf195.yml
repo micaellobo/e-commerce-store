@@ -1,0 +1,35 @@
+_id: req_4b56cf0141ad43de8c22cd3a228cf195
+type: Request
+parentId: fld_43c4898870c540f2923354bfcacad98b
+modified: 1710804230262
+created: 1710795015184
+url: http://localhost:8080/api/v1/reviews/users/me
+name: add
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "productId": 2,
+        "orderId": 11,
+        "reviewText": "text",
+        "rating": 2
+    }
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  prefix: ""
+metaSortKey: -1710795015184
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

@@ -1,0 +1,27 @@
+_id: req_edbc9129e192498bab43af123d2b71cf
+type: Request
+parentId: fld_43c4898870c540f2923354bfcacad98b
+modified: 1710804220948
+created: 1710795015186
+url: http://localhost:8080/api/v1/reviews/users/me
+name: getAllByUser
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  prefix: ""
+metaSortKey: -1710795015186
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

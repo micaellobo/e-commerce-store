@@ -1,0 +1,25 @@
+_id: req_bff1cec3f0b749d589bea0d6a0e19f07
+type: Request
+parentId: fld_565b769b14c74560bd2581da4fea7f59
+modified: 1710795015182
+created: 1710795015182
+url: http://localhost:8080/api/v1/products/by-ids
+name: getByIds
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: ids
+    value: 1,2,3,4,5
+    disabled: false
+headers: []
+authentication: {}
+metaSortKey: -1710795015182
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []

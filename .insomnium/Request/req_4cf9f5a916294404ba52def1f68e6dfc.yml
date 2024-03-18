@@ -1,0 +1,27 @@
+_id: req_4cf9f5a916294404ba52def1f68e6dfc
+type: Request
+parentId: fld_43c4898870c540f2923354bfcacad98b
+modified: 1710804227455
+created: 1710795015185
+url: http://localhost:8080/api/v1/reviews/products/1
+name: getAllByProduct
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  disabled: false
+  token: "{% response 'header', 'req_2b9f8d5b34bf43d491c68551517d3836',
+    'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+  prefix: ""
+metaSortKey: -1710795015185
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
+segmentParams: []
