@@ -7,3 +7,9 @@ eureka:
 spring:
   kafka:
     bootstrap-servers: broker:29092
+management:
+  otlp:
+    metrics:
+      export:
+        url: http://otel-collector:4318/v1/metrics
+        step: 10s
