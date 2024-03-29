@@ -1,0 +1,115 @@
+version: '3.8'
+name: e-commerce-store-infra
+services:
+  db-users:
+    container_name: dbs-users
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+    volumes:
+      - db-pgdata-users-dbs:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-store-infra
+
+  db-inventory:
+    container_name: dbs-inventory
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory
+    volumes:
+      - db-pgdata-inventory-dbs:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-store-infra
+
+  db-reviews:
+    container_name: dbs-reviews
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviews
+    volumes:
+      - db-pgdata-reviews-dbs:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-store-infra
+
+  db-orders:
+    container_name: dbs-orders
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    volumes:
+      - db-pgdata-orders-dbs:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    networks:
+      - e-commerce-store-infra
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:latest
+    container_name: broker
+    ports:
+      - "9092:9092"
+    expose:
+      - "29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  init-broker:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - broker
+    entrypoint: ['/bin/sh', '-c']
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server broker:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic order.created.v1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server broker:29092 --list
+      "
+
+volumes:
+  db-pgdata-users-dbs:
+  db-pgdata-inventory-dbs:
+  db-pgdata-reviews-dbs:
+  db-pgdata-orders-dbs:
+
+networks:
+  -commerce-store-infra:
+    driver: bridge
+
