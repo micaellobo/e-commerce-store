@@ -2,14 +2,14 @@ version: '3.8'
 name: e-commerce-store-infra
 services:
   db-users:
-    container_name: dbs-users
+    container_name: infra-users
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: users
     volumes:
-      - db-pgdata-users-dbs:/var/lib/postgresql/data
+      - db-pgdata-users-infra:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -17,14 +17,14 @@ services:
       - e-commerce-store-infra
 
   db-inventory:
-    container_name: dbs-inventory
+    container_name: infra-inventory
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: inventory
     volumes:
-      - db-pgdata-inventory-dbs:/var/lib/postgresql/data
+      - db-pgdata-inventory-infra:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     restart: unless-stopped
@@ -32,14 +32,14 @@ services:
       - e-commerce-store-infra
 
   db-reviews:
-    container_name: dbs-reviews
+    container_name: infra-reviews
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: reviews
     volumes:
-      - db-pgdata-reviews-dbs:/var/lib/postgresql/data
+      - db-pgdata-reviews-infra:/var/lib/postgresql/data
     ports:
       - "5434:5432"
     restart: unless-stopped
@@ -47,14 +47,14 @@ services:
       - e-commerce-store-infra
 
   db-orders:
-    container_name: dbs-orders
+    container_name: infra-orders
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: orders
     volumes:
-      - db-pgdata-orders-dbs:/var/lib/postgresql/data
+      - db-pgdata-orders-infra:/var/lib/postgresql/data
     ports:
       - "5435:5432"
     restart: unless-stopped
@@ -63,14 +63,14 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+    container_name: infra-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
     image: confluentinc/cp-kafka:latest
-    container_name: broker
+    container_name: infra-broker
     ports:
       - "9092:9092"
     expose:
@@ -88,6 +88,7 @@ services:
 
   init-broker:
     image: confluentinc/cp-kafka:latest
+    container_name: infra-init-broker
     depends_on:
       - broker
     entrypoint: ['/bin/sh', '-c']
@@ -104,6 +105,7 @@ services:
       "
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: infra-otel-collector
     restart: always
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yaml
@@ -121,7 +123,7 @@ services:
       - e-commerce-store-infra
 
   prometheus:
-    container_name: prometheus
+    container_name: infra-prometheus
     image: prom/prometheus
     restart: always
     command:
@@ -134,7 +136,7 @@ services:
       - e-commerce-store-infra
 
   grafana:
-    container_name: grafana
+    container_name: infra-grafana
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
@@ -142,12 +144,12 @@ services:
       - e-commerce-store-infra
 
 volumes:
-  db-pgdata-users-dbs:
-  db-pgdata-inventory-dbs:
-  db-pgdata-reviews-dbs:
-  db-pgdata-orders-dbs:
+  db-pgdata-users-infra:
+  db-pgdata-inventory-infra:
+  db-pgdata-reviews-infra:
+  db-pgdata-orders-infra:
 
 networks:
-  -commerce-store-infra:
+  e-commerce-store-infra:
     driver: bridge
 
