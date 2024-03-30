@@ -1,4 +1,3 @@
--- Inserting random data into the "product" table
 INSERT INTO public.product (description, name, price, quantity)
 VALUES ('Wireless Trackpad', 'Trackpad', 49.99, 100),
        ('27-inch LED Monitor', 'Monitor', 199.99, 50),
