@@ -106,7 +106,7 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.96.0
     container_name: infra-otel-collector
-    restart: always
+    restart: unless-stopped
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yaml
     volumes:
@@ -125,7 +125,7 @@ services:
   prometheus:
     container_name: infra-prometheus
     image: prom/prometheus
-    restart: always
+    restart: unless-stopped
     command:
       - --config.file=/etc/prometheus/prometheus.yaml
     volumes:

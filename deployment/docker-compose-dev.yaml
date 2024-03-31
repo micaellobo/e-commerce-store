@@ -2,14 +2,14 @@ version: '3.8'
 name: e-commerce-store-dev
 services:
   db-users:
-    container_name: db-users
+    container_name: db-users-dev
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: users
     volumes:
-      - db-pgdata-users:/var/lib/postgresql/data
+      - db-pgdata-users-dev:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -17,14 +17,14 @@ services:
       - e-commerce-store-dev
 
   db-inventory:
-    container_name: db-inventory
+    container_name: db-inventory-dev
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: inventory
     volumes:
-      - db-pgdata-inventory:/var/lib/postgresql/data
+      - db-pgdata-inventory-dev:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     restart: unless-stopped
@@ -32,14 +32,14 @@ services:
       - e-commerce-store-dev
 
   db-reviews:
-    container_name: db-reviews
+    container_name: db-reviews-dev
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: reviews
     volumes:
-      - db-pgdata-reviews:/var/lib/postgresql/data
+      - db-pgdata-reviews-dev:/var/lib/postgresql/data
     ports:
       - "5434:5432"
     restart: unless-stopped
@@ -47,14 +47,14 @@ services:
       - e-commerce-store-dev
 
   db-orders:
-    container_name: db-orders
+    container_name: db-orders-dev
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: orders
     volumes:
-      - db-pgdata-orders:/var/lib/postgresql/data
+      - db-pgdata-orders-dev:/var/lib/postgresql/data
     ports:
       - "5435:5432"
     restart: unless-stopped
@@ -62,7 +62,7 @@ services:
       - e-commerce-store-dev
 
   eureka-service:
-    container_name: eureka-service
+    container_name: eureka-service-dev
     build:
       context: ../eureka-service
     image: eureka-service
@@ -73,7 +73,7 @@ services:
       - e-commerce-store-dev
 
   api-gateway:
-    container_name: api-gateway
+    container_name: api-gateway-dev
     build:
       context: ../api-gateway
     image: api-gateway
@@ -88,7 +88,7 @@ services:
       - e-commerce-store-dev
 
   user-service:
-    container_name: user-service
+    container_name: user-service-dev
     build:
       context: ../user-service
     image: user-service
@@ -102,7 +102,7 @@ services:
       - e-commerce-store-dev
 
   auth-service:
-    container_name: auth-service
+    container_name: auth-service-dev
     build:
       context: ../auth-service
     image: auth-service
@@ -116,7 +116,7 @@ services:
       - e-commerce-store-dev
 
   inventory-service:
-    container_name: inventory-service
+    container_name: inventory-service-dev
     build:
       context: ../inventory-service
     image: inventory-service
@@ -130,7 +130,7 @@ services:
       - e-commerce-store-dev
 
   order-service:
-    container_name: order-service
+    container_name: order-service-dev
     build:
       context: ../order-service
     image: order-service
@@ -144,7 +144,7 @@ services:
       - e-commerce-store-dev
 
   reviews-service:
-    container_name: reviews-service
+    container_name: reviews-service-dev
     build:
       context: ../reviews-service
     image: reviews-service
@@ -158,7 +158,7 @@ services:
       - e-commerce-store-dev
 
   notification-service:
-    container_name: notification-service
+    container_name: notification-service-dev
     build:
       context: ../notification-service
     image: notification-service
@@ -172,7 +172,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+    container_name: zookeeper-dev
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -181,7 +181,7 @@ services:
 
   broker:
     image: confluentinc/cp-kafka:latest
-    container_name: broker
+    container_name: broker-dev
     ports:
       - "9092:9092"
     expose:
@@ -220,7 +220,7 @@ services:
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.96.0
-    restart: always
+    restart: unless-stopped
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yaml
     volumes:
@@ -237,9 +237,9 @@ services:
       - e-commerce-store-dev
 
   prometheus:
-    container_name: prometheus
+    container_name: prometheus-dev
     image: prom/prometheus
-    restart: always
+    restart: unless-stopped
     command:
       - --config.file=/etc/prometheus/prometheus.yaml
     volumes:
@@ -250,7 +250,7 @@ services:
       - e-commerce-store-dev
 
   grafana:
-    container_name: grafana
+    container_name: grafana-dev
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
@@ -258,10 +258,10 @@ services:
       - e-commerce-store-dev
 
 volumes:
-  db-pgdata-users:
-  db-pgdata-inventory:
-  db-pgdata-reviews:
-  db-pgdata-orders:
+  db-pgdata-users-dev:
+  db-pgdata-inventory-dev:
+  db-pgdata-reviews-dev:
+  db-pgdata-orders-dev:
 
 networks:
   e-commerce-store-dev:
