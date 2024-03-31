@@ -2,7 +2,7 @@ version: '3.8'
 name: e-commerce-store-infra
 services:
   db-users:
-    container_name: infra-users
+    container_name: users-infra
     image: postgres
     environment:
       POSTGRES_USER: postgres
@@ -17,7 +17,7 @@ services:
       - e-commerce-store-infra
 
   db-inventory:
-    container_name: infra-inventory
+    container_name: inventory-infra
     image: postgres
     environment:
       POSTGRES_USER: postgres
@@ -32,7 +32,7 @@ services:
       - e-commerce-store-infra
 
   db-reviews:
-    container_name: infra-reviews
+    container_name: reviews-infra
     image: postgres
     environment:
       POSTGRES_USER: postgres
@@ -47,7 +47,7 @@ services:
       - e-commerce-store-infra
 
   db-orders:
-    container_name: infra-orders
+    container_name: orders-infra
     image: postgres
     environment:
       POSTGRES_USER: postgres
@@ -63,14 +63,14 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: infra-zookeeper
+    container_name: zookeeper-infra
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
     image: confluentinc/cp-kafka:latest
-    container_name: infra-broker
+    container_name: broker-infra
     ports:
       - "9092:9092"
     expose:
@@ -88,7 +88,7 @@ services:
 
   init-broker:
     image: confluentinc/cp-kafka:latest
-    container_name: infra-init-broker
+    container_name: init-broker-infra
     depends_on:
       - broker
     entrypoint: ['/bin/sh', '-c']
@@ -105,7 +105,7 @@ services:
       "
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.96.0
-    container_name: infra-otel-collector
+    container_name: otel-collector-infra
     restart: unless-stopped
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yaml
@@ -123,7 +123,7 @@ services:
       - e-commerce-store-infra
 
   prometheus:
-    container_name: infra-prometheus
+    container_name: prometheus-infra
     image: prom/prometheus
     restart: unless-stopped
     command:
@@ -136,7 +136,7 @@ services:
       - e-commerce-store-infra
 
   grafana:
-    container_name: infra-grafana
+    container_name: grafana-infra
     image: grafana/grafana:latest
     ports:
       - "3000:3000"

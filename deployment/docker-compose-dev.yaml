@@ -252,6 +252,8 @@ services:
   grafana:
     container_name: grafana-dev
     image: grafana/grafana:latest
+    volumes:
+      - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
       - "3000:3000"
     networks:
