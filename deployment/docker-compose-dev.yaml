@@ -235,6 +235,8 @@ services:
       - "55679:55679" # zpages extension
     networks:
       - e-commerce-store-dev
+    depends_on:
+      - zipkin
 
   prometheus:
     container_name: prometheus-dev
@@ -256,6 +258,15 @@ services:
       - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
       - "3000:3000"
+    networks:
+      - e-commerce-store-dev
+
+  zipkin:
+    container_name: zipkin-dev
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
     networks:
       - e-commerce-store-dev
 

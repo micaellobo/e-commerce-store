@@ -27,3 +27,9 @@ management:
       export:
         url: http://otel-collector:4318/v1/metrics
         step: 10s
+    tracing:
+      endpoint: http://otel-collector:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+

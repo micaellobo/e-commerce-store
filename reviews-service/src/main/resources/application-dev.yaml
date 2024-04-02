@@ -27,3 +27,8 @@ management:
       export:
         url: http://localhost:4318/v1/metrics
         step: 10s
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
