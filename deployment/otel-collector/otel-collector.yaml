@@ -7,6 +7,8 @@ processors:
   batch:
 
 exporters:
+  logging:
+    loglevel: debug
   prometheus:
     endpoint: "0.0.0.0:8889"
     const_labels:
@@ -30,8 +32,8 @@ service:
     metrics:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ prometheus ]
+      exporters: [ prometheus, logging ]
     traces:
       receivers: [ otlp ]
       processors: [ batch ]
-      exporters: [ zipkin ]
+      exporters: [ zipkin, logging ]
