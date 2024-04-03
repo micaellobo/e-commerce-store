@@ -80,6 +80,7 @@ jobs:
           push: true
           tags: 8160202/order-service:latest
           platforms: 'linux/arm64,linux/amd64'
+
       - name: Build and push notification-service
         uses: docker/build-push-action@v4
         with:

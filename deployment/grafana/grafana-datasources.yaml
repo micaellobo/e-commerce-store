@@ -13,18 +13,18 @@ datasources:
     editable: false
     jsonData:
       httpMethod: GET
-#  - name: Tempo
-#    type: tempo
-#    access: proxy
-#    orgId: 1
-#    url: http://tempo:3200
-#    basicAuth: false
-#    isDefault: true
-#    version: 1
-#    editable: false
-#    apiVersion: 1
-#    uid: tempo
-#    jsonData:
-#      httpMethod: GET
-#      serviceMap:
-#        datasourceUid: prometheus
+  - name: Tempo
+    type: tempo
+    access: proxy
+    orgId: 1
+    url: http://tempo:3200
+    basicAuth: false
+    isDefault: true
+    version: 1
+    editable: false
+    apiVersion: 1
+    uid: tempo
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: prometheus
