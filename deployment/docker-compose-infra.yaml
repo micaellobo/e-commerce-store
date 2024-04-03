@@ -62,15 +62,15 @@ services:
       - e-commerce-store-infra
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper-infra
+    image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-kafka:latest
     container_name: broker-infra
+    image: confluentinc/cp-kafka:latest
     ports:
       - "9092:9092"
     expose:
@@ -87,8 +87,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   init-broker:
-    image: confluentinc/cp-kafka:latest
     container_name: init-broker-infra
+    image: confluentinc/cp-kafka:latest
     depends_on:
       - broker
     entrypoint: ['/bin/sh', '-c']
@@ -104,8 +104,8 @@ services:
       kafka-topics --bootstrap-server broker:29092 --list
       "
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.96.0
     container_name: otel-collector-infra
+    image: otel/opentelemetry-collector-contrib:0.96.0
     restart: unless-stopped
     command:
       - --config=/etc/otelcol-contrib/otel-collector.yaml
@@ -142,6 +142,28 @@ services:
       - "3000:3000"
     networks:
       - e-commerce-store-infra
+
+  zipkin:
+    container_name: zipkin-infra
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
+    networks:
+      - e-commerce-store-infra
+
+  tempo:
+    container_name: tempo-infra
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"   # tempo
+      - "4317"  # otlp grpc
+    networks:
+      - e-commerce-store-infra
+
 
 volumes:
   db-pgdata-users-infra:

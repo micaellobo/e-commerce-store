@@ -148,8 +148,8 @@ services:
       - e-commerce-store
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -157,8 +157,8 @@ services:
       - e-commerce-store
 
   broker:
-    image: confluentinc/cp-kafka:latest
     container_name: broker
+    image: confluentinc/cp-kafka:latest
     expose:
       - "29092"
     depends_on:
@@ -195,6 +195,7 @@ services:
       - e-commerce-store
 
   otel-collector:
+    container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:0.96.0
     restart: unless-stopped
     command:
@@ -230,6 +231,26 @@ services:
       - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
       - "3000:3000"
+    networks:
+      - e-commerce-store
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
+    networks:
+      - e-commerce-store
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"
     networks:
       - e-commerce-store
 
