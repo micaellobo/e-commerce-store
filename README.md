@@ -11,6 +11,7 @@ Spring Boot microservice-based application to manage orders, products, inventory
 - **Inventory Service:** Manages product inventory and availability.
 - **Order Service:** Manage and process customer orders.
 - **Reviews Service:** Gather and display product reviews and ratings from users.
+- **Notification Service:** Sends notifications to users.
 
 # How to run
 
@@ -22,7 +23,7 @@ Use pre-built Docker images for a fast and straightforward way to run the applic
    [docker-compose.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose.yaml)
 2. Run the following command:
 
-        docker-compose up -d
+        cd deployment && docker-compose up -d
 
 ### Local Development with Docker
 
@@ -35,8 +36,8 @@ slower.
        docker-compose -f docker-compose-dev.yaml up -d --build
 
 For smoother local development, it's recommended to have `Java 17` or higher and `Maven` installed. You can also
-configure the essential databases
-using [docker-compose-dbs.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-dbs.yaml). \
+configure the essential infrastructure
+using [docker-compose-infra.yaml](https://github.com/micaellobo/e-commerce-store/raw/master/deployment/docker-compose-infra.yaml). \
 Run each service individually with `mvn spring-boot:run`.
 
 ### Exploring and Interacting with API
@@ -56,4 +57,4 @@ are a few ideas:
   using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - [ ] **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
 - [x] **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
-- [ ] **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
+- [x] **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
