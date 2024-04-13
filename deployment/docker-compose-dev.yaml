@@ -263,6 +263,15 @@ services:
     networks:
       - e-commerce-store-dev
 
+  loki:
+    container_name: loki-dev
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - e-commerce-store-dev
+
   zipkin:
     container_name: zipkin-dev
     image: openzipkin/zipkin
