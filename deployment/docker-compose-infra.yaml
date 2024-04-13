@@ -138,8 +138,19 @@ services:
   grafana:
     container_name: grafana-infra
     image: grafana/grafana:latest
+    volumes:
+      - ./grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
       - "3000:3000"
+    networks:
+      - e-commerce-store-infra
+
+  loki:
+    container_name: loki-infra
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
     networks:
       - e-commerce-store-infra
 

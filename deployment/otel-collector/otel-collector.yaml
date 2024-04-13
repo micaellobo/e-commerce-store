@@ -25,6 +25,9 @@ exporters:
     tls:
       insecure: true
 
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+
 # https://github.com/open-telemetry/opentelemetry-collector/blob/main/extension/README.md
 extensions:
   # responsible for responding to health check calls on behalf of the collector.
@@ -45,3 +48,7 @@ service:
       receivers: [ otlp ]
       processors: [ batch ]
       exporters: [ zipkin, logging, otlp ]
+
+    logs:
+      receivers: [ otlp ]
+      exporters: [ loki ]
