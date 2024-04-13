@@ -57,4 +57,9 @@ are a few ideas:
   using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - [ ] **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
 - [x] **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
-- [x] **Monitoring:** Explore monitoring tools like `Prometheus` and `Grafana`.
+- [x] **Observability:**
+    - **Grafana:** Data visualization.
+    - **OpenTelemetry:** Collect metrics, traces, and logs.
+    - **Grafana Loki:** Centralized logging.
+    - **Grafana Tempo and Zipkin:** Distributed tracing.
+    - **Prometheus:** Metrics monitoring and alerting.
