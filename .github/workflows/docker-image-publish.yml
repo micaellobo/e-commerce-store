@@ -8,6 +8,7 @@ on:
       - 'documentation/**'
       - 'README.md'
       - '.insomnium'
+  workflow_dispatch:
 
 jobs:
   docker:
