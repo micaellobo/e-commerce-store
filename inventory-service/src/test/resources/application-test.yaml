@@ -1,0 +1,17 @@
+eureka:
+  client:
+    enabled: false
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false
+spring:
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
