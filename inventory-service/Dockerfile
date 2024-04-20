@@ -1,4 +1,11 @@
-FROM openjdk:17-jdk AS build
+FROM maven:3.8.5-openjdk-17 AS build
+COPY . /usr/app
+WORKDIR /usr/app
+RUN mvn clean install
+
+FROM openjdk:17
 VOLUME /tmp
-COPY target/*.jar inventory-service.jar
+COPY --from=build /usr/app/target/*.jar inventory-service.jar
 ENTRYPOINT ["java","-jar","/inventory-service.jar"]
+EXPOSE 8083
+
