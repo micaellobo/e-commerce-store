@@ -11,6 +11,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [eureka-service, api-gateway, user-service, auth-service, inventory-service, reviews-service, order-service, notification-service]
     steps:
       - uses: docker/setup-qemu-action@v2
       - uses: docker/setup-buildx-action@v2
@@ -20,67 +23,11 @@ jobs:
           username: 8160202
           password: ${{ secrets.DOCKER_HUB_PW }}
 
-      - name: Build and push eureka-service
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: "{{defaultContext}}:eureka-service"
+          context: "{{defaultContext}}:${{ matrix.service }}"
           push: true
-          tags: 8160202/eureka-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push api-gateway
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:api-gateway"
-          push: true
-          tags: 8160202/api-gateway:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push user-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:user-service"
-          push: true
-          tags: 8160202/user-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push auth-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:auth-service"
-          push: true
-          tags: 8160202/auth-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push inventory-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:inventory-service"
-          push: true
-          tags: 8160202/inventory-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push reviews-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:reviews-service"
-          push: true
-          tags: 8160202/reviews-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push order-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:order-service"
-          push: true
-          tags: 8160202/order-service:latest
-          platforms: 'linux/arm64,linux/amd64'
-
-      - name: Build and push notification-service
-        uses: docker/build-push-action@v4
-        with:
-          context: "{{defaultContext}}:notification-service"
-          push: true
-          tags: 8160202/notification-service:latest
+          tags: 8160202/${{ matrix.service }}:latest
           platforms: 'linux/arm64,linux/amd64'
 
