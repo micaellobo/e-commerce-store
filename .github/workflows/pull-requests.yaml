@@ -15,9 +15,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Build inventory-service
-        run: mvn -B package --file inventory-service/pom.xml
-
+          
       - name: Build eureka-service
         run: mvn -B package --file eureka-service/pom.xml
 
