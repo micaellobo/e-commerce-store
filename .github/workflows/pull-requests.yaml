@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Build and Test
 
 on:
   pull_request:
@@ -13,7 +13,31 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'
+          distribution: 'openjdk'
           cache: maven
-      - name: Build with Maven
+      - name: Build inventory-service
         run: mvn -B package --file inventory-service/pom.xml
+
+      - name: Build eureka-service
+        run: mvn -B package --file eureka-service/pom.xml
+
+      - name: Build api-gateway
+        run: mvn -B package --file api-gateway/pom.xml
+
+      - name: Build user-service
+        run: mvn -B package --file user-service/pom.xml
+
+      - name: Build auth-service
+        run: mvn -B package --file auth-service/pom.xml
+
+      - name: Build inventory-service
+        run: mvn -B package --file inventory-service/pom.xml
+
+      - name: Build reviews-service
+        run: mvn -B package --file reviews-service/pom.xml
+
+      - name: Build order-service
+        run: mvn -B package --file order-service/pom.xml
+
+      - name: Build notification-service
+        run: mvn -B package --file notification-service/pom.xml
