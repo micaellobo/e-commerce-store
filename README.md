@@ -50,7 +50,7 @@ Run each service individually with `mvn spring-boot:run`.
 As the project is actively being developed, there are several possibilities for future enhancements and progress. Here
 are a few ideas:
 
-- [ ] **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
+- [x] **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - [ ] **Security:** Transitioning from `JWT` to `OAuth` 2.0 with `Keycloak` for more robust authentication and authorization
   mechanisms.
 - [ ] **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently
