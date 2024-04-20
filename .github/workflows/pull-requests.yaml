@@ -22,3 +22,4 @@ jobs:
       - name: Build and Test ${{ matrix.service }}
         run: |
           mvn -B package --file ${{ matrix.service }}/pom.xml
+          
