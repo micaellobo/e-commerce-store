@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [eureka-service, api-gateway, user-service, auth-service, inventory-service, reviews-service, order-service, notification-service]
+        service: [ eureka-service, api-gateway, user-service, auth-service, inventory-service, reviews-service, order-service, notification-service ]
+        platforms: [ linux/arm64, linux/amd64, darwin/amd64, darwin/amd64 ]
     steps:
-      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v2
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -29,5 +30,5 @@ jobs:
           context: "{{defaultContext}}:${{ matrix.service }}"
           push: true
           tags: 8160202/${{ matrix.service }}:latest
-          platforms: 'linux/arm64,linux/amd64'
+          platforms: ${{ matrix.platforms }}
 
