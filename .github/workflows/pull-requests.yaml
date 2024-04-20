@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [eureka-service, api-gateway, user-service, auth-service, inventory-service, reviews-service, order-service, notification-service]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -15,27 +18,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-          
-      - name: Build eureka-service
-        run: mvn -B package --file eureka-service/pom.xml
 
-      - name: Build api-gateway
-        run: mvn -B package --file api-gateway/pom.xml
-
-      - name: Build user-service
-        run: mvn -B package --file user-service/pom.xml
-
-      - name: Build auth-service
-        run: mvn -B package --file auth-service/pom.xml
-
-      - name: Build inventory-service
-        run: mvn -B package --file inventory-service/pom.xml
-
-      - name: Build reviews-service
-        run: mvn -B package --file reviews-service/pom.xml
-
-      - name: Build order-service
-        run: mvn -B package --file order-service/pom.xml
-
-      - name: Build notification-service
-        run: mvn -B package --file notification-service/pom.xml
+      - name: Build and Test ${{ matrix.service }}
+        run: |
+          mvn -B package --file ${{ matrix.service }}/pom.xml
