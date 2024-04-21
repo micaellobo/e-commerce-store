@@ -28,7 +28,7 @@ Use pre-built Docker images for a fast and straightforward way to run the applic
 ### Local Development with Docker
 
 Build new Docker images and package the application into a JAR file from your local codebase, although it may be a bit
-slower.
+slower do the fact that it's building the images from scratch:
 
 1. Clone the repository.
 2. Run the following command:
@@ -45,21 +45,48 @@ Run each service individually with `mvn spring-boot:run`.
 - **Swagger:** http://localhost:8080/swagger
 - **Postman Collection:** [postman.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman.json)
 
+# Technologies and Concepts Used
+
+- **PostgreSQL:**
+
+## Architecture
+- **Spring Boot:** 
+- **Microservices:** 
+- **API Gateway Pattern:** An `API Gateway` on the edge of the microservices.
+- **Service Registration and Discovery** using `Netflix Eureka` for service registration and discovery.
+
+## Security
+- **JWT Tokens:** Used for authentication and authorization.
+
+## QA/Testing
+- **JUnit:**
+- **Mockito:**
+- **Unit Testing:**
+- **Integration Testing:** 
+- **TestContainers:**
+
+## CI/CD
+- **Maven:** 
+- **Docker:** 
+- **GitHub Actions:** Automatically builds, tests and publishes Docker images to Docker Hub.
+
+## Event-Driven Concepts/Messaging/Communication Pattern
+- **Kafka** Used for building real-time data pipelines and streaming apps.
+
+## Observability
+- **Grafana:** Data visualization.
+- **OpenTelemetry:** Collect metrics, traces, and logs.
+- **Grafana Loki:** `Logging`.
+- **Grafana Tempo and Zipkin:** `Distributed Tracing`.
+- **Prometheus:** `Metrics`.
+
 # Next Steps and Improvements
 
 As the project is actively being developed, there are several possibilities for future enhancements and progress. Here
 are a few ideas:
 
-- [x] **Testing:** Implement integration tests using `testContainers` to closely resemble the production environment.
 - [ ] **Security:** Transitioning from `JWT` to `OAuth` 2.0 with `Keycloak` for more robust authentication and authorization
   mechanisms.
 - [ ] **CI/CD:** Set up pipelines to automate testing and deployment processes with `Jenkins`. Currently
   using `GitHub Actions` to build and push microservices Docker images to `Docker Hub`.
 - [ ] **Container Orchestration:** Explore container orchestration platforms like `Kubernetes`.
-- [x] **Event-Driven:** Explore asynchronous communication with `Kafka`/ `RabbitMQ`.
-- [x] **Observability:**
-    - **Grafana:** Data visualization.
-    - **OpenTelemetry:** Collect metrics, traces, and logs.
-    - **Grafana Loki:** Centralized logging.
-    - **Grafana Tempo and Zipkin:** Distributed tracing.
-    - **Prometheus:** Metrics monitoring and alerting.
