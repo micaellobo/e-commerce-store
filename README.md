@@ -13,6 +13,41 @@ Spring Boot microservice-based application to manage orders, products, inventory
 - **Reviews Service:** Gather and display product reviews and ratings from users.
 - **Notification Service:** Sends notifications to users.
 
+# Technologies and Concepts Used
+
+- **Spring Boot with Maven:**
+- **PostgreSQL**
+
+## Architecture
+- **Microservices:**
+- **API Gateway Pattern:** An `API Gateway` on the edge of the microservices.
+- **Service Registration and Discovery** using `Netflix Eureka` for service registration and discovery.
+
+## Security
+- **JWT Tokens:** Used for authentication and authorization.
+
+## QA/Testing
+- **JUnit:**
+- **Mockito:**
+- **Unit Testing:**
+- **Integration Testing:**
+- **TestContainers:**
+
+## CI/CD
+- **Maven:**
+- **Docker:**
+- **GitHub Actions:** Automatically builds, tests and publishes Docker images to Docker Hub.
+
+## Event-Driven Messaging
+- **Kafka**
+
+## Observability
+- **Grafana:** Data visualization.
+- **OpenTelemetry:** Collect metrics, traces, and logs.
+- **Grafana Loki:** `Logging`.
+- **Grafana Tempo and Zipkin:** `Distributed Tracing`.
+- **Prometheus:** `Metrics`.
+
 # How to run
 
 ### Docker Compose
@@ -44,41 +79,6 @@ Run each service individually with `mvn spring-boot:run`.
 
 - **Swagger:** http://localhost:8080/swagger
 - **Postman Collection:** [postman.json](https://github.com/micaellobo/e-commerce-store/raw/master/documentation/postman.json)
-
-# Technologies and Concepts Used
-
-- **PostgreSQL:**
-
-## Architecture
-- **Spring Boot:** 
-- **Microservices:** 
-- **API Gateway Pattern:** An `API Gateway` on the edge of the microservices.
-- **Service Registration and Discovery** using `Netflix Eureka` for service registration and discovery.
-
-## Security
-- **JWT Tokens:** Used for authentication and authorization.
-
-## QA/Testing
-- **JUnit:**
-- **Mockito:**
-- **Unit Testing:**
-- **Integration Testing:** 
-- **TestContainers:**
-
-## CI/CD
-- **Maven:** 
-- **Docker:** 
-- **GitHub Actions:** Automatically builds, tests and publishes Docker images to Docker Hub.
-
-## Event-Driven Concepts/Messaging/Communication Pattern
-- **Kafka** Used for building real-time data pipelines and streaming apps.
-
-## Observability
-- **Grafana:** Data visualization.
-- **OpenTelemetry:** Collect metrics, traces, and logs.
-- **Grafana Loki:** `Logging`.
-- **Grafana Tempo and Zipkin:** `Distributed Tracing`.
-- **Prometheus:** `Metrics`.
 
 # Next Steps and Improvements
 
