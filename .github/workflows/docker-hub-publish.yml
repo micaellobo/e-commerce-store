@@ -9,7 +9,25 @@ on:
       - 'README.md'
       - '.insomnium'
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ eureka-service, api-gateway, user-service, auth-service, inventory-service, reviews-service, order-service, notification-service ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test ${{ matrix.service }}
+        run: |
+          mvn -B package --file ${{ matrix.service }}/pom.xml
   publish:
+    needs: test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
