@@ -16,7 +16,8 @@ Spring Boot microservice-based application to manage orders, products, inventory
 # Technologies and Concepts Used
 
 - Java 17
-- Spring Boot with Maven
+- Spring Boot
+- Maven 
 - PostgreSQL
 
 ### Architecture
