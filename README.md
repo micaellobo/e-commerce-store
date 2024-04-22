@@ -15,33 +15,34 @@ Spring Boot microservice-based application to manage orders, products, inventory
 
 # Technologies and Concepts Used
 
-- **Spring Boot with Maven:**
-- **PostgreSQL**
+- Java 17
+- Spring Boot with Maven:
+- PostgreSQL
 
-## Architecture
+### Architecture
 - **Microservices:**
 - **API Gateway Pattern:** An `API Gateway` on the edge of the microservices.
-- **Service Registration and Discovery** using `Netflix Eureka` for service registration and discovery.
+- **Service Registration and Discovery:** using `Netflix Eureka` for service registration and discovery.
 
-## Security
+### Security
 - **JWT Tokens:** Used for authentication and authorization.
 
-## QA/Testing
+### QA/Testing
 - **JUnit:**
 - **Mockito:**
 - **Unit Testing:**
 - **Integration Testing:**
 - **TestContainers:**
 
-## CI/CD
+### CI/CD
 - **Maven:**
 - **Docker:**
 - **GitHub Actions:** Automatically builds, tests and publishes Docker images to Docker Hub.
 
-## Event-Driven Messaging
+### Event-Driven Messaging
 - **Kafka**
 
-## Observability
+### Observability
 - **Grafana:** Data visualization.
 - **OpenTelemetry:** Collect metrics, traces, and logs.
 - **Grafana Loki:** `Logging`.
